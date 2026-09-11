@@ -3,184 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Recursos Socioemocionales</title>
- 
-<style>
-  :root{
-    --bg:#F2F4EF;
-    --paper:#FFFFFF;
-    --ink:#1E2A22;
-    --ink-soft:#5B6B5F;
-    --line:#DDE3D8;
-    --teal:#3D6B5C;
-    --teal-dark:#2B4E42;
-    --ochre:#D98A3D;
-    --ochre-soft:#FBE9D2;
-    --radius:14px;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:var(--bg);
-    color:var(--ink);
-    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-    line-height:1.5;
-    padding-bottom:80px;
-  }
-  h1,h2,h3{
-    font-family:Georgia, 'Times New Roman', serif;
-    font-weight:600;
-    letter-spacing:-0.01em;
-  }
-  a{color:var(--teal-dark);}
- 
-  header{
-    background:var(--paper);
-    border-bottom:1px solid var(--line);
-    padding:36px 24px 26px;
-  }
-  .header-inner{max-width:1000px;margin:0 auto;}
-  .eyebrow{color:var(--teal); font-size:0.85rem; margin:0 0 6px;}
-  h1{font-size:clamp(1.6rem, 3vw, 2.2rem); margin:0 0 8px; color:var(--teal-dark);}
-  .subtitle{color:var(--ink-soft); max-width:62ch; margin:0; font-size:0.96rem;}
- 
-  .grade-nav{
-    background:var(--paper);
-    border-bottom:1px solid var(--line);
-    padding:14px 0;
-  }
-  .grade-nav-inner{
-    max-width:1000px; margin:0 auto;
-    display:flex; gap:8px; align-items:center;
-    flex-wrap:wrap;
-    padding:0 16px;
-  }
-  .grade-tab{
-    border:1px solid var(--teal);
-    background:var(--paper);
-    color:var(--teal-dark);
-    padding:9px 16px;
-    border-radius:999px;
-    font-size:0.88rem;
-    font-weight:500;
-    cursor:pointer;
-    white-space:nowrap;
-    flex:0 0 auto;
-  }
-  .grade-tab:hover{border-color:var(--teal);}
-  .grade-tab.active{background:var(--teal-dark); border-color:var(--teal-dark); color:#fff;}
-  #search{
-    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-    font-size:16px;
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:9px 12px;
-    width:100%;
-    background:var(--bg);
-  }
- 
-  .toolbar{
-    max-width:1000px; margin:14px auto 0; padding:0 16px;
-    display:flex; flex-wrap:wrap; gap:10px;
-  }
-  .toolbar #search{flex:1 1 100%; order:1;}
-  .toolbar .btn{order:2; flex:0 0 auto;}
-  .btn{
-    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-size:0.82rem;
-    border-radius:9px; padding:7px 13px; cursor:pointer;
-    border:1px solid var(--line); background:var(--paper); color:var(--ink-soft);
-  }
-  .btn:hover{border-color:var(--teal); color:var(--ink);}
-  .btn.on{background:var(--ochre-soft); border-color:var(--ochre); color:#7A4A16;}
- 
-  main{max-width:1000px; margin:22px auto 0; padding:0 24px;}
- 
-  .cat-group{margin-bottom:30px;}
-  .cat-head{
-    display:flex; align-items:baseline; gap:10px;
-    margin-bottom:12px; border-bottom:2px solid var(--group-color, var(--teal));
-    padding-bottom:7px;
-  }
-  .cat-head h2{font-size:1.08rem; margin:0; color:var(--ink);}
-  .cat-head .count{font-size:0.78rem; color:var(--ink-soft);}
- 
-  .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(270px, 1fr));
-    gap:12px;
-  }
- 
-  .card{
-    background:var(--paper);
-    border:1px solid var(--line);
-    border-top:4px solid var(--group-color, var(--teal));
-    border-radius:10px;
-    padding:16px;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-  }
-  .card-source{font-size:0.75rem; color:var(--ink-soft);}
-  .card-title{font-weight:600; font-size:0.98rem; margin:0; line-height:1.35;}
-  .card-sub{font-size:0.8rem; color:var(--ink-soft); margin:0;}
-  .card-footer{margin-top:auto; padding-top:8px;}
- 
-  .view-link{
-    display:inline-block;
-    background:var(--teal-dark);
-    color:#fff;
-    text-decoration:none;
-    font-size:0.85rem;
-    padding:8px 14px;
-    border-radius:8px;
-    text-align:center;
-    width:100%;
-  }
-  .view-link:hover{background:var(--teal);}
-  .view-link.pending{
-    background:var(--bg);
-    color:var(--ink-soft);
-    border:1px dashed var(--line);
-    cursor:default;
-    pointer-events:none;
-  }
- 
-  .edit-row{display:none; gap:6px; margin-top:4px;}
-  body.edit-mode .edit-row{display:flex;}
-  body.edit-mode .view-link{display:none;}
-  .edit-row input{
-    flex:1;
-    border:1px solid var(--line);
-    border-radius:8px;
-    padding:7px 9px;
-    font-size:0.82rem;
-  }
-  .edit-row input.saved{border-color:var(--teal);}
- 
-  #empty{text-align:center; color:var(--ink-soft); padding:50px 0; display:none;}
- 
-  footer{max-width:1000px; margin:30px auto 0; padding:0 24px; color:var(--ink-soft); font-size:0.8rem;}
- 
-  @media (max-width:640px){
-    header{padding:26px 16px 20px;}
-    .subtitle{font-size:0.9rem;}
-    main{padding:0 16px; margin-top:18px;}
-    footer{padding:0 16px;}
-    .grid{grid-template-columns:1fr; gap:10px;}
-    .card{padding:14px;}
-    .toolbar{margin-top:12px;}
-    .btn{font-size:0.8rem; padding:8px 12px;}
-    .cat-head h2{font-size:1rem;}
-  }
-</style>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="logo.png">
+<title>Recursos Socioemocionales</title> 
 </head>
 <body>
  
 <header>
   <div class="header-inner">
-    <p class="eyebrow">Educación socioemocional · Colombia</p>
+    <img src="emotic-logo.png" width="100" height="100">
     <h1>Recursos Sobre Competencias Socioemocionales</h1>
-    <p class="subtitle">Elige un grado arriba para ver los recursos socioemocionales disponibles para ese nivel, organizados por tipo.</p>
+    <p class="subtitle">Elige un grado para ver los recursos socioemocionales disponibles para ese nivel.</p>
   </div>
 </header>
  
@@ -216,14 +49,8 @@ window.addEventListener('error', function(e){
  
 document.addEventListener('DOMContentLoaded', function(){
  
-// --- Acceso de administrador ---
-// Cambia esta clave por la que tú quieras usar.
 const ADMIN_PASSWORD = "socioemocional2026";
  
-// Para poner un enlace directamente desde el código, agrega la propiedad
-// "link" en el objeto del recurso correspondiente, por ejemplo:
-// {fuente:"MEN", documento:"...", ..., link:"https://tu-enlace-aqui.com"}
-// Si un recurso no tiene "link", se mostrará como "Enlace pendiente".
 const DATA = [
   {fuente:"MEN", documento:"Emociones para la vida", grado:"Primero", origen:"Cuaderno de trabajo", codigo:"Socioemocional-1", categoria:"Guía de trabajo (estudiantes)", link:"https://www.educacionbogota.edu.co/portal_institucional/sites/default/files/inline-files/Socioemocional%20estudiante%201o.pdf"},
   {fuente:"MEN", documento:"Emociones para la vida", grado:"Segundo", origen:"Cuaderno de trabajo", codigo:"Socioemocional-2", categoria:"Guía de trabajo (estudiantes)", link:"https://www.educacionbogota.edu.co/portal_institucional/sites/default/files/inline-files/Socioemocional%20estudiante%202o.pdf"},
@@ -335,10 +162,8 @@ const CATEGORY_COLORS = {
 };
  
 const GRADES_PRESENT = ["Todos","Jardín","Primero","Segundo","Tercero","Cuarto","Quinto","Sexto"];
- 
-// Los enlaces se precargan desde el campo "link" de cada recurso en DATA.
-// El modo edición del navegador puede seguir usándose para ajustarlos o
-// añadir nuevos sin tocar el código.
+
+
 let links = {};
 DATA.forEach(d=>{ if(d.link) links[d.id] = d.link; });
  
@@ -489,7 +314,7 @@ if(checkAdminAccess()){
  
 render();
  
-}); // end DOMContentLoaded
+}); 
 </script>
 </body>
 </html>
