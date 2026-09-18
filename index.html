@@ -5,40 +5,54 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="logo.png">
-<title>Recursos Socioemocionales</title> 
+<title>Recursos Socioemocionales</title>
 </head>
 <body>
 
 <header>
   <div class="header-inner">
-    <img src="emoTIC-Logo.png" width="100" height="100"> 
-    <h1>Recursos Sobre Competencias Socioemocionales</h1>
-    <p class="subtitle">Elige un grado para ver los recursos socioemocionales disponibles para ese nivel.</p>
+    <img src="emoTIC-Logo.png" width="100" height="100" alt="emoTIC">
+    <h1>Activos de Información Sobre Competencias Socioemocionales</h1>
+    <p class="subtitle">Inventario de guias sobre competencias Socioemocionales. Trabajo de investigación</p>
   </div>
 </header>
- 
-<nav class="grade-nav">
-  <div class="grade-nav-inner" id="grade-tabs"></div>
+
+<nav class="cat-nav">
+  <div class="cat-nav-inner" id="cat-tabs"></div>
 </nav>
- 
-<div class="toolbar">
-  <input type="search" id="search" placeholder="Buscar recurso…" style="margin-right:auto; max-width:260px;">
-  <button class="btn admin-only" id="btn-toggle-edit" style="display:none;">Editar enlaces</button>
-  <button class="btn admin-only" id="btn-export" style="display:none;">Exportar enlaces</button>
-  <button class="btn admin-only" id="btn-import" style="display:none;">Importar enlaces</button>
-  <input type="file" id="file-input" accept="application/json" style="display:none;">
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-expanded="false">
+      <span id="sidebar-toggle-label">Grados</span>
+      <span class="chevron">▾</span>
+    </button>
+    <div class="sidebar-inner" id="grade-menu"></div>
+  </aside>
+
+  <div class="content">
+    <div class="toolbar">
+      <input type="search" id="search" placeholder="Buscar recurso…">
+      <button class="btn admin-only" id="btn-toggle-edit" style="display:none;">Editar enlaces</button>
+      <button class="btn admin-only" id="btn-export" style="display:none;">Exportar enlaces</button>
+      <button class="btn admin-only" id="btn-import" style="display:none;">Importar enlaces</button>
+      <input type="file" id="file-input" accept="application/json" style="display:none;">
+    </div>
+    <p id="admin-hint" style="margin:6px 0 0;font-size:0.78rem;color:var(--ink-soft);display:none;">
+      Modo administrador activo.
+    </p>
+
+    <main id="main"></main>
+    <p id="empty">No hay recursos que coincidan con tu búsqueda.</p>
+  </div>
+
 </div>
-<p id="admin-hint" style="max-width:1000px;margin:6px auto 0;padding:0 16px;font-size:0.78rem;color:var(--ink-soft);display:none;">
-  Modo administrador activo.
-</p>
- 
-<main id="main"></main>
-<p id="empty">No hay recursos que coincidan con tu búsqueda.</p>
- 
+
 <footer>
   Fuente de los datos: matriz de inventario de recursos socioemocionales.
 </footer>
- 
+
 <script>
 window.addEventListener('error', function(e){
   var box = document.createElement('div');
@@ -46,50 +60,54 @@ window.addEventListener('error', function(e){
   box.textContent = 'Ocurrió un error cargando la página: ' + e.message;
   document.body.prepend(box);
 });
- 
+
 document.addEventListener('DOMContentLoaded', function(){
- 
+
 const ADMIN_PASSWORD = "socioemocional2026";
- 
+
+const CI = "https://www.mineducacion.gov.co/portal/micrositios-institucionales/Centros-de-Interes-para-la-Formacion-Integral/422449:Caja-de-Herramientas";
+const AFE = "https://escuelasecretarias.mineducacion.gov.co/alianza-familia-escuela";
+
 const DATA = [
+  /*  EDUCACIÓN BÁSICA PRIMARIA  */
   {fuente:"MEN", documento:"Emociones para la vida", grado:"Primero", origen:"Cuaderno de trabajo", codigo:"Socioemocional-1", categoria:"Guía de trabajo (estudiantes)", link:"https://www.educacionbogota.edu.co/portal_institucional/sites/default/files/inline-files/Socioemocional%20estudiante%201o.pdf"},
   {fuente:"MEN", documento:"Emociones para la vida", grado:"Segundo", origen:"Cuaderno de trabajo", codigo:"Socioemocional-2", categoria:"Guía de trabajo (estudiantes)", link:"https://www.educacionbogota.edu.co/portal_institucional/sites/default/files/inline-files/Socioemocional%20estudiante%202o.pdf"},
   {fuente:"MEN", documento:"Emociones para la vida", grado:"Tercero", origen:"Cuaderno de trabajo", codigo:"Socioemocional-3", categoria:"Guía de trabajo (estudiantes)", link:"https://www.educacionbogota.edu.co/portal_institucional/sites/default/files/inline-files/Socioemocional%20estudiante%203o.pdf"},
   {fuente:"MEN", documento:"Emociones para la vida", grado:"Cuarto", origen:"Cuaderno de trabajo", codigo:"Socioemocional-4", categoria:"Guía de trabajo (estudiantes)", link:"https://www.educacionbogota.edu.co/portal_institucional/sites/default/files/inline-files/Socioemocional%20estudiante%204o.pdf"},
   {fuente:"MEN", documento:"Emociones para la vida", grado:"Quinto", origen:"Cuaderno de trabajo", codigo:"Socioemocional-5", categoria:"Guía de trabajo (estudiantes)", link:"https://www.educacionbogota.edu.co/portal_institucional/sites/default/files/inline-files/Socioemocional%20estudiante%205o.pdf"},
- 
+
   {fuente:"MEN", documento:"Emociones para la vida", grado:"Primero", origen:"Guía profesor", codigo:"Socioemocional-D1", categoria:"Guía de trabajo (profesores)", link:"https://www.educacionbogota.edu.co/portal_institucional/sites/default/files/inline-files/Socioemocional%20docente%201o.pdf"},
   {fuente:"MEN", documento:"Emociones para la vida", grado:"Segundo", origen:"Guía profesor", codigo:"Socioemocional-D2", categoria:"Guía de trabajo (profesores)", link:"https://www.educacionbogota.edu.co/portal_institucional/sites/default/files/inline-files/Socioemocional%20docente%202o.pdf"},
   {fuente:"MEN", documento:"Emociones para la vida", grado:"Tercero", origen:"Guía profesor", codigo:"Socioemocional-D3", categoria:"Guía de trabajo (profesores)", link:"https://www.educacionbogota.edu.co/portal_institucional/sites/default/files/inline-files/Socioemocional%20docente%203o.pdf"},
   {fuente:"MEN", documento:"Emociones para la vida", grado:"Cuarto", origen:"Guía profesor", codigo:"Socioemocional-D4", categoria:"Guía de trabajo (profesores)", link:"https://www.educacionbogota.edu.co/portal_institucional/sites/default/files/inline-files/Socioemocional%20docente%204o.pdf"},
   {fuente:"MEN", documento:"Emociones para la vida", grado:"Quinto", origen:"Guía profesor", codigo:"Socioemocional-D5", categoria:"Guía de trabajo (profesores)", link:"https://www.educacionbogota.edu.co/portal_institucional/sites/default/files/inline-files/Socioemocional%20docente%205o.pdf"},
- 
+
   {fuente:"Fundación Alianza Educativa", documento:"Dimensión conmigo mismo", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Actividad 1", categoria:"Actividad", link:"https://www.canva.com/design/DAHBCVlprdA/cmmgi5PaBHD4INO0nAzcJw/edit"},
   {fuente:"Fundación Alianza Educativa", documento:"Dimensión conmigo mismo", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Actividad 2", categoria:"Actividad", link:"https://www.canva.com/design/DAHBIKfG9E8/dMz_T7wpmrESwVtiGsfFKQ/edit"},
   {fuente:"Fundación Alianza Educativa", documento:"Dimensión conmigo mismo", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Actividad 3", categoria:"Actividad", link:"https://www.canva.com/design/DAHBIDGsiMs/jcjPfrcKiuHbVdRCkY9hEA/edit"},
   {fuente:"Fundación Alianza Educativa", documento:"Dimensión conmigo mismo", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Actividad 4", categoria:"Actividad", link:"https://www.canva.com/design/DAHBIMw7kCg/IpeDfXkZ7dhjjPQmyfmMnA/edit"},
   {fuente:"Fundación Alianza Educativa", documento:"Dimensión conmigo mismo", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Actividad 5", categoria:"Actividad", link:"https://www.canva.com/design/DAHBIOKUTY8/suzwIz_wTDXYTJkcM6ezxg/edit"},
- 
+
   {fuente:"Fundación Alianza Educativa", documento:"Dimensión con los demás", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Actividad 1", categoria:"Actividad", link:"https://www.canva.com/design/DAHA8zgbBf0/hPMI6BQjS0C-YlJKZOWKPA/edit"},
   {fuente:"Fundación Alianza Educativa", documento:"Dimensión con los demás", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Actividad 2", categoria:"Actividad", link:"https://www.canva.com/design/DAHBCTvHNMQ/sxdm1xy-zxD4NiIcNBbEXg/edit"},
   {fuente:"Fundación Alianza Educativa", documento:"Dimensión con los demás", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Actividad 3", categoria:"Actividad", link:"https://www.canva.com/design/DAHBCmA7BGA/fVxSzRPGpjdzVMLTBgZrMA/edit"},
   {fuente:"Fundación Alianza Educativa", documento:"Dimensión con los demás", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Actividad 4", categoria:"Actividad", link:"https://www.canva.com/design/DAHBC7yB6Do/n0UDjl-DaIdaD-q0lPL26g/edit"},
   {fuente:"Fundación Alianza Educativa", documento:"Dimensión con los demás", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Actividad 5", categoria:"Actividad", link:"https://www.canva.com/design/DAHBDM8GvWU/4xnOKmS_XukF06dNbE_gaw/edit"},
- 
+
   {fuente:"Fundación Alianza Educativa", documento:"Dimensión con nuestros desafíos", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Actividad 1", categoria:"Actividad", link:"https://www.canva.com/design/DAHA8zgbBf0/hPMI6BQjS0C-YlJKZOWKPA/edit"},
   {fuente:"Fundación Alianza Educativa", documento:"Dimensión con nuestros desafíos", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Actividad 2", categoria:"Actividad", link:"https://www.canva.com/design/DAHBCTvHNMQ/sxdm1xy-zxD4NiIcNBbEXg/edit"},
   {fuente:"Fundación Alianza Educativa", documento:"Dimensión con nuestros desafíos", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Actividad 3", categoria:"Actividad", link:"https://www.canva.com/design/DAHBCmA7BGA/fVxSzRPGpjdzVMLTBgZrMA/edit"},
   {fuente:"Fundación Alianza Educativa", documento:"Dimensión con nuestros desafíos", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Actividad 4", categoria:"Actividad", link:"https://www.canva.com/design/DAHBC7yB6Do/n0UDjl-DaIdaD-q0lPL26g/edit"},
   {fuente:"Fundación Alianza Educativa", documento:"Dimensión con nuestros desafíos", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Actividad 5", categoria:"Actividad", link:"https://www.canva.com/design/DAHBDM8GvWU/4xnOKmS_XukF06dNbE_gaw/edit"},
- 
+
   {fuente:"Fundación Alianza Educativa", documento:"Cierre socioemocional", grado:"Primero a quinto", origen:"Cuaderno de trabajo", codigo:"Actividad", categoria:"Actividad", link:"https://www.canva.com/design/DAHBDmPXtAY/TzkvvMOI_1fPW5fyWWMvDQ/edit"},
   {fuente:"Fundación Alianza Educativa", documento:"Circuito docente", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Tarjetas", categoria:"Tarjetas", link:"https://www.canva.com/design/DAHA1BofNnU/EsKaNJYBCWazr6Z9ElKcew/edit"},
- 
+
   {fuente:"Fundación Alianza Educativa", documento:"Dirección de curso — martes", grado:"Jardín a tercero", origen:"Guía profesor", codigo:"Dirección de curso 1", categoria:"Guía de trabajo (profesores)", link:"https://www.canva.com/design/DAHBPzBBxlY/6KiOa4Rk28gIDxN9lyyeAg/edit"},
   {fuente:"Fundación Alianza Educativa", documento:"Dirección de curso — martes", grado:"Cuarto a sexto", origen:"Guía profesor", codigo:"Dirección de curso 1", categoria:"Guía de trabajo (profesores)", link:"https://www.canva.com/design/DAHBQIsQokE/zPDhklWpB9RDl476hsgNUw/edit"},
   {fuente:"Fundación Alianza Educativa", documento:"Dirección de curso — jueves", grado:"Jardín a tercero", origen:"Guía profesor", codigo:"Dirección de curso 2", categoria:"Guía de trabajo (profesores)", link:"https://www.canva.com/design/DAHBQNcAE_E/PDmLfHYS92ahgLmiGXxz3w/edit"},
   {fuente:"Fundación Alianza Educativa", documento:"Dirección de curso — jueves", grado:"Cuarto a sexto", origen:"Guía profesor", codigo:"Dirección de curso 2", categoria:"Guía de trabajo (profesores)", link:"https://www.canva.com/design/DAHBQdGkDKI/8jIGCLrUPijuwSX5YyFt9Q/edit"},
- 
+
   {fuente:"Fundación Saldarriaga Concha", documento:"Emociones, conexión vital", grado:"Primero a quinto", origen:"Recursos para estudiantes", codigo:"Tema 2 — Autorreconocimiento", categoria:"Guía de trabajo (estudiantes)", link:"https://especiales.colombiaaprende.edu.co/emociones-conexion-vital/linea1_ruta1_mod1.html"},
   {fuente:"Fundación Saldarriaga Concha", documento:"Emociones, conexión vital", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Taller 1", categoria:"Taller", link:"https://especiales.colombiaaprende.edu.co/emociones-conexion-vital/pdf/tema_1_Mod1_L1R1.pdf"},
   {fuente:"Fundación Saldarriaga Concha", documento:"Emociones, conexión vital", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Taller 3", categoria:"Taller", link:"https://especiales.colombiaaprende.edu.co/emociones-conexion-vital/pdf/tema_3_Mod1_L1R1.pdf"},
@@ -109,86 +127,246 @@ const DATA = [
   {fuente:"Fundación Saldarriaga Concha", documento:"Emociones, conexión vital", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Tema 2 — Signos de alarma", categoria:"Taller", link:"https://especiales.colombiaaprende.edu.co/emociones-conexion-vital/pdf/L1_R2_Mod6_Tema2.pdf"},
   {fuente:"Fundación Saldarriaga Concha", documento:"Emociones, conexión vital", grado:"Primero a quinto", origen:"Recursos para estudiantes", codigo:"Tema 3 — Activación de rutas", categoria:"Taller", link:"https://especiales.colombiaaprende.edu.co/emociones-conexion-vital/linea1_ruta2_mod6.html"},
   {fuente:"Fundación Saldarriaga Concha", documento:"Emociones, conexión vital", grado:"Primero a quinto", origen:"Recursos para estudiantes", codigo:"Tema 4 — Riesgo en casa, el aula y la comunidad", categoria:"Taller", link:"https://especiales.colombiaaprende.edu.co/emociones-conexion-vital/linea1_ruta2_mod6.html"},
- 
+
   {fuente:"Agencia de pedagogía ClickArte", documento:"Diviértete con Aldea", grado:"Primero a quinto", origen:"Recursos para estudiantes", codigo:"La aldea", categoria:"Actividad", link:"https://laaldea.co/"},
- 
+
   {fuente:"Colombia Aprende", documento:"Yo pienso, siento y actúo", grado:"Cuarto", origen:"Recursos para estudiantes", codigo:"Material 1 (p.4)", categoria:"Sitio web offline", link:"https://www.colombiaaprende.edu.co/recurso-coleccion/catalogo-de-contenidos-competencias-ciudadanas-y-habilidades-socioemocionales"},
   {fuente:"Colombia Aprende", documento:"Contarle a alguien mis problemas hace más fácil las cosas", grado:"Cuarto", origen:"Recursos para estudiantes", codigo:"Material 2 (p.4)", categoria:"Sitio web offline", link:"https://www.colombiaaprende.edu.co/recurso-coleccion/catalogo-de-contenidos-competencias-ciudadanas-y-habilidades-socioemocionales"},
   {fuente:"Colombia Aprende", documento:"Conozco y manejo mis emociones", grado:"Primero a tercero", origen:"Recursos para estudiantes", codigo:"Material 3 (p.2)", categoria:"Sitio web offline", link:"https://www.colombiaaprende.edu.co/recurso-coleccion/catalogo-de-contenidos-competencias-ciudadanas-y-habilidades-socioemocionales"},
   {fuente:"Colombia Aprende", documento:"Afrontando el enojo", grado:"Cuarto", origen:"Recursos para estudiantes", codigo:"Material 4 (p.3)", categoria:"Sitio web offline", link:"https://www.colombiaaprende.edu.co/recurso-coleccion/catalogo-de-contenidos-competencias-ciudadanas-y-habilidades-socioemocionales"},
- 
+
   {fuente:"Secretaría de Educación de Bogotá", documento:"Escuelas con emociones", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Malla de aprendizajes", categoria:"Malla de aprendizajes", link:"https://oce.educacionbogota.edu.co/escuela-con-emociones"},
- 
+
   {fuente:"EDUCAPAZ", documento:"Curso de profundización 1", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Herramientas metodológicas", categoria:"Guía de trabajo (profesores)", link:"https://herramientas.educapaz.co/herramienta/curso-de-profundizacion-fortalecimiento-crese-ciudadania-reconciliacion-y-educacion-socioemocional/"},
   {fuente:"EDUCAPAZ", documento:"Curso de profundización 2", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Herramientas metodológicas", categoria:"Guía de trabajo (profesores)", link:"https://herramientas.educapaz.co/herramienta/curso-de-profundizacion-guia-2-ciudadania-reconciliacion-y-educacion-socioemocional/"},
   {fuente:"EDUCAPAZ", documento:"Curso de profundización 3", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Herramientas metodológicas", categoria:"Guía de trabajo (profesores)", link:"https://herramientas.educapaz.co/herramienta/curso-de-profundizacion-guia-3-ciudadania-reconciliacion-y-educacion-socioemocional/"},
   {fuente:"EDUCAPAZ", documento:"Escuela de gestores y gestoras", grado:"Primero a quinto", origen:"Guía profesor", codigo:"Herramientas metodológicas", categoria:"Guía de trabajo (profesores)", link:"https://herramientas.educapaz.co/herramienta/escuela-de-gestores-y-gestoras-modulo-2-ciudadania-reconciliacion-y-educacion-socioemocional-crese/"},
+
+  /*  BACHILLERATO: NAVEGAR SEGURO */
+  {fuente:"MEN", documento:"Navegar seguro", grado:"Sexto", origen:"Cuaderno de trabajo", codigo:"Socioemocional-6", categoria:"Guía de trabajo (estudiantes)", link:"https://drive.google.com/file/d/1MP3NcuRGBXX2_dS4iIAdBMtOeyrR-dKM/view"},
+  {fuente:"MEN", documento:"Navegar seguro", grado:"Séptimo", origen:"Cuaderno de trabajo", codigo:"Socioemocional-7", categoria:"Guía de trabajo (estudiantes)", link:"https://drive.google.com/file/d/1uqr4KaFjkEoIZr-cYhGi14xB9-SXe3zr/view"},
+  {fuente:"MEN", documento:"Navegar seguro", grado:"Octavo", origen:"Cuaderno de trabajo", codigo:"Socioemocional-8", categoria:"Guía de trabajo (estudiantes)", link:"https://drive.google.com/file/d/1itpYgjVk6rhIuDFK666XUkTO6yzp4ePH/view"},
+  {fuente:"MEN", documento:"Navegar seguro", grado:"Noveno", origen:"Cuaderno de trabajo", codigo:"Socioemocional-9", categoria:"Guía de trabajo (estudiantes)", link:"https://drive.google.com/file/d/1MFDUBmMUQZ6Ec8vw-mddWJB7gLMEp99x/view"},
+  {fuente:"MEN", documento:"Navegar seguro", grado:"Décimo", origen:"Cuaderno de trabajo", codigo:"Socioemocional-10", categoria:"Guía de trabajo (estudiantes)", link:"https://drive.google.com/file/d/1wmabMpAjqHd8Umfz9cIkfifO2Ht6L5zB/view"},
+  {fuente:"MEN", documento:"Navegar seguro", grado:"Undécimo", origen:"Cuaderno de trabajo", codigo:"Socioemocional-11", categoria:"Guía de trabajo (estudiantes)", link:"https://drive.google.com/file/d/1qqvPY-qjzw-Faenvsa9OZpYKjBnXbEJc/view"},
+
+  {fuente:"MEN", documento:"Navegar seguro", grado:"Sexto", origen:"Guía profesor", codigo:"Socioemocional-D6", categoria:"Guía de trabajo (profesores)", link:"https://drive.google.com/file/d/1kTE6UZBt82PMNdAKxZQoLvGnfiV7gtTy/view"},
+  {fuente:"MEN", documento:"Navegar seguro", grado:"Séptimo", origen:"Guía profesor", codigo:"Socioemocional-D7", categoria:"Guía de trabajo (profesores)", link:"https://drive.google.com/file/d/1i24e_GJfr2yIRfwdYC74JllaVsvw0IGc/view"},
+  {fuente:"MEN", documento:"Navegar seguro", grado:"Octavo", origen:"Guía profesor", codigo:"Socioemocional-D8", categoria:"Guía de trabajo (profesores)", link:"https://drive.google.com/file/d/17ba6nrMbZX8lOqvM_wyGJrKwwDi97ebp/view"},
+  {fuente:"MEN", documento:"Navegar seguro", grado:"Noveno", origen:"Guía profesor", codigo:"Socioemocional-D9", categoria:"Guía de trabajo (profesores)", link:"https://drive.google.com/file/d/1LKE_HXJzPRKnaR1fRu495OoOEdCmcnLA/view"},
+  {fuente:"MEN", documento:"Navegar seguro", grado:"Décimo", origen:"Guía profesor", codigo:"Socioemocional-D10", categoria:"Guía de trabajo (profesores)", link:"https://drive.google.com/file/d/1muBDeLKBp1c8Tl5yCl-sj_oiTW-X33uc/view"},
+  {fuente:"MEN", documento:"Navegar seguro", grado:"Undécimo", origen:"Guía profesor", codigo:"Socioemocional-D11", categoria:"Guía de trabajo (profesores)", link:"https://drive.google.com/file/d/10d1v6UegacJPg8AuADk0EWd8R1h1uccC/view"},
+
+  {fuente:"MEN", documento:"Píllatela y aprende", grado:"Sexto a undécimo", origen:"Cuaderno de trabajo", codigo:"Fortalecimiento de competencias", categoria:"Guía de trabajo (estudiantes)", link:"https://drive.google.com/file/d/1Aytc8cZwWNnmityW6yMGG_Ja_J4SaJSJ/view"},
+
+  /* Centros de Interés: guías de sesión 1 a 27 */
+  {fuente:"MEN / Universidad EAFIT", documento:"Reconocimiento CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 1", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Sentidos en la comunidad CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 2", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Preguntas en contexto CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 3", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Equipos visionarios CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 4", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Enfoque transformador CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 5", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"De ideas a impactos CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 6", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"De ideas a impactos — Parte 2 CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 7", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Experimentación de prototipos CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 8", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Experimentación de prototipos — Parte 2 CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 9", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Sinergia estratégica CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 10", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Primer sprint CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 11", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Vamos a crear CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 12", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Vamos a crear — Parte 2 CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 13", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Vamos a crear — Parte 3 CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 14", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Vamos a crear — Parte 4 CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 15", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Segundo sprint CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 16", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Segundo sprint — Parte 2 CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 17", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Segundo sprint — Parte 3 CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 18", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Segundo sprint — Parte 4 CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 19", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Vamos a valorar y crear CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 20", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Tercer sprint CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 21", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Tercer sprint — Parte 2 CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 22", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Tercer sprint — Parte 3 CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 23", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Preparamos nuestros logros CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 24", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Valoremos nuestro aprendizaje CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 25", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Celebremos CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 26", categoria:"Guía de trabajo (profesores)", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Celebremos — Parte 2 CI", grado:"Sexto a undécimo", origen:"Guía profesor", codigo:"Guía sesión 27", categoria:"Guía de trabajo (profesores)", link:CI},
+
+  /*  Centros de Interés: material de apoyo */
+  {fuente:"MEN / Universidad EAFIT", documento:"Universo CI", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Material de apoyo CI", categoria:"Actividad", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Formato Velero CI", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Material de apoyo CI", categoria:"Actividad", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Tabla de seguimiento de proyectos CI", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Material de apoyo CI", categoria:"Actividad", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Tablero de planeación CI", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Material de apoyo CI", categoria:"Actividad", link:CI},
+  {fuente:"MEN / Universidad EAFIT", documento:"Bitácora del centro de interés", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Material de apoyo CI", categoria:"Actividad", link:CI},
+
+  {fuente:"MEN / Inravisión", documento:"RTVC Play", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Educación", categoria:"Videos", link:"https://rtvcplay.co/educacion"},
+
+  /*  Tarjetas socioemocionales */
+  {fuente:"MEN", documento:"A punto de estallar", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Socioemocional", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Aceptación: afrontar situaciones difíciles", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Socioemocional", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Afrontar la muerte de un ser querido", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Socioemocional", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Apoyar a niños ante la muerte de un ser querido", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Socioemocional", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Apoyo en el manejo de emociones", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Socioemocional", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Calmarse y reducir el estrés", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Socioemocional", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Control de emociones en tres pasos", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Socioemocional", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Controlar emociones intensas", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Socioemocional", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Empatía: comprender las emociones de otros", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Socioemocional", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Fortalecer la capacidad de superar la adversidad", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Socioemocional", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"La violencia afecta a niños y niñas", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Socioemocional", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Manejar en familia el impacto del aislamiento", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Socioemocional", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"¿Qué son las emociones?", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Socioemocional", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Reconocimiento de emociones", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Socioemocional", categoria:"Tarjetas", link:AFE},
+
+  /*  Tarjetas: crianza con amabilidad  */
+  {fuente:"MEN", documento:"Abordar comportamientos desafiantes", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Crianza con amabilidad", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Cinco estrategias de rutinas", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Crianza con amabilidad", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Cinco ideas de autocuidado", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Crianza con amabilidad", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Comprender las reglas", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Crianza con amabilidad", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Manejar comportamientos retadores", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Crianza con amabilidad", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Participación efectiva de adolescentes", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Crianza con amabilidad", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Redes de apoyo", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Crianza con amabilidad", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Reloj de rutinas para niños y niñas", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Crianza con amabilidad", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Reportar violencia que afecta a otros", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Crianza con amabilidad", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Rutinas familiares para organizarnos", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Crianza con amabilidad", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Rutinas y aprovechamiento del tiempo", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Crianza con amabilidad", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Tiempo en casa: posibilidades y oportunidades", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Crianza con amabilidad", categoria:"Tarjetas", link:AFE},
+  {fuente:"MEN", documento:"Tres acciones para contar con ayuda", grado:"Sexto a undécimo", origen:"Recursos para estudiantes", codigo:"Crianza con amabilidad", categoria:"Tarjetas", link:AFE},
 ];
 DATA.forEach((d,i)=>d.id="r"+i);
- 
-const GRADE_SEQUENCE = ["Jardín","Primero","Segundo","Tercero","Cuarto","Quinto","Sexto"];
- 
+
+/* ---------- Grados ---------- */
+const GRADE_SEQUENCE = ["Jardín","Primero","Segundo","Tercero","Cuarto","Quinto","Sexto","Séptimo","Octavo","Noveno","Décimo","Undécimo"];
+
+function normalize(s){
+  return s.trim()
+    .replace(/^s/,'S').replace(/^p/,'P').replace(/^t/,'T').replace(/^c/,'C')
+    .replace(/^q/,'Q').replace(/^o/,'O').replace(/^n/,'N').replace(/^d/,'D')
+    .replace(/^u/,'U').replace(/^j/,'J');
+}
+
 function expandGrado(str){
   if(str.includes(" a ")){
-    const [from,to] = str.split(" a ").map(s=>s.trim());
-    const fromCap = from.charAt(0).toUpperCase()+from.slice(1);
-    const toCap = to.charAt(0).toUpperCase()+to.slice(1);
-    const i = GRADE_SEQUENCE.indexOf(fromCap);
-    const j = GRADE_SEQUENCE.indexOf(toCap);
+    const [from,to] = str.split(" a ").map(s=>normalize(s));
+    const i = GRADE_SEQUENCE.indexOf(from);
+    const j = GRADE_SEQUENCE.indexOf(to);
     if(i===-1 || j===-1) return [str];
     return GRADE_SEQUENCE.slice(i, j+1);
   }
-  return [str];
+  return [normalize(str)];
 }
 DATA.forEach(d=> d.grados = expandGrado(d.grado));
- 
+
+/* ---------- Menú lateral de grados ---------- */
+const GRADE_MENU = [
+  {
+    nivel: "Educación básica",
+    grupos: [
+      { nombre: "Básica primaria",   grados: ["Primero","Segundo","Tercero","Cuarto","Quinto"] },
+      { nombre: "Básica secundaria", grados: ["Sexto","Séptimo","Octavo","Noveno"] }
+    ]
+  },
+  {
+    nivel: "Educación media",
+    grupos: [
+      { nombre: null, grados: ["Décimo","Undécimo"] }
+    ]
+  }
+];
+
+/* ---------- Categorías ---------- */
 const CATEGORY_ORDER = [
   "Guía de trabajo (estudiantes)",
   "Guía de trabajo (profesores)",
   "Actividad",
   "Taller",
   "Tarjetas",
+  "Videos",
   "Sitio web offline",
   "Malla de aprendizajes"
 ];
 const CATEGORY_COLORS = {
-  "Guía de trabajo (estudiantes)": "#FFDE21",
-  "Guía de trabajo (profesores)": "#2B4E42",
-  "Actividad": "#D98A3D",
+  "Guía de trabajo (estudiantes)": "#F2B807",
+  "Guía de trabajo (profesores)": "#08b1b1",
+  "Actividad": "#d4690c",
   "Taller": "#6B5B95",
-  "Tarjetas": "#B4553F",
+  "Tarjetas": "#cf639e",
+  "Videos": "#B4553F",
   "Sitio web offline": "#4477A1",
   "Malla de aprendizajes": "#8A8A3D"
 };
- 
-const GRADES_PRESENT = ["Todos","Jardín","Primero","Segundo","Tercero","Cuarto","Quinto","Sexto"];
-
 
 let links = {};
 DATA.forEach(d=>{ if(d.link) links[d.id] = d.link; });
- 
+
 let activeGrade = "Todos";
+let activeCategory = "Todas";
 let query = "";
 let editMode = false;
- 
+
 function isValidUrl(v){ return !!v && /^https?:\/\/.+/i.test(v.trim()); }
- 
-function renderTabs(){
-  const el = document.getElementById("grade-tabs");
-  el.innerHTML = GRADES_PRESENT.map(g=>
-    `<button class="grade-tab ${activeGrade===g?'active':''}" data-g="${g}">${g}</button>`
-  ).join("");
-  el.querySelectorAll(".grade-tab").forEach(btn=>{
-    btn.addEventListener("click", ()=>{ activeGrade = btn.dataset.g; render(); });
+
+function countForGrade(g){
+  return DATA.filter(d => g==="Todos" || d.grados.includes(g)).length;
+}
+
+/* ---------- Render: menú lateral ---------- */
+function renderGradeMenu(){
+  const el = document.getElementById("grade-menu");
+  let html = `<button class="grade-item all ${activeGrade==="Todos"?"active":""}" data-g="Todos">
+      Todos los grados <span class="n">${DATA.length}</span></button>`;
+
+  GRADE_MENU.forEach(nivel=>{
+    html += `<div class="nivel">${nivel.nivel}</div>`;
+    nivel.grupos.forEach(grupo=>{
+      if(grupo.nombre) html += `<div class="grupo">${grupo.nombre}</div>`;
+      html += `<div class="grados">`;
+      grupo.grados.forEach(g=>{
+        const n = countForGrade(g);
+        html += `<button class="grade-item ${activeGrade===g?"active":""}" data-g="${g}">
+            ${g} <span class="n">${n}</span></button>`;
+      });
+      html += `</div>`;
+    });
+  });
+  el.innerHTML = html;
+
+  el.querySelectorAll(".grade-item").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      activeGrade = btn.dataset.g;
+      document.getElementById("sidebar-toggle-label").textContent =
+        activeGrade === "Todos" ? "Grados" : activeGrade;
+      document.querySelector(".sidebar").classList.remove("open");
+      render();
+      if(window.innerWidth <= 860){
+        document.querySelector(".content").scrollIntoView({behavior:"smooth", block:"start"});
+      }
+    });
   });
 }
- 
+
+/* ---------- Render: filtro de categorías ---------- */
+function renderCatTabs(){
+  const base = DATA.filter(d => activeGrade==="Todos" || d.grados.includes(activeGrade));
+  const counts = {};
+  base.forEach(d=> counts[d.categoria] = (counts[d.categoria]||0)+1);
+
+  const el = document.getElementById("cat-tabs");
+  let html = `<button class="cat-tab ${activeCategory==="Todas"?"active":""}" data-c="Todas">Todas <span class="n">${base.length}</span></button>`;
+  CATEGORY_ORDER.forEach(cat=>{
+    const n = counts[cat] || 0;
+    if(n === 0) return;
+    html += `<button class="cat-tab ${activeCategory===cat?"active":""}" data-c="${cat}"
+        style="--group-color:${CATEGORY_COLORS[cat]}">${cat} <span class="n">${n}</span></button>`;
+  });
+  el.innerHTML = html;
+
+  el.querySelectorAll(".cat-tab").forEach(btn=>{
+    btn.addEventListener("click", ()=>{ activeCategory = btn.dataset.c; render(); });
+  });
+}
+
 function matchesQuery(d){
   if(!query) return true;
   const q = query.toLowerCase();
   return (d.documento+" "+d.fuente+" "+d.codigo).toLowerCase().includes(q);
 }
- 
+
 function renderCard(d){
   const savedVal = links[d.id] || "";
   const valid = isValidUrl(savedVal);
@@ -208,23 +386,28 @@ function renderCard(d){
     </div>
   `;
 }
- 
+
 function render(){
-  renderTabs();
+  renderGradeMenu();
+  renderCatTabs();
+
   const filtered = DATA.filter(d=>
     (activeGrade==="Todos" || d.grados.includes(activeGrade)) &&
+    (activeCategory==="Todas" || d.categoria===activeCategory) &&
     matchesQuery(d)
   );
- 
+
   const main = document.getElementById("main");
   const empty = document.getElementById("empty");
   if(filtered.length===0){ main.innerHTML=""; empty.style.display="block"; return; }
   empty.style.display="none";
- 
+
   const groups = {};
   filtered.forEach(d=>{ groups[d.categoria]=groups[d.categoria]||[]; groups[d.categoria].push(d); });
- 
-  let html = "";
+
+  let html = `<p class="result-head">${activeGrade==="Todos" ? "Todos los grados" : activeGrade} ·
+      ${filtered.length} recurso${filtered.length===1?"":"s"}</p>`;
+
   CATEGORY_ORDER.forEach(cat=>{
     const items = groups[cat];
     if(!items || items.length===0) return;
@@ -239,7 +422,7 @@ function render(){
     `;
   });
   main.innerHTML = html;
- 
+
   main.querySelectorAll(".link-input").forEach(inp=>{
     inp.addEventListener("input", (e)=>{
       const id = e.target.dataset.id;
@@ -254,16 +437,23 @@ function render(){
     });
   });
 }
- 
+
+/* ---------- Sidebar móvil ---------- */
+document.getElementById("sidebar-toggle").addEventListener("click", (e)=>{
+  const sb = document.querySelector(".sidebar");
+  sb.classList.toggle("open");
+  e.currentTarget.setAttribute("aria-expanded", sb.classList.contains("open"));
+});
+
 document.getElementById("search").addEventListener("input",(e)=>{ query=e.target.value; render(); });
- 
+
 document.getElementById("btn-toggle-edit").addEventListener("click",(e)=>{
   editMode = !editMode;
   document.body.classList.toggle("edit-mode", editMode);
   e.target.classList.toggle("on", editMode);
   e.target.textContent = editMode ? "Salir de edición" : "Editar enlaces";
 });
- 
+
 document.getElementById("btn-export").addEventListener("click", ()=>{
   const exportData = DATA.map(d=>({
     documento:d.documento, codigo:d.codigo, fuente:d.fuente, grado:d.grado, link: links[d.id]||""
@@ -274,7 +464,7 @@ document.getElementById("btn-export").addEventListener("click", ()=>{
   a.href=url; a.download="enlaces_recursos_socioemocionales.json"; a.click();
   URL.revokeObjectURL(url);
 });
- 
+
 document.getElementById("btn-import").addEventListener("click", ()=> document.getElementById("file-input").click());
 document.getElementById("file-input").addEventListener("change",(e)=>{
   const file = e.target.files[0];
@@ -295,9 +485,7 @@ document.getElementById("file-input").addEventListener("change",(e)=>{
   reader.readAsText(file);
   e.target.value="";
 });
- 
-// Revisa si el enlace tiene ?admin= al final y pide la contraseña.
-// Un visitante normal (sin ese enlace especial) nunca ve los botones de edición.
+
 function checkAdminAccess(){
   const params = new URLSearchParams(window.location.search);
   if(!params.has('admin')) return false;
@@ -306,15 +494,15 @@ function checkAdminAccess(){
   if(entered !== null) alert('Contraseña incorrecta.');
   return false;
 }
- 
+
 if(checkAdminAccess()){
   document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
   document.getElementById('admin-hint').style.display = 'block';
 }
- 
+
 render();
- 
-}); 
+
+});
 </script>
 </body>
 </html>
