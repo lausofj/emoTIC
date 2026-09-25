@@ -302,14 +302,17 @@ let editMode = false;
 function isValidUrl(v){ return !!v && /^https?:\/\/.+/i.test(v.trim()); }
 
 function countForGrade(g){
-  return DATA.filter(d => g==="Todos" || d.grados.includes(g)).length;
+  return DATA.filter(d =>
+    (g==="Todos" || d.grados.includes(g)) &&
+    (activeCategory==="Todas" || d.categoria===activeCategory)
+  ).length;
 }
 
-/* ---------- Render: menú lateral ---------- */
+/*  Render: menú lateral */
 function renderGradeMenu(){
   const el = document.getElementById("grade-menu");
   let html = `<button class="grade-item all ${activeGrade==="Todos"?"active":""}" data-g="Todos">
-      Todos los grados <span class="n">${DATA.length}</span></button>`;
+      Todos los grados <span class="n">${countForGrade("Todos")}</span></button>`;
 
   GRADE_MENU.forEach(nivel=>{
     html += `<div class="nivel">${nivel.nivel}</div>`;
@@ -340,7 +343,7 @@ function renderGradeMenu(){
   });
 }
 
-/* ---------- Render: filtro de categorías ---------- */
+/*  Render: filtro de categorías  */
 function renderCatTabs(){
   const base = DATA.filter(d => activeGrade==="Todos" || d.grados.includes(activeGrade));
   const counts = {};
