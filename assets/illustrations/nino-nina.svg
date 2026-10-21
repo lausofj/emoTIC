@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" width="100%" height="100%">
+  <!-- Niño y Niña - Exploradores de la Empatía -->
+  <defs>
+    <radialGradient id="kidsGlow" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#FEF3C7" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#EDE9FE" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softKidsShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#4A3E6D" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <!-- Aura suave de fondo -->
+  <circle cx="120" cy="100" r="90" fill="url(#kidsGlow)"/>
+
+  <!-- ================= LA NIÑA (Izquierda) ================= -->
+  <g transform="translate(25, 25)" filter="url(#softKidsShadow)">
+    <!-- Coletas de cabello castaño -->
+    <circle cx="18" cy="40" r="16" fill="#6D4C41"/>
+    <circle cx="82" cy="40" r="16" fill="#6D4C41"/>
+    <!-- Lazos de colores -->
+    <ellipse cx="28" cy="46" rx="5" ry="8" fill="#EC4899" transform="rotate(-20, 28, 46)"/>
+    <ellipse cx="72" cy="46" rx="5" ry="8" fill="#EC4899" transform="rotate(20, 72, 46)"/>
+
+    <!-- Cabeza -->
+    <circle cx="50" cy="62" r="30" fill="#FFE0B2"/>
+
+    <!-- Cabello flequillo -->
+    <path d="M 22 55 Q 50 30 78 55 Q 65 42 50 44 Q 35 42 22 55 Z" fill="#6D4C41"/>
+
+    <!-- Cejas alegres -->
+    <path d="M 36 50 Q 43 45 50 50" fill="none" stroke="#5D4037" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 56 50 Q 63 45 70 50" fill="none" stroke="#5D4037" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Ojos brillantes grandes -->
+    <ellipse cx="43" cy="60" rx="4.5" ry="6" fill="#2E1065"/>
+    <circle cx="42" cy="58" r="1.8" fill="#FFFFFF"/>
+    <ellipse cx="63" cy="60" rx="4.5" ry="6" fill="#2E1065"/>
+    <circle cx="62" cy="58" r="1.8" fill="#FFFFFF"/>
+
+    <!-- Nariz pequeña y mejillas sonrosadas -->
+    <circle cx="53" cy="66" r="1.5" fill="#E65100" opacity="0.6"/>
+    <ellipse cx="36" cy="67" rx="5.5" ry="3.5" fill="#FF8A80" opacity="0.6"/>
+    <ellipse cx="70" cy="67" rx="5.5" ry="3.5" fill="#FF8A80" opacity="0.6"/>
+
+    <!-- Sonrisa amigable -->
+    <path d="M 45 73 Q 53 81 61 73" fill="none" stroke="#C2185B" stroke-width="2.8" stroke-linecap="round"/>
+
+    <!-- Ropa: Camiseta amarilla / coral -->
+    <path d="M 30 92 Q 50 86 70 92 L 78 135 L 22 135 Z" fill="#F59E0B"/>
+    <!-- Cuello -->
+    <path d="M 43 90 Q 50 96 57 90" fill="none" stroke="#FFFFFF" stroke-width="2.5"/>
+
+    <!-- Brazo saludando -->
+    <path d="M 26 94 Q 10 80 12 65" fill="none" stroke="#FFE0B2" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="12" cy="63" r="5" fill="#FFE0B2"/>
+  </g>
+
+  <!-- Corazón de empatía central flotante -->
+  <g transform="translate(110, 45)">
+    <path d="M 10 5 Q 0 -6 0 5 Q 0 12 10 20 Q 20 12 20 5 Q 20 -6 10 5 Z" fill="#EF4444" opacity="0.85">
+      <animate attributeName="transform" type="scale" values="1; 1.15; 1" dur="1.8s" repeatCount="indefinite" additive="sum"/>
+    </path>
+    <circle cx="6" cy="4" r="1.5" fill="#FFFFFF" opacity="0.7"/>
+  </g>
+
+  <!-- ================= EL NIÑO (Derecha) ================= -->
+  <g transform="translate(125, 25)" filter="url(#softKidsShadow)">
+    <!-- Cabello castaño oscuro corto -->
+    <path d="M 22 55 Q 20 30 45 28 Q 75 25 78 52 Q 62 40 48 42 Q 32 40 22 55 Z" fill="#3E2723"/>
+
+    <!-- Orejas -->
+    <circle cx="21" cy="62" r="6" fill="#FFD180"/>
+    <circle cx="79" cy="62" r="6" fill="#FFD180"/>
+
+    <!-- Cabeza -->
+    <circle cx="50" cy="62" r="29" fill="#FFD180"/>
+
+    <!-- Cejas alegres -->
+    <path d="M 36 50 Q 43 45 50 50" fill="none" stroke="#3E2723" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 56 50 Q 63 45 70 50" fill="none" stroke="#3E2723" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Ojos vivos curiosos -->
+    <ellipse cx="43" cy="60" rx="4.5" ry="6" fill="#1E293B"/>
+    <circle cx="42" cy="58" r="1.8" fill="#FFFFFF"/>
+    <ellipse cx="63" cy="60" rx="4.5" ry="6" fill="#1E293B"/>
+    <circle cx="62" cy="58" r="1.8" fill="#FFFFFF"/>
+
+    <!-- Mejillas sonrosadas y nariz -->
+    <circle cx="53" cy="66" r="1.5" fill="#E65100" opacity="0.6"/>
+    <ellipse cx="36" cy="67" rx="5.5" ry="3.5" fill="#FF8A80" opacity="0.6"/>
+    <ellipse cx="70" cy="67" rx="5.5" ry="3.5" fill="#FF8A80" opacity="0.6"/>
+
+    <!-- Gran sonrisa de oreja a oreja -->
+    <path d="M 44 73 Q 53 82 62 73" fill="none" stroke="#B91C1C" stroke-width="2.8" stroke-linecap="round"/>
+
+    <!-- Ropa: Camiseta azul / celeste -->
+    <path d="M 30 92 Q 50 86 70 92 L 78 135 L 22 135 Z" fill="#0284C7"/>
+    <!-- Cuello blanco -->
+    <path d="M 43 90 Q 50 96 57 90" fill="none" stroke="#FFFFFF" stroke-width="2.5"/>
+
+    <!-- Brazo saludando -->
+    <path d="M 72 94 Q 88 80 86 65" fill="none" stroke="#FFD180" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="86" cy="63" r="5" fill="#FFD180"/>
+  </g>
+</svg>

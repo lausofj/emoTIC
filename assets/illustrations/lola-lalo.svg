@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 220" width="100%" height="100%">
+  <!-- Turn Taking Banner -->
+  <rect x="10" y="8" width="240" height="36" rx="10" fill="#7E57C2"/>
+  <text x="130" y="32" font-family="'Nunito', sans-serif" font-weight="900" font-size="14" fill="#FFFFFF" text-anchor="middle">¡NOS TURNAMOS PARA JUGAR!</text>
+
+  <!-- Lola (Superhero Cape) -->
+  <g transform="translate(25, 55)">
+    <!-- Cape -->
+    <path d="M 40 50 Q 10 70 15 110 Q 40 95 50 60 Z" fill="#E53935"/>
+    <!-- Body -->
+    <circle cx="50" cy="35" r="18" fill="#FFCCBC"/>
+    <!-- Pigtails -->
+    <circle cx="32" cy="28" r="8" fill="#5D4037"/>
+    <circle cx="68" cy="28" r="8" fill="#5D4037"/>
+    <path d="M 35 25 Q 50 15 65 25" fill="#5D4037"/>
+    <!-- Eyes & Smile -->
+    <circle cx="45" cy="34" r="2.5" fill="#212121"/>
+    <circle cx="55" cy="34" r="2.5" fill="#212121"/>
+    <path d="M 46 42 Q 50 47 54 42" stroke="#D84315" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <!-- Clothes -->
+    <rect x="38" y="52" width="24" height="42" rx="6" fill="#FDD835"/>
+    <text x="50" y="76" font-family="sans-serif" font-weight="bold" font-size="12" fill="#D84315" text-anchor="middle">⚡</text>
+    <!-- Arms -->
+    <line x1="38" y1="56" x2="22" y2="40" stroke="#FFCCBC" stroke-width="6" stroke-linecap="round"/>
+    <line x1="62" y1="56" x2="80" y2="65" stroke="#FFCCBC" stroke-width="6" stroke-linecap="round"/>
+    <!-- Legs -->
+    <line x1="44" y1="94" x2="40" y2="128" stroke="#1E88E5" stroke-width="7" stroke-linecap="round"/>
+    <line x1="56" y1="94" x2="62" y2="128" stroke="#1E88E5" stroke-width="7" stroke-linecap="round"/>
+    <text x="50" y="148" font-family="sans-serif" font-weight="bold" font-size="12" fill="#D32F2F" text-anchor="middle">Lola (Correr)</text>
+  </g>
+
+  <!-- Turn exchange symbol -->
+  <g transform="translate(115, 95)">
+    <circle cx="15" cy="15" r="16" fill="#FFF9C4" stroke="#FBC02D" stroke-width="2"/>
+    <path d="M 6 12 Q 15 4 24 12 L 20 12 M 24 18 Q 15 26 6 18 L 10 18" stroke="#E65100" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <!-- Lalo (Puzzle & Maze Book) -->
+  <g transform="translate(155, 55)">
+    <!-- Body -->
+    <circle cx="50" cy="35" r="18" fill="#FFCCBC"/>
+    <!-- Hair -->
+    <path d="M 33 32 Q 50 15 67 32 Z" fill="#3E2723"/>
+    <!-- Eyes & Smile -->
+    <circle cx="45" cy="34" r="2.5" fill="#212121"/>
+    <circle cx="55" cy="34" r="2.5" fill="#212121"/>
+    <path d="M 46 42 Q 50 47 54 42" stroke="#D84315" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <!-- Clothes -->
+    <rect x="38" y="52" width="24" height="42" rx="6" fill="#43A047"/>
+    <!-- Legs -->
+    <line x1="44" y1="94" x2="42" y2="128" stroke="#37474F" stroke-width="7" stroke-linecap="round"/>
+    <line x1="56" y1="94" x2="58" y2="128" stroke="#37474F" stroke-width="7" stroke-linecap="round"/>
+    <!-- Book in hands -->
+    <rect x="22" y="58" width="28" height="24" rx="3" fill="#039BE5" stroke="#01579B" stroke-width="1.5"/>
+    <line x1="36" y1="58" x2="36" y2="82" stroke="#FFFFFF" stroke-width="1.5"/>
+    <!-- Maze lines inside book -->
+    <path d="M 26 64 H 32 V 70 H 28" stroke="#FFFFFF" stroke-width="1" fill="none"/>
+    <text x="50" y="148" font-family="sans-serif" font-weight="bold" font-size="12" fill="#2E7D32" text-anchor="middle">Lalo (Libro)</text>
+  </g>
+</svg>

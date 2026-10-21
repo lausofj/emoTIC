@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 220" width="100%" height="100%">
+  <!-- Code of Help: Miro, Pregunto, Ayudo Banner -->
+  <rect x="10" y="10" width="240" height="40" rx="12" fill="#43A047"/>
+  <text x="130" y="35" font-family="'Nunito', sans-serif" font-weight="900" font-size="16" fill="#FFFFFF" text-anchor="middle">CÓDIGO DE AYUDA</text>
+
+  <!-- Step 1: MIRO (Binoculars) -->
+  <g transform="translate(20, 65)">
+    <rect x="0" y="0" width="65" height="135" rx="10" fill="#E8F5E9" stroke="#81C784" stroke-width="2"/>
+    <circle cx="32" cy="22" r="14" fill="#2E7D32"/>
+    <text x="32" y="27" font-family="sans-serif" font-weight="bold" font-size="14" fill="#FFFFFF" text-anchor="middle">1</text>
+    <!-- Binoculars icon -->
+    <circle cx="23" cy="65" r="11" fill="#455A64" stroke="#263238" stroke-width="2"/>
+    <circle cx="42" cy="65" r="11" fill="#455A64" stroke="#263238" stroke-width="2"/>
+    <rect x="28" y="60" width="9" height="6" fill="#78909C"/>
+    <circle cx="23" cy="65" r="6" fill="#81D4FA"/>
+    <circle cx="42" cy="65" r="6" fill="#81D4FA"/>
+    <text x="32" y="105" font-family="sans-serif" font-weight="bold" font-size="13" fill="#1B5E20" text-anchor="middle">MIRO</text>
+    <text x="32" y="122" font-family="sans-serif" font-size="9.5" fill="#388E3C" text-anchor="middle">Observo</text>
+  </g>
+
+  <!-- Step 2: PREGUNTO (Question Mark & Smile) -->
+  <g transform="translate(97, 65)">
+    <rect x="0" y="0" width="65" height="135" rx="10" fill="#FFF9C4" stroke="#FFF176" stroke-width="2"/>
+    <circle cx="32" cy="22" r="14" fill="#F57F17"/>
+    <text x="32" y="27" font-family="sans-serif" font-weight="bold" font-size="14" fill="#FFFFFF" text-anchor="middle">2</text>
+    <!-- Big friendly question mark -->
+    <path d="M 23 52 C 23 42 42 42 42 54 C 42 62 33 64 33 72" stroke="#E65100" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+    <circle cx="33" cy="80" r="3" fill="#E65100"/>
+    <text x="32" y="105" font-family="sans-serif" font-weight="bold" font-size="12" fill="#E65100" text-anchor="middle">PREGUNTO</text>
+    <text x="32" y="122" font-family="sans-serif" font-size="9" fill="#F57C00" text-anchor="middle">¿Ayuda?</text>
+  </g>
+
+  <!-- Step 3: AYUDO (Helping Hands) -->
+  <g transform="translate(175, 65)">
+    <rect x="0" y="0" width="65" height="135" rx="10" fill="#E1F5FE" stroke="#81D4FA" stroke-width="2"/>
+    <circle cx="32" cy="22" r="14" fill="#0288D1"/>
+    <text x="32" y="27" font-family="sans-serif" font-weight="bold" font-size="14" fill="#FFFFFF" text-anchor="middle">3</text>
+    <!-- Helping Hands -->
+    <path d="M 15 76 Q 28 62 42 64" stroke="#01579B" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <path d="M 50 56 Q 36 70 22 68" stroke="#0288D1" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <circle cx="32" cy="65" r="4" fill="#FF5252"/>
+    <text x="32" y="105" font-family="sans-serif" font-weight="bold" font-size="13" fill="#01579B" text-anchor="middle">AYUDO</text>
+    <text x="32" y="122" font-family="sans-serif" font-size="9.5" fill="#0288D1" text-anchor="middle">¡Juntos!</text>
+  </g>
+</svg>

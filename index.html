@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+  <title>Emoti: Mundos de las Emociones | emoTIC</title>
+  
+  <meta name="description" content="Plataforma web educativa interactiva de aprendizaje socioemocional para primaria basada en el programa Emociones para la Vida." />
+  <meta name="theme-color" content="#5F4CB4" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Emoti" />
+  
+  <!-- Evitar caché obsoleta en recargas del navegador -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
+  <link rel="manifest" href="./manifest.webmanifest?v=4" />
+  <link rel="icon" type="image/svg+xml" href="./assets/icons/icon-192.svg" />
+  <link rel="apple-touch-icon" href="./assets/icons/icon-192.svg" />
+
+  <!-- Tipografía Amigable Redondeada -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Hojas de estilo modulares -->
+  <link rel="stylesheet" href="./css/main.css?v=15" />
+  <link rel="stylesheet" href="./css/worlds.css?v=15" />
+  <link rel="stylesheet" href="./css/games.css?v=15" />
+  <link rel="stylesheet" href="./css/teacher.css?v=15" />
+  <link rel="stylesheet" href="./css/accessibility.css?v=15" />
+</head>
+<body>
+
+  <!-- ENCABEZADO SUPERIOR ESTILO PÍLDORA FLOTANTE (ESTILO IMAGEN 1) -->
+  <div class="header-pill-container">
+    <header class="app-header-pill" role="banner">
+      <div class="header-pill-left">
+        <div class="brand-wrapper" id="nav-link-home" role="button" tabindex="0" aria-label="Ir a inicio de emoTIC" onclick="emoTIC_Navigation.showScreen('welcome-screen')">
+          <img src="./emotic-logo.png" alt="Logotipo emoTIC" class="brand-logo-img" />
+          <span class="brand-title-emoti">Emoti</span>
+        </div>
+        <button class="nav-text-link" id="nav-link-play" onclick="emoTIC_Navigation.showScreen('worlds-screen')">Jugar</button>
+        <button class="nav-text-link" id="nav-link-stars" onclick="emoTIC_Navigation.showStarsTab()">Mis estrellas</button>
+        <button class="nav-text-link" id="nav-link-library" onclick="emoTIC_Navigation.showScreen('library-screen')">Para familias</button>
+      </div>
+
+      <div class="header-pill-right">
+        <!-- Indicador de estrellas conquistadas -->
+        <div class="header-stars-pill" id="header-stars-badge">
+          ⭐ <span id="header-stars-count">Estrellas: 0</span>
+        </div>
+
+        <!-- Indicador en vivo de estado de red (Online / Offline) -->
+        <div id="network-status-pill" class="network-pill online" role="status" aria-live="polite" title="Estado de la conexión">
+          🟢 <span class="hide-mobile">En Línea</span>
+        </div>
+
+        <!-- Botón de instalación PWA -->
+        <button id="btn-install-app" class="btn-install-pwa" aria-label="Instalar aplicación en tu dispositivo">
+          📥 <span class="hide-mobile">Instalar</span>
+        </button>
+
+        <!-- Herramientas de accesibilidad rápida (Sin modo nocturno) -->
+        <div class="access-tools-group" role="group" aria-label="Controles de accesibilidad">
+          <button id="btn-voice-settings" class="access-btn" title="Personalizar o cambiar la voz de Lumi" aria-label="Personalizar voz">🗣️</button>
+          <button id="btn-toggle-text-size" class="access-btn" title="Aumentar tamaño de texto" aria-pressed="false" aria-label="Alternar tamaño de texto">A+</button>
+          <button id="btn-toggle-sound" class="access-btn" title="Activar o silenciar sonidos" aria-label="Alternar sonido">🔊</button>
+        </div>
+
+        <button class="header-action-pill-btn" id="btn-header-teacher">Docente</button>
+      </div>
+    </header>
+  </div>
+
+  <!-- CONTENEDOR PRINCIPAL DE PANTALLAS -->
+  <main class="main-viewport" id="main-content" role="main">
+
+    <!-- 1. PANTALLA DE INICIO (ESTILO EXACTO A LA IMAGEN) -->
+    <section class="app-screen active-screen travel-home-view" id="welcome-screen" aria-labelledby="welcome-heading">
+      
+      <div class="home-exact-viewport">
+        <!-- Título Principal -->
+        <h1 class="travel-hero-title" id="welcome-heading">
+          ¡Empieza tu viaje<br/>emocional!
+        </h1>
+
+        <!-- Botón Jugar (Inicia directamente el Nivel 1) -->
+        <div class="travel-play-btn-row">
+          <button class="btn-travel-jugar-main" id="btn-start-adventure" title="Iniciar Nivel 1: Emociones">
+            Jugar
+          </button>
+        </div>
+
+        <!-- Subtítulo de Descripción -->
+        <p class="travel-hero-subtitle">
+          Descubre tus emociones a través de divertidos juegos interactivos con tus personajes guía.
+        </p>
+
+        <!-- Tarjeta de Selección de Quién Juega (Fiel a la Imagen) -->
+        <div class="home-selection-card">
+          <h2 class="home-selection-title">Selecciona quién juega:</h2>
+
+          <div class="travel-avatars-row">
+            <button class="travel-avatar-btn active" id="btn-avatar-nina" data-avatar="nina" type="button" aria-label="Seleccionar Niña">
+              <div class="travel-avatar-icon-box box-nina">
+                <img src="assets/illustrations/nina-home.svg" alt="Niña" class="travel-avatar-pic" />
+              </div>
+              <span class="travel-avatar-label">Niña</span>
+            </button>
+
+            <button class="travel-avatar-btn" id="btn-avatar-nino" data-avatar="nino" type="button" aria-label="Seleccionar Niño">
+              <div class="travel-avatar-icon-box box-nino">
+                <img src="assets/illustrations/nino-home.svg" alt="Niño" class="travel-avatar-pic" />
+              </div>
+              <span class="travel-avatar-label">Niño</span>
+            </button>
+          </div>
+        </div>
+
+        <p class="travel-selection-caption">
+          (Selección para personalizar tu experiencia en los juegos)
+        </p>
+      </div>
+
+    </section>
+
+    <!-- 2. PANTALLA DEL MAPA DE MUNDOS Y NIVELES -->
+    <section class="app-screen" id="worlds-screen" aria-label="Mapa de Mundos de las Emociones">
+      <div id="worlds-map-container">
+        <!-- Renderizado dinámicamente por navigation.js -->
+      </div>
+    </section>
+
+    <!-- 3. PANTALLA REPRODUCTOR DE ACTIVIDAD (8 FASES PEDAGÓGICAS) -->
+    <section class="app-screen" id="activity-screen" aria-label="Aventura Interactiva">
+      <div id="activity-player-container">
+        <!-- Renderizado dinámicamente por games.js -->
+      </div>
+    </section>
+
+    <!-- 4. PANTALLA DE LA BIBLIOTECA MULTIMEDIA (PARA FAMILIAS) -->
+    <section class="app-screen" id="library-screen" aria-label="Biblioteca de Aventuras y Recursos Familiares">
+      <div id="library-content-container">
+        <!-- Renderizado dinámicamente por library.js -->
+      </div>
+    </section>
+
+    <!-- 5. PANTALLA DEL MODO DOCENTE -->
+    <section class="app-screen" id="teacher-screen" aria-label="Área Pedagógica Docente">
+      <div id="teacher-dashboard-container">
+        <!-- Renderizado dinámicamente por teacher.js -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="app-footer" role="contentinfo">
+    <p><strong>emoTIC</strong> • Plataforma Web Educativa Socioemocional Basada en <em>Emociones para la Vida</em> (Ministerio de Educación Nacional de Colombia / Secretaría de Educación de Bogotá / Banco Mundial). Diseñada con accesibilidad, pedagogía FASE y funcionamiento 100% offline.</p>
+  </footer>
+
+  <!-- Scripts del Sistema en orden de dependencia -->
+  <!-- 1. Datos y Matrices Curriculares -->
+  <script src="./data/curriculum.js?v=15"></script>
+  <script src="./data/activities.js?v=15"></script>
+  <script src="./data/library-data.js?v=15"></script>
+
+  <!-- 2. Motores de Base de Datos y Sonido -->
+  <script src="./js/db.js?v=15"></script>
+  <script src="./js/sound.js?v=15"></script>
+  <script src="./js/pwa.js?v=15"></script>
+
+  <!-- 3. Motores de Acompañamiento, Juegos y Gestión -->
+  <script src="./js/guide.js?v=15"></script>
+  <script src="./js/games.js?v=15"></script>
+  <script src="./js/teacher.js?v=15"></script>
+  <script src="./js/library.js?v=15"></script>
+  <script src="./js/navigation.js?v=15"></script>
+
+  <!-- 4. Orquestador de Aplicación -->
+  <script src="./js/app.js?v=15"></script>
+
+</body>
+</html>

@@ -1,0 +1,158 @@
+/**
+ * emoTIC - Accesibilidad y Adaptabilidad Responsiva
+ * Sin modo nocturno (diseño diurno, alegre, cálido y luminoso permanentemente).
+ * Incluye modo de texto grande, reducción de movimiento, foco visible para teclado y diseño multidispositivo.
+ */
+
+/* ========================================================
+   MODO TEXTO GRANDE (Para niños y primeros lectores)
+   ======================================================== */
+body.large-text {
+  font-size: 1.25rem;
+}
+
+body.large-text h1 { font-size: 2.6rem; }
+body.large-text h2 { font-size: 2.1rem; }
+body.large-text h3 { font-size: 1.7rem; }
+body.large-text p, 
+body.large-text .speech-lead, 
+body.large-text .explanation-main-text,
+body.large-text .guided-prompt {
+  font-size: 1.35rem;
+  line-height: 1.7;
+}
+
+body.large-text .option-card-btn,
+body.large-text .pair-btn,
+body.large-text .level-node-btn {
+  font-size: 1.2rem;
+  padding: 18px;
+}
+
+/* ========================================================
+   MODO REDUCCIÓN DE MOVIMIENTO
+   ======================================================== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body.reduced-motion * {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Indicador de foco visible y accesible para navegación por teclado */
+*:focus-visible {
+  outline: 3px solid #3B82F6 !important;
+  outline-offset: 3px;
+}
+
+/* ========================================================
+   ADAPTABILIDAD RESPONSIVA (CELULARES, TABLETAS, COMPUTADORES)
+   ======================================================== */
+@media (max-width: 900px) {
+  .welcome-hero-banner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .character-dialog-hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .speech-bubble-hero::before {
+    display: none;
+  }
+
+  .guidelines-dual-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pair-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .header-pill-container {
+    padding: 8px 10px 0 10px;
+  }
+
+  .app-header-pill {
+    padding: 6px 14px;
+  }
+
+  .hide-mobile {
+    display: none !important;
+  }
+
+  .emoti-hero-title {
+    font-size: 1.85rem;
+  }
+
+  .emoti-hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .emoti-orbit-pill.orb-left-far,
+  .emoti-orbit-pill.orb-right-far {
+    display: none;
+  }
+
+  .emoti-card-box {
+    padding: 22px 18px;
+    border-radius: 20px;
+  }
+
+  .emoti-tabs-nav-row {
+    gap: 8px;
+  }
+
+  .emoti-tab-nav-btn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+
+  .app-screen {
+    padding: 12px;
+  }
+
+  .phase-card-content {
+    padding: 16px;
+    min-height: auto;
+  }
+
+  .phase-heading {
+    font-size: 1.2rem;
+  }
+
+  .lumi-floating-btn {
+    bottom: 14px;
+    right: 14px;
+    padding: 4px 10px 4px 4px;
+  }
+
+  .lumi-avatar-wrapper {
+    width: 38px;
+    height: 38px;
+  }
+
+  .lumi-btn-text {
+    font-size: 0.82rem;
+  }
+
+  .btn-primary-large {
+    width: 100%;
+    font-size: 1.05rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

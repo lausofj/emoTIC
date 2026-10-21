@@ -1,0 +1,111 @@
+===================================================================
+emoTIC - CARPETA PARA GRABACIONES DE VOZ DE LOS PERSONAJES
+===================================================================
+
+Aquí es donde guardas los audios que grabes para los personajes:
+
+-------------------------------------------------------------------
+1. NIVEL 1: VOZ DEL GATO (EMOCIONES)
+-------------------------------------------------------------------
+- NOMBRE DEL ARCHIVO:
+  gato-nivel1.mp3   (o gato-nivel1.wav / gato-nivel1.m4a)
+- RUTA EN TU COMPUTADOR:
+  e:\Downloads\emoTIC\assets\audio\gato-nivel1.mp3
+- TEXTO A GRABAR (Voz del Gato):
+  "¡Hola! Soy tu amigo el Gato de las Emociones. Hoy descubriremos
+  seis emociones que todos sentimos: alegría, tristeza, enojo, miedo,
+  asco y sorpresa.
+  Acompáñame a ver el video y luego une cada emoción con su significado
+  trazando una línea con el mouse o con tu dedo.
+  ¡Miau, vamos a divertirnos y aprender juntos!"
+
+-------------------------------------------------------------------
+2. NIVEL 2: EL CUENTO DE GLOBITO EL PEZ
+-------------------------------------------------------------------
+- NOMBRE DEL ARCHIVO:
+  globito-cuento.mp3   (o globito-cuento.wav / globito-cuento.m4a)
+- RUTA EN TU COMPUTADOR:
+  e:\Downloads\emoTIC\assets\audio\globito-cuento.mp3
+- TEXTO A GRABAR (Lectura del cuento de Globito):
+  "Globito es un pez globo que vive en el mar; tiene muchos amigos
+  y le gusta jugar mucho con ellos. Globito estaba preocupado;
+  sus amigos ya no querían estar con él porque se enojaba mucho,
+  los trataba mal y a veces hasta les pegaba.
+  Pero Globito encontró una solución: ¡aprendió a calmarse!
+  Un día se dio cuenta de que, si respiraba profundamente hasta
+  inflarse varias veces, se calmaba y ya no trataba mal a sus
+  amigos y les podía decir calmadamente lo que quería.
+  Ahora, cuando Globito siente rabia o miedo:
+  Uno: Se queda quieto.
+  Dos: Respira profundamente y despacito hasta inflarse varias veces."
+
+-------------------------------------------------------------------
+3. NIVEL 3: UN NIÑO Y UNA NIÑA (SOFI Y NICO)
+-------------------------------------------------------------------
+- NOMBRE DEL ARCHIVO:
+  nino-nina-nivel3.mp3   (o nino-nina-nivel3.wav / nino-nina-nivel3.m4a)
+- RUTA EN TU COMPUTADOR:
+  e:\Downloads\emoTIC\assets\audio\nino-nina-nivel3.mp3
+- TEXTO A GRABAR (Voz de los niños):
+  "¡Hola, amigos! Somos Sofi y Nico. Hoy jugaremos a Descubrir
+  las Emociones de los Demás. A veces nuestros compañeros sienten
+  tristeza, miedo o enojo. Aprenderemos a notar cómo se sienten,
+  a darnos cuenta de cómo nos afecta a nosotros y a decidir cómo
+  podemos ayudar con respeto. ¡Acompáñanos en esta gran misión!"
+
+-------------------------------------------------------------------
+4. NIVEL 4: HÉROE Y HEROÍNA (AMIGO QUE AYUDA)
+-------------------------------------------------------------------
+- NOMBRE DEL ARCHIVO:
+  heroe-heroina-nivel4.mp3   (o heroe-heroina-nivel4.wav / heroe-heroina-nivel4.m4a)
+- RUTA EN TU COMPUTADOR:
+  e:\Downloads\emoTIC\assets\audio\heroe-heroina-nivel4.mp3
+- TEXTO A GRABAR (Voz de los superhéroes):
+  "¡Hola, superamigo! Somos Héroe y Heroína. Todos tenemos un
+  gran superpoder: el poder de ayudar a quien lo necesita.
+  En este reto, descubrirás cómo acercarte a tus compañeros
+  cuando están tristes o solos, elegirás cómo brindarles tu apoyo
+  para que se pongan felices y pensarás con cuánta frecuencia
+  practicas la ayuda en tu vida diaria. ¡A volar juntos por la empatía!"
+
+-------------------------------------------------------------------
+5. NIVEL 5: TIMO (EL BOSQUE DE LAS FAMILIAS)
+-------------------------------------------------------------------
+- NOMBRE DEL ARCHIVO:
+  timo-nivel5.mp3   (o timo-nivel5.wav / timo-nivel5.m4a)
+- RUTA EN TU COMPUTADOR:
+  e:\Downloads\emoTIC\assets\audio\timo-nivel5.mp3
+- TEXTO A GRABAR (Voz alegre y curiosa de Timo):
+  "¡Hola, explorador! Soy Timo, tu amigo en el Bosque de las
+  Familias. ¡Vamos a descubrir qué sentimos! Cada familia es única
+  y nos enseña formas diferentes de expresar lo que sentimos.
+  Recuerda siempre: todas las emociones merecen ser escuchadas,
+  hay muchas maneras de expresar lo que sentimos y ¡equivocarse
+  también es una gran oportunidad para aprender! Elige tu avatar
+  y adentrémonos juntos en el bosque."
+
+-------------------------------------------------------------------
+6. NIVEL 6: KORI EL CUY (EMOCIONES Y SENTIMIENTOS)
+-------------------------------------------------------------------
+- NOMBRE DEL ARCHIVO:
+  cuy-nivel6.mp3   (o cuy-nivel6.wav / cuy-nivel6.m4a)
+- RUTA EN TU COMPUTADOR:
+  e:\Downloads\emoTIC\assets\audio\cuy-nivel6.mp3
+- TEXTO A GRABAR (Voz tierna y alegre de Kori el Cuy):
+  "¡Cui, cui, hola amigos! Soy Kori el Cuy de los sentimientos.
+  ¿Sabías que las emociones y los sentimientos son distintos?
+  Una emoción es rápida e intensa, como el susto al escuchar un trueno
+  o la risa por una sorpresa. Un sentimiento es duradero y profundo,
+  como el amor por tu familia o la gratitud con un amigo.
+  Acompáñame a ver nuestro video y a clasificar cada uno en su canasta
+  correspondiente. ¡Cui, cui, vamos juntos!"
+
+-------------------------------------------------------------------
+¿CÓMO FUNCIONA?
+- Tan pronto pegues tus archivos grabados ("gato-nivel1.mp3", "globito-cuento.mp3",
+  "nino-nina-nivel3.mp3", "heroe-heroina-nivel4.mp3", "timo-nivel5.mp3" o "cuy-nivel6.mp3") en esta
+  carpeta, la plataforma los reproducirá automáticamente cuando el estudiante toque
+  el botón de audio en cada nivel o en la barra superior.
+- Si aún no has colocado tu archivo de audio, la plataforma usará automáticamente
+  la voz interactiva de respaldo para que siempre se pueda jugar sin interrupción.
+===================================================================

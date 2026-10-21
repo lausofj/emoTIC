@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <!-- Fondo circular mágico -->
+  <circle cx="50" cy="50" r="48" fill="#EDE9FE"/>
+  <!-- Alitas mágicas de hoja / hada -->
+  <path d="M 22 42 C 8 28 12 56 26 50 Z" fill="#6EE7B7" opacity="0.85"/>
+  <path d="M 78 42 C 92 28 88 56 74 50 Z" fill="#6EE7B7" opacity="0.85"/>
+  <!-- Orejas grandes de zorrito fantástico -->
+  <polygon points="32,46 22,22 42,32" fill="#F97316"/>
+  <polygon points="30,42 25,27 38,34" fill="#FED7AA"/>
+  <polygon points="68,46 78,22 58,32" fill="#F97316"/>
+  <polygon points="70,42 75,27 62,34" fill="#FED7AA"/>
+  <!-- Cabeza de zorro mágico -->
+  <ellipse cx="50" cy="54" rx="24" ry="20" fill="#FB923C"/>
+  <path d="M 32 50 Q 50 64 68 50 Q 64 68 50 72 Q 36 68 32 50 Z" fill="#FFF7ED"/>
+  <!-- Ojos curiosos -->
+  <circle cx="41" cy="52" r="3.2" fill="#1E293B"/>
+  <circle cx="42" cy="51" r="1.1" fill="#FFFFFF"/>
+  <circle cx="59" cy="52" r="3.2" fill="#1E293B"/>
+  <circle cx="60" cy="51" r="1.1" fill="#FFFFFF"/>
+  <!-- Naricita y Sonrisa -->
+  <circle cx="50" cy="62" r="2.2" fill="#C2410C"/>
+  <path d="M 46 65 Q 50 68 54 65" stroke="#9A3412" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+  <!-- Estrella mágica en la frente -->
+  <polygon points="50,38 52,43 56,44 53,47 54,51 50,49 46,51 47,47 44,44 48,43" fill="#FBBF24"/>
+  <!-- Cuellito con pelaje blanco -->
+  <ellipse cx="50" cy="74" rx="18" ry="10" fill="#FFF7ED"/>
+</svg>

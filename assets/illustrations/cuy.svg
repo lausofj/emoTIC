@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 280" width="100%" height="100%">
+  <defs>
+    <radialGradient id="cuyAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FEF3C7" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="#FDE68A" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cuyFur" cx="42%" cy="38%" r="65%">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="40%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </radialGradient>
+    <filter id="cuyDropShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#78350F" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Aura cálida dorada de fondo -->
+  <circle cx="120" cy="145" r="110" fill="url(#cuyAura)"/>
+
+  <!-- Sombra en el suelo -->
+  <ellipse cx="120" cy="254" rx="46" ry="10" fill="#CBD5E1" opacity="0.6"/>
+
+  <g id="cuy-kori" filter="url(#cuyDropShadow)">
+    
+    <!-- ================= FLOR EN LA CABEZA ================= -->
+    <!-- Tallo verde curvado -->
+    <path d="M 120 74 Q 116 52 121 40" stroke="#10B981" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <path d="M 119 50 Q 125 48 126 44" stroke="#059669" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+    <!-- Flor lila / rosada de 5 pétalos -->
+    <g transform="translate(122, 38)">
+      <!-- Pétalos -->
+      <circle cx="0" cy="-7" r="4.8" fill="#C084FC"/>
+      <circle cx="6.6" cy="-2.2" r="4.8" fill="#C084FC"/>
+      <circle cx="4.1" cy="5.6" r="4.8" fill="#C084FC"/>
+      <circle cx="-4.1" cy="5.6" r="4.8" fill="#C084FC"/>
+      <circle cx="-6.6" cy="-2.2" r="4.8" fill="#C084FC"/>
+      <!-- Centro naranja/amarillo -->
+      <circle cx="0" cy="0" r="4" fill="#F59E0B"/>
+      <circle cx="0" cy="0" r="2.2" fill="#FEF08A"/>
+    </g>
+
+    <!-- ================= OREJAS DEL CUY ================= -->
+    <!-- Oreja izquierda -->
+    <path d="M 84 68 C 66 52 74 88 88 94 Z" fill="#F59E0B" stroke="#D97706" stroke-width="2"/>
+    <ellipse cx="80" cy="78" rx="8" ry="12" fill="#FCA5A5" transform="rotate(-15, 80, 78)"/>
+
+    <!-- Oreja derecha -->
+    <path d="M 156 68 C 174 52 166 88 152 94 Z" fill="#F59E0B" stroke="#D97706" stroke-width="2"/>
+    <ellipse cx="160" cy="78" rx="8" ry="12" fill="#FCA5A5" transform="rotate(15, 160, 78)"/>
+
+    <!-- ================= PATITAS INFERIORES ================= -->
+    <!-- Pata izquierda -->
+    <ellipse cx="100" cy="242" rx="19" ry="11" fill="#D97706" transform="rotate(-10, 100, 242)"/>
+    <ellipse cx="100" cy="240" rx="17" ry="9" fill="#F59E0B" transform="rotate(-10, 100, 240)"/>
+    <!-- Pata derecha -->
+    <ellipse cx="140" cy="242" rx="19" ry="11" fill="#D97706" transform="rotate(10, 140, 242)"/>
+    <ellipse cx="140" cy="240" rx="17" ry="9" fill="#F59E0B" transform="rotate(10, 140, 240)"/>
+
+    <!-- ================= CUERPO / BARRIGA ================= -->
+    <ellipse cx="120" cy="180" rx="46" ry="54" fill="url(#cuyFur)"/>
+    <!-- Pancita beige / crema clara (fiel al dibujo) -->
+    <ellipse cx="120" cy="178" rx="34" ry="40" fill="#FEF3C7"/>
+
+    <!-- ================= BRAZOS ABIERTOS ================= -->
+    <!-- Brazo izquierdo extendido arriba -->
+    <path d="M 84 156 C 58 152 42 142 36 136 C 34 130 42 124 50 128 C 64 136 78 144 88 148 Z" fill="#F59E0B"/>
+    <!-- Patita / manito izquierda beige redonda -->
+    <circle cx="36" cy="132" r="10.5" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.8"/>
+
+    <!-- Brazo derecho extendido arriba -->
+    <path d="M 156 156 C 182 152 198 142 204 136 C 206 130 198 124 190 128 C 176 136 162 144 152 148 Z" fill="#F59E0B"/>
+    <!-- Patita / manito derecha beige redonda -->
+    <circle cx="204" cy="132" r="10.5" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.8"/>
+
+    <!-- ================= CABEZA REDONDA ================= -->
+    <ellipse cx="120" cy="116" rx="47" ry="43" fill="url(#cuyFur)"/>
+
+    <!-- ================= MEJILLAS SONROSADAS ================= -->
+    <!-- Mejilla izquierda -->
+    <ellipse cx="90" cy="122" rx="13" ry="8" fill="#F472B6" opacity="0.85"/>
+    <!-- Mejilla derecha -->
+    <ellipse cx="150" cy="122" rx="13" ry="8" fill="#F472B6" opacity="0.85"/>
+
+    <!-- ================= OJOS KAWAII GRANDES ================= -->
+    <!-- Ojo izquierdo -->
+    <ellipse cx="101" cy="108" rx="10" ry="14" fill="#0F172A"/>
+    <!-- Brillos blancos grandes kawaii -->
+    <circle cx="98" cy="103" r="5" fill="#FFFFFF"/>
+    <circle cx="104" cy="113" r="3.2" fill="#FFFFFF"/>
+
+    <!-- Ojo derecho -->
+    <ellipse cx="139" cy="108" rx="10" ry="14" fill="#0F172A"/>
+    <!-- Brillos blancos grandes kawaii -->
+    <circle cx="136" cy="103" r="5" fill="#FFFFFF"/>
+    <circle cx="142" cy="113" r="3.2" fill="#FFFFFF"/>
+
+    <!-- ================= NARICITA DE CORAZÓN ROJO ================= -->
+    <!-- Corazón rojo fiel al dibujo -->
+    <g transform="translate(120, 126)">
+      <path d="M 0 5 C -6 0 -10 -4 -10 -8 C -10 -12 -6 -15 0 -10 C 6 -15 10 -12 10 -8 C 10 -4 6 0 0 5 Z" fill="#EF4444"/>
+    </g>
+
+    <!-- ================= SONRISA TIERNA ================= -->
+    <path d="M 111 135 Q 120 142 129 135" stroke="#1E293B" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+
+  </g>
+</svg>
