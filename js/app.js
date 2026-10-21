@@ -113,7 +113,7 @@ function bindGlobalEvents() {
       btnAvatarNina.classList.add("active");
       btnAvatarNino.classList.remove("active");
       if (avatarMainImg) {
-        avatarMainImg.src = "assets/illustrations/avatar-display-nina.svg";
+        avatarMainImg.src = "assets/illustrations/avatar-display-nina.png";
         avatarMainImg.style.transform = "scale(0.9)";
         setTimeout(() => avatarMainImg.style.transform = "scale(1)", 150);
       }
