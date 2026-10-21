@@ -9,3 +9,6 @@
   ```
 - No dejar cambios de código sin commitear al finalizar las intervenciones.
 - Mantener mensajes de commit descriptivos y profesionales.
+
+## Reglas de OpenSpec
+- **Idioma obligatorio**: Todos los artefactos generados por OpenSpec (`proposal.md`, `specs/**/*.md`, `design.md`, `tasks.md`, etc.), así como las especificaciones y la documentación de cambios, deben redactarse SIEMPRE en español.

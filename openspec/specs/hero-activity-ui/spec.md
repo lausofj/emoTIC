@@ -1,25 +1,25 @@
-# hero-activity-ui Specification
+# Especificación de hero-activity-ui
 
 ## Purpose
 
-Provides expressive, dynamic visual assets and badge presentation for the Level 4 "Amigo que ayuda" prosocial activity in emoTIC.
+Proporciona recursos visuales expresivos y dinámicos, así como la presentación de insignias para la actividad prosocial de Nivel 4 "Amigo que ayuda" en emoTIC.
 
 ## Requirements
 
-### Requirement: Display superhero duo on Level 4 game selection card
-The system SHALL display the combined superhero duo graphic (Heroine and Hero) and a custom hero badge icon on the Level 4 activity card.
+### Requirement: Mostrar dúo de superhéroes en la tarjeta de selección del Nivel 4
+El sistema DEBE mostrar el gráfico combinado del dúo de superhéroes (Heroína y Héroe) y un icono de insignia de héroe personalizado en la tarjeta de la actividad de Nivel 4.
 
-#### Scenario: User views the games menu
-- **WHEN** the user navigates to the activities/games menu
-- **THEN** the card for "Amigo que ayuda" displays the new duo graphic in the avatar circle and a custom hero badge in the floating badge container.
+#### Scenario: El usuario visualiza el menú de juegos
+- **CUANDO** el usuario navega al menú de actividades y juegos
+- **ENTONCES** la tarjeta de "Amigo que ayuda" muestra la nueva ilustración del dúo en el círculo del avatar y una insignia personalizada en el contenedor flotante.
 
-### Requirement: Character selection and in-game avatars
-The system SHALL display the individual Heroine and Hero character graphics during character selection, scenario gameplay, and the completion screen.
+### Requirement: Selección de personaje y avatares dentro del juego
+El sistema DEBE mostrar los gráficos individuales de los personajes Heroína y Héroe durante la selección de personaje, las etapas del juego y la pantalla de felicitación final.
 
-#### Scenario: User selects a hero character in Level 4
-- **WHEN** the user begins the Level 4 activity and selects either Heroine or Hero
-- **THEN** the interface displays the corresponding new character illustration in the intro view and during the helping scenario.
+#### Scenario: El usuario selecciona un personaje héroe en el Nivel 4
+- **CUANDO** el usuario inicia la actividad de Nivel 4 y selecciona a la Heroína o al Héroe
+- **ENTONCES** la interfaz muestra la nueva ilustración del personaje correspondiente en la vista de presentación y durante la situación de ayuda.
 
-#### Scenario: Completing the Level 4 activity
-- **WHEN** the user completes the prosocial situations and reflections
-- **THEN** the final celebration card displays the superhero duo graphic and awards the hero badge.
+#### Scenario: Completar la actividad de Nivel 4
+- **CUANDO** el usuario completa las situaciones prosociales y las reflexiones
+- **ENTONCES** la tarjeta de celebración final muestra el gráfico del dúo de superhéroes y otorga la insignia de héroe.
