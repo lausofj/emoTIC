@@ -1,9 +1,9 @@
 /**
- * emoTIC - Service Worker Oficial (v18)
+ * emoTIC - Service Worker Oficial (v19)
  * Soporta funcionamiento 100% offline de los juegos de emociones y recursos multimedia.
  */
 
-const CACHE_NAME = "emotic-v18";
+const CACHE_NAME = "emotic-v19";
 
 const ASSETS_TO_CACHE = [
   "./",
