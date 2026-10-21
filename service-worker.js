@@ -1,9 +1,9 @@
 /**
- * emoTIC - Service Worker Oficial (v15)
+ * emoTIC - Service Worker Oficial (v16)
  * Soporta funcionamiento 100% offline de los juegos de emociones y recursos multimedia.
  */
 
-const CACHE_NAME = "emotic-v15";
+const CACHE_NAME = "emotic-v16";
 
 const ASSETS_TO_CACHE = [
   "./",
@@ -48,6 +48,10 @@ const ASSETS_TO_CACHE = [
   "./assets/illustrations/heroe-heroina.svg",
   "./assets/illustrations/heroina-avatar.svg",
   "./assets/illustrations/heroe-avatar.svg",
+  "./assets/illustrations/heroe-heroina-duo.png",
+  "./assets/illustrations/heroina-avatar.png",
+  "./assets/illustrations/heroe-avatar.png",
+  "./assets/illustrations/hero-badge.png",
   "./assets/illustrations/timo.svg",
   "./assets/illustrations/cuy.svg",
   "./assets/illustrations/avatar-explorador.svg",

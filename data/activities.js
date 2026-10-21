@@ -403,9 +403,10 @@ window.EMOTIC_ACTIVITIES = [
     character: {
       id: "heroe-heroina",
       name: "Héroe y Heroína",
-      avatarSvg: "assets/illustrations/heroe-heroina.svg",
-      heroinaSvg: "assets/illustrations/heroina-avatar.svg",
-      heroeSvg: "assets/illustrations/heroe-avatar.svg",
+      avatarSvg: "assets/illustrations/heroe-heroina-duo.png",
+      heroinaSvg: "assets/illustrations/heroina-avatar.png",
+      heroeSvg: "assets/illustrations/heroe-avatar.png",
+      badgeIcon: "assets/illustrations/hero-badge.png",
       audioFile: "assets/audio/heroe-heroina-nivel4.mp3",
       greeting: "¡Hola! Somos los Superhéroes de la Ayuda. ¡Nuestro mayor superpoder es el corazón para ayudar a los demás!",
       explanation: "Mira a tus compañeros: cuando alguien esté triste, solo o en apuros, acércate como un superhéroe y arrastra o elige la mejor forma de ayudar. Luego reflexiona con la escala de corazones. ¡Vamos!",

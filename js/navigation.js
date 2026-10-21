@@ -233,9 +233,9 @@ window.emoTIC_Navigation = {
               } else if (act.id === "act-4") {
                 circleBg = 'background: radial-gradient(circle, #EFF6FF 40%, #DBEAFE 100%); box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);';
                 badgeBg = 'background: #2563EB;';
-                badgeIcon = '🦸';
+                badgeIcon = '<img src="assets/illustrations/hero-badge.png" alt="Superhéroe" style="width: 20px; height: 20px; object-fit: contain; display: block;" />';
                 btnColor = 'color: #2563EB;';
-                avatarSrc = (act.character && act.character.avatarSvg) || 'assets/illustrations/heroe-heroina.svg';
+                avatarSrc = (act.character && act.character.avatarSvg) || 'assets/illustrations/heroe-heroina-duo.png';
               } else if (act.id === "act-5") {
                 circleBg = 'background: radial-gradient(circle, #ECFDF5 40%, #D1FAE5 100%); box-shadow: 0 4px 14px rgba(5, 150, 105, 0.25);';
                 badgeBg = 'background: #059669;';

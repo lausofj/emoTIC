@@ -1657,11 +1657,11 @@ window.emoTIC_Games = {
 
         <section class="empathy-presentation-card">
           <div class="empathy-avatar-stage" id="hero-avatar-stage" style="background: radial-gradient(circle, #EFF6FF 30%, #DBEAFE 100%);">
-            <img src="${heroChar.avatarSvg || 'assets/illustrations/heroe-heroina.svg'}" alt="Héroe y Heroína" class="empathy-avatar-img" />
+            <img src="${heroChar.avatarSvg || 'assets/illustrations/heroe-heroina-duo.png'}" alt="Héroe y Heroína" class="empathy-avatar-img" />
           </div>
 
           <div class="character-speech-bubble">
-            <span class="character-name-badge" style="background:#DBEAFE; color:#1E40AF;">🦸 ${heroChar.name || 'Héroe y Heroína'}</span>
+            <span class="character-name-badge" style="background:#DBEAFE; color:#1E40AF;"><img src="assets/illustrations/hero-badge.png" alt="Hero" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;display:inline-block;" /> ${heroChar.name || 'Héroe y Heroína'}</span>
             <h3 style="font-size:1.4rem; color:#1E40AF; margin:4px 0 10px 0;">¡Superhéroes de la Ayuda!</h3>
             
             <p class="character-bubble-text">«${heroChar.greeting}»</p>
@@ -1671,10 +1671,10 @@ window.emoTIC_Games = {
             <div style="margin: 16px 0; display:flex; align-items:center; justify-content:center; gap: 14px; flex-wrap:wrap;">
               <span style="font-weight:700; color:#1E293B; font-size:0.95rem;">¿Con quién deseas jugar?</span>
               <button class="hero-pill-btn ${this.heroState.selectedChar === 'heroina' ? 'active' : ''}" id="btn-choose-heroina">
-                <span>🦸‍♀️ Heroína</span>
+                <span><img src="assets/illustrations/heroina-avatar.png" alt="Heroína" style="width:22px;height:22px;object-fit:contain;vertical-align:middle;margin-right:4px;" /> Heroína</span>
               </button>
               <button class="hero-pill-btn ${this.heroState.selectedChar === 'heroe' ? 'active' : ''}" id="btn-choose-heroe">
-                <span>🦸‍♂️ Héroe</span>
+                <span><img src="assets/illustrations/heroe-avatar.png" alt="Héroe" style="width:22px;height:22px;object-fit:contain;vertical-align:middle;margin-right:4px;" /> Héroe</span>
               </button>
             </div>
 
@@ -1759,7 +1759,9 @@ window.emoTIC_Games = {
     const sit = act.situations[this.heroState.situationIndex] || act.situations[0];
     const step = this.heroState.stageStep; // 1, 2, 3
     const isHeroina = this.heroState.selectedChar === "heroina";
-    const heroAvatarSrc = isHeroina ? "assets/illustrations/heroina-avatar.svg" : "assets/illustrations/heroe-avatar.svg";
+    const heroAvatarSrc = isHeroina 
+      ? ((act.character && act.character.heroinaSvg) || "assets/illustrations/heroina-avatar.png") 
+      : ((act.character && act.character.heroeSvg) || "assets/illustrations/heroe-avatar.png");
 
     const getHeartsText = (val) => {
       if (val === 1) return "🤍";
@@ -2090,7 +2092,7 @@ window.emoTIC_Games = {
     modal.innerHTML = `
       <div class="victory-card-box">
         <div class="victory-cat-avatar" style="background: radial-gradient(circle, #EFF6FF 30%, #DBEAFE 100%); box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);">
-          <img src="assets/illustrations/heroe-heroina.svg" alt="Héroe y Heroína" style="width: 85px; height: 85px; object-fit: contain;" />
+          <img src="assets/illustrations/heroe-heroina-duo.png" alt="Héroe y Heroína" style="width: 105px; height: 105px; object-fit: contain;" />
         </div>
         <h3 class="victory-title" style="color:#1E40AF;">¡Gran Superamigo de las Emociones!</h3>
         <div class="victory-stars-row">⭐⭐⭐</div>
