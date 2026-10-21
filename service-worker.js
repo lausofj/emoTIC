@@ -3,7 +3,7 @@
  * Soporta funcionamiento 100% offline de los juegos de emociones y recursos multimedia.
  */
 
-const CACHE_NAME = "emotic-v20";
+const CACHE_NAME = "emotic-v21";
 
 const ASSETS_TO_CACHE = [
   "./",
