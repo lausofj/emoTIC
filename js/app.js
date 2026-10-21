@@ -277,16 +277,6 @@ function bindGlobalEvents() {
   const btnTeacher = document.getElementById("btn-open-teacher");
   if (btnTeacher) btnTeacher.addEventListener("click", openTeacherFlow);
 
-  // Botón Biblioteca de Aventuras / Para Familias
-  const btnLib = document.getElementById("btn-open-library");
-  if (btnLib) {
-    btnLib.addEventListener("click", () => {
-      emoTIC_Sound.playClick();
-      emoTIC_Library.renderLibrary();
-      emoTIC_Navigation.showScreen("library-screen");
-    });
-  }
-
   // Botón explicativo de modo sin internet
   const btnOffHelp = document.getElementById("btn-offline-info");
   if (btnOffHelp) {
@@ -348,15 +338,6 @@ function bindGlobalEvents() {
     btnNavStars.addEventListener("click", () => {
       emoTIC_Sound.playClick();
       emoTIC_Navigation.showStarsTab();
-    });
-  }
-
-  const btnNavLib = document.getElementById("nav-link-library");
-  if (btnNavLib) {
-    btnNavLib.addEventListener("click", () => {
-      emoTIC_Sound.playClick();
-      emoTIC_Library.renderLibrary();
-      emoTIC_Navigation.showScreen("library-screen");
     });
   }
 }

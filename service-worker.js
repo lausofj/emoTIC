@@ -1,9 +1,9 @@
 /**
- * emoTIC - Service Worker Oficial (v19)
+ * emoTIC - Service Worker Oficial (v20)
  * Soporta funcionamiento 100% offline de los juegos de emociones y recursos multimedia.
  */
 
-const CACHE_NAME = "emotic-v19";
+const CACHE_NAME = "emotic-v20";
 
 const ASSETS_TO_CACHE = [
   "./",
@@ -22,32 +22,18 @@ const ASSETS_TO_CACHE = [
   "./js/guide.js",
   "./js/games.js",
   "./js/teacher.js",
-  "./js/library.js",
   "./js/pwa.js",
   "./data/curriculum.js",
   "./data/activities.js",
-  "./data/library-data.js",
-  "./assets/illustrations/gato.svg",
   "./assets/illustrations/gato-alegria.png",
   "./assets/illustrations/gato-tristeza.png",
   "./assets/illustrations/gato-enojo.png",
   "./assets/illustrations/gato-miedo.png",
   "./assets/illustrations/gato-asco.png",
   "./assets/illustrations/gato-sorpresa.png",
-  "./assets/illustrations/gato-avatar.png",
-  "./assets/illustrations/gatos-emociones.png",
-  "./assets/illustrations/gato-tristeza.svg",
-  "./assets/illustrations/gato-enojo.svg",
-  "./assets/illustrations/gato-miedo.svg",
-  "./assets/illustrations/gato-asco.svg",
-  "./assets/illustrations/gato-sorpresa.svg",
   "./assets/illustrations/lumi.svg",
   "./assets/illustrations/globito.png",
-  "./assets/illustrations/globito.svg",
   "./assets/illustrations/nino-nina.svg",
-  "./assets/illustrations/heroe-heroina.svg",
-  "./assets/illustrations/heroina-avatar.svg",
-  "./assets/illustrations/heroe-avatar.svg",
   "./assets/illustrations/heroe-heroina-duo.png",
   "./assets/illustrations/heroina-avatar.png",
   "./assets/illustrations/heroe-avatar.png",
@@ -57,19 +43,10 @@ const ASSETS_TO_CACHE = [
   "./assets/illustrations/avatar-explorador.svg",
   "./assets/illustrations/avatar-exploradora.svg",
   "./assets/illustrations/avatar-fantastico.svg",
-  "./assets/illustrations/nina-home.svg",
   "./assets/illustrations/nina-home.png",
-  "./assets/illustrations/nino-home.svg",
   "./assets/illustrations/nino-home.png",
-  "./assets/illustrations/avatar-display-nina.svg",
   "./assets/illustrations/avatar-display-nina.png",
-  "./assets/illustrations/avatar-display-nino.svg",
   "./assets/illustrations/avatar-display-nino.png",
-  "./assets/illustrations/gina.svg",
-  "./assets/illustrations/jatron.svg",
-  "./assets/illustrations/dino.svg",
-  "./assets/illustrations/ayuda.svg",
-  "./assets/illustrations/lola-lalo.svg",
   "./assets/icons/icon-192.svg",
   "./assets/icons/icon-512.svg",
   "./emotic-logo.png"

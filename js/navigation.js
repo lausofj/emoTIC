@@ -36,18 +36,12 @@ window.emoTIC_Navigation = {
 
       // Marcar visualmente el enlace activo del encabezado
       const navPlay = document.getElementById("nav-link-play") || document.getElementById("nav-link-worlds");
-      const navLib = document.getElementById("nav-link-library");
       if (navPlay) navPlay.classList.toggle("nav-active", screenId === "worlds-screen");
-      if (navLib) navLib.classList.toggle("nav-active", screenId === "library-screen");
 
       if (screenId === "worlds-screen") {
         this.renderWorldsMap();
       } else if (screenId === "welcome-screen") {
         this.renderWelcomeScreen();
-      } else if (screenId === "library-screen") {
-        if (window.emoTIC_Library && typeof window.emoTIC_Library.renderLibrary === "function") {
-          window.emoTIC_Library.renderLibrary();
-        }
       } else if (screenId === "teacher-screen") {
         if (window.emoTIC_Teacher && typeof window.emoTIC_Teacher.renderTeacherDashboard === "function") {
           window.emoTIC_Teacher.renderTeacherDashboard();
