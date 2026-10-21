@@ -123,9 +123,9 @@ function bindGlobalEvents() {
     btnAvatarNino.addEventListener("click", async () => {
       emoTIC_Sound.playClick();
       btnAvatarNino.classList.add("active");
-      btnAvatarNino.classList.remove("active");
+      btnAvatarNina.classList.remove("active");
       if (avatarMainImg) {
-        avatarMainImg.src = "assets/illustrations/avatar-display-nino.svg";
+        avatarMainImg.src = "assets/illustrations/avatar-display-nino.png";
         avatarMainImg.style.transform = "scale(0.9)";
         setTimeout(() => avatarMainImg.style.transform = "scale(1)", 150);
       }
