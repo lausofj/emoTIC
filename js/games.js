@@ -242,21 +242,10 @@ window.emoTIC_Games = {
             </div>
 
             <div class="matching-video-box" id="emociones-video-box">
-              <div class="matching-video-placeholder-inner" id="btn-play-emociones-video">
-                <button class="btn-play-video-trigger" aria-label="Reproducir video de emociones">
-                  ▶
-                </button>
-                <strong style="font-size:1.15rem; letter-spacing:0.5px;">Reproducir Video Educativo</strong>
-                <span style="font-size:0.88rem; color:#CBD5E1; max-width:440px;">
-                  Toca aquí para reproducir el video. Puedes compartir tu archivo de video y se verá en este marco.
-                </span>
-                
-                <div class="matching-video-file-picker" onclick="event.stopPropagation()">
-                  <span>O carga tu video local:</span>
-                  <label class="matching-file-label" for="input-emociones-video">Seleccionar archivo</label>
-                  <input type="file" id="input-emociones-video" class="matching-video-file-input" accept="video/mp4,video/webm,video/ogg" />
-                </div>
-              </div>
+              <video controls autoplay playsinline style="width:100%; height:100%; object-fit:contain; border-radius:18px; background:#000;">
+                <source src="${videoData.placeholderUrl || 'assets/video/emociones-video.mp4'}" type="video/mp4">
+                Tu navegador no soporta video local HTML5.
+              </video>
             </div>
 
             <button class="btn-timo-advance" id="btn-start-matching-game" style="background:#F59E0B; color:#78350F; font-size:1.18rem; padding:14px 44px; box-shadow:0 6px 20px rgba(245, 158, 11, 0.4); margin-top: 6px;">
@@ -285,41 +274,6 @@ window.emoTIC_Games = {
           act.character.audioTranscript || act.character.greeting,
           "cat-avatar-stage"
         );
-      });
-    }
-
-    const playVideoBtn = document.getElementById("btn-play-emociones-video");
-    if (playVideoBtn) {
-      playVideoBtn.addEventListener("click", () => {
-        emoTIC_Sound.playClick();
-        const box = document.getElementById("emociones-video-box");
-        if (box) {
-          box.innerHTML = `
-            <video controls autoplay style="width:100%; height:100%; object-fit:contain; border-radius:18px;">
-              <source src="${videoData.placeholderUrl || 'assets/video/emociones-video.mp4'}" type="video/mp4">
-              Tu navegador no soporta video local HTML5.
-            </video>
-          `;
-        }
-      });
-    }
-
-    const fileInput = document.getElementById("input-emociones-video");
-    if (fileInput) {
-      fileInput.addEventListener("change", (e) => {
-        const file = e.target.files && e.target.files[0];
-        if (file) {
-          emoTIC_Sound.playClick();
-          const fileUrl = URL.createObjectURL(file);
-          const box = document.getElementById("emociones-video-box");
-          if (box) {
-            box.innerHTML = `
-              <video controls autoplay style="width:100%; height:100%; object-fit:contain; border-radius:18px;">
-                <source src="${fileUrl}" type="${file.type || 'video/mp4'}">
-              </video>
-            `;
-          }
-        }
       });
     }
 
@@ -829,21 +783,10 @@ window.emoTIC_Games = {
             </div>
 
             <div class="matching-video-box" id="globito-video-box" style="border-color: #0284C7;">
-              <div class="matching-video-placeholder-inner" id="btn-play-globito-video">
-                <button class="btn-play-video-trigger" style="background: linear-gradient(135deg, #0284C7, #0369A1);" aria-label="Reproducir video de Globito">
-                  ▶
-                </button>
-                <strong style="font-size:1.15rem; letter-spacing:0.5px;">Reproducir Video de la Historia</strong>
-                <span style="font-size:0.88rem; color:#CBD5E1; max-width:440px;">
-                  Espacio reservado para el video de Globito. Cuando compartas tu archivo o enlace, se reproducirá aquí automáticamente.
-                </span>
-
-                <div class="matching-video-file-picker" onclick="event.stopPropagation()">
-                  <span>O carga tu video local:</span>
-                  <label class="matching-file-label" for="input-globito-video" style="color:#38BDF8;">Seleccionar archivo</label>
-                  <input type="file" id="input-globito-video" class="matching-video-file-input" accept="video/mp4,video/webm,video/ogg" />
-                </div>
-              </div>
+              <video controls autoplay playsinline style="width:100%; height:100%; object-fit:contain; border-radius:18px; background:#000;">
+                <source src="${videoData.placeholderUrl || 'assets/video/globito-cuento.mp4'}" type="video/mp4">
+                Tu navegador no soporta video local HTML5.
+              </video>
             </div>
 
             <button class="btn-timo-advance" id="btn-start-situations" style="background:#0284C7; color:#FFFFFF; font-size:1.15rem; padding:14px 44px; box-shadow:0 6px 20px rgba(2, 132, 199, 0.4); margin-top: 6px;">
@@ -873,41 +816,6 @@ window.emoTIC_Games = {
           act.character.storyText,
           "globito-avatar-stage"
         );
-      });
-    }
-
-    const playVideoBtn = document.getElementById("btn-play-globito-video");
-    if (playVideoBtn) {
-      playVideoBtn.addEventListener("click", () => {
-        emoTIC_Sound.playClick();
-        const box = document.getElementById("globito-video-box");
-        if (box) {
-          box.innerHTML = `
-            <video controls autoplay style="width:100%; height:100%; object-fit:contain; border-radius:18px;">
-              <source src="${videoData.placeholderUrl || 'assets/video/globito-cuento.mp4'}" type="video/mp4">
-              Tu navegador no soporta video local HTML5.
-            </video>
-          `;
-        }
-      });
-    }
-
-    const fileInput = document.getElementById("input-globito-video");
-    if (fileInput) {
-      fileInput.addEventListener("change", (e) => {
-        const file = e.target.files && e.target.files[0];
-        if (file) {
-          emoTIC_Sound.playClick();
-          const fileUrl = URL.createObjectURL(file);
-          const box = document.getElementById("globito-video-box");
-          if (box) {
-            box.innerHTML = `
-              <video controls autoplay style="width:100%; height:100%; object-fit:contain; border-radius:18px;">
-                <source src="${fileUrl}" type="${file.type || 'video/mp4'}">
-              </video>
-            `;
-          }
-        }
       });
     }
 
