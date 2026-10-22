@@ -207,24 +207,21 @@ window.emoTIC_Games = {
 
         <div class="matching-intro-viewport">
           <!-- Presentación del Gato de las Emociones -->
-          <section class="globito-story-card" style="border-color: #FDE68A; background: #FFFFFF;">
+          <section class="globito-story-card" style="border-color: #FDE68A; background: #FFFFFF; padding: 16px 20px;">
             <div class="cat-avatar-stage" id="cat-avatar-stage">
               <img src="${cat.avatarSvg || 'assets/illustrations/gato-alegria.png'}" alt="El Gato de las Emociones" class="cuy-hero-avatar-img" />
             </div>
 
             <div class="character-speech-bubble" style="background:#FFFBEB; border-color:#FCD34D;">
               <span class="character-name-badge" style="background:#FDE68A; color:#B45309;">🐱 ${cat.name || 'El Gato de las Emociones'}</span>
-              <h3 style="font-size:1.35rem; color:#B45309; margin:4px 0 10px 0;">¡Descubramos las 6 Emociones!</h3>
+              <h3 style="font-size:1.35rem; color:#B45309; margin:4px 0 8px 0;">¡Descubramos las 6 Emociones!</h3>
               
-              <p style="font-size:1.05rem; line-height:1.55; color:#1E293B; margin-bottom:12px;">
-                ${cat.greeting || '¡Hola! Soy tu amigo el Gato. Hoy descubriremos las emociones: alegría, tristeza, enojo, miedo, asco y sorpresa.'}
-              </p>
-              <p style="font-size:1.02rem; line-height:1.5; color:#475569; margin-bottom:12px;">
-                ${cat.explanation || 'Puedes ver nuestro video educativo para conocer las 6 emociones básicas. Luego, ayúdame a unir cada emoción con su significado trazando una línea. ¡Miau, vamos a aprender juntos!'}
+              <p style="font-size:1.05rem; line-height:1.55; color:#1E293B; margin-bottom:8px;">
+                «${cat.greeting || '¡Hola! Soy tu amigo el Gato. Hoy descubriremos las 6 emociones básicas.'}»
               </p>
 
               <!-- Botones de audio -->
-              <div class="character-audio-actions" style="margin-top: 14px;">
+              <div class="character-audio-actions" style="margin-top: 10px;">
                 <button class="btn-cat-audio" id="btn-play-voice-action" style="background:#F59E0B; box-shadow:0 4px 14px rgba(245, 158, 11, 0.35);">
                   <span id="voice-audio-icon">🔊</span>
                   <span id="voice-audio-label">Escuchar la voz del Gato</span>
@@ -299,7 +296,7 @@ window.emoTIC_Games = {
         if (box) {
           box.innerHTML = `
             <video controls autoplay style="width:100%; height:100%; object-fit:contain; border-radius:18px;">
-              <source src="${videoData.placeholderUrl || 'assets/videos/emociones-video.mp4'}" type="video/mp4">
+              <source src="${videoData.placeholderUrl || 'assets/video/emociones-video.mp4'}" type="video/mp4">
               Tu navegador no soporta video local HTML5.
             </video>
           `;
@@ -796,36 +793,25 @@ window.emoTIC_Games = {
         </div>
 
         <div class="matching-intro-viewport">
-          <!-- Tarjeta del Cuento de Globito -->
-          <section class="globito-story-card">
+          <!-- Tarjeta de Presentación de Globito -->
+          <section class="globito-story-card" style="padding: 16px 20px;">
             <div class="globito-avatar-stage" id="globito-avatar-stage">
               <img src="${globito.avatarSvg || 'assets/illustrations/globito.png'}" alt="Globito el pez globo" class="globito-story-avatar-img" />
             </div>
 
             <div class="character-speech-bubble">
               <span class="character-name-badge" style="background:#E0F2FE; color:#0369A1;">🐡 ${globito.name || 'Globito'}</span>
-              <h3 style="font-size:1.4rem; color:#0369A1; margin:4px 0 10px 0;">La historia de Globito</h3>
+              <h3 style="font-size:1.4rem; color:#0369A1; margin:4px 0 8px 0;">¡La técnica de Globito!</h3>
               
-              <p style="font-size:1.05rem; line-height:1.55; color:#1E293B; margin-bottom:12px;">
-                Globito es un pez globo que vive en el mar; tiene muchos amigos y le gusta jugar mucho con ellos. Globito estaba preocupado; sus amigos ya no querían estar con él porque se enojaba mucho, los trataba mal y a veces hasta les pegaba.
+              <p style="font-size:1.05rem; line-height:1.55; color:#1E293B; margin-bottom:8px;">
+                «${globito.greeting || '¡Hola! Soy Globito el pez globo. Mira mi video para aprender la técnica de quedarte quieto y respirar hondo para calmarte.'}»
               </p>
-              <p style="font-size:1.05rem; line-height:1.55; color:#1E293B; margin-bottom:12px;">
-                Pero Globito encontró una solución: <strong>¡aprendió a calmarse!</strong> Un día se dio cuenta de que, si respiraba profundamente hasta inflarse varias veces, se calmaba y ya no trataba mal a sus amigos y les podía decir calmadamente lo que quería.
-              </p>
-
-              <div class="globito-rules-box">
-                <span>Ahora, cuando Globito siente rabia o miedo:</span>
-                <ol>
-                  <li>Se queda quieto.</li>
-                  <li>Respira profundamente y despacito hasta inflarse varias veces.</li>
-                </ol>
-              </div>
 
               <!-- Botones de audio -->
-              <div class="character-audio-actions" style="margin-top: 18px;">
+              <div class="character-audio-actions" style="margin-top: 10px;">
                 <button class="btn-cat-audio" id="btn-play-voice-action" style="background:#0284C7; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);">
                   <span id="voice-audio-icon">🔊</span>
-                  <span id="voice-audio-label">Escuchar el cuento de Globito</span>
+                  <span id="voice-audio-label">Escuchar a Globito</span>
                 </button>
               </div>
             </div>
@@ -898,7 +884,7 @@ window.emoTIC_Games = {
         if (box) {
           box.innerHTML = `
             <video controls autoplay style="width:100%; height:100%; object-fit:contain; border-radius:18px;">
-              <source src="${videoData.placeholderUrl || 'assets/videos/globito-cuento.mp4'}" type="video/mp4">
+              <source src="${videoData.placeholderUrl || 'assets/video/globito-cuento.mp4'}" type="video/mp4">
               Tu navegador no soporta video local HTML5.
             </video>
           `;
@@ -1364,10 +1350,6 @@ window.emoTIC_Games = {
                 <span id="voice-audio-icon">🔊</span>
                 <span id="voice-audio-label">Escuchar a Sofi y Nico</span>
               </button>
-
-              <div class="audio-file-indicator" title="Ubicación donde colocas tu audio grabado">
-                📁 <code>assets/audio/nino-nina-nivel3.mp3</code>
-              </div>
             </div>
 
             <div style="margin-top: 24px;">
@@ -1685,10 +1667,6 @@ window.emoTIC_Games = {
                 <span id="voice-audio-icon">🔊</span>
                 <span id="voice-audio-label">Escuchar a Héroe y Heroína</span>
               </button>
-
-              <div class="audio-file-indicator" title="Ubicación donde colocas tu audio grabado">
-                📁 <code>assets/audio/heroe-heroina-nivel4.mp3</code>
-              </div>
             </div>
 
             <div style="margin-top: 24px;">
@@ -2198,10 +2176,6 @@ window.emoTIC_Games = {
                 <span id="voice-audio-icon">🔊</span>
                 <span id="voice-audio-label">Escuchar a Timo</span>
               </button>
-
-              <div class="audio-file-indicator" title="Ubicación donde colocas tu audio grabado">
-                📁 <code>assets/audio/timo-nivel5.mp3</code>
-              </div>
             </div>
 
             <div style="margin-top: 22px;">
@@ -2731,42 +2705,15 @@ window.emoTIC_Games = {
                   <span id="voice-audio-icon">🔊</span>
                   <span id="voice-audio-label">Escuchar a Kori el Cuy</span>
                 </button>
+              </div>
 
-                <div class="audio-file-indicator" title="Ubicación donde colocas tu audio grabado">
-                  📁 <code>assets/audio/cuy-nivel6.mp3</code>
-                </div>
+              <div style="margin-top: 22px;">
+                <button class="btn-timo-advance" id="btn-start-baskets-game" style="background:#F59E0B; color:#78350F; font-size:1.15rem; padding:12px 38px; box-shadow:0 4px 16px rgba(245, 158, 11, 0.4);">
+                  ¡Comenzar el Juego de las Canastas! 🧺
+                </button>
               </div>
             </div>
           </section>
-
-          <!-- ESPACIO PARA EL VIDEO EDUCATIVO (Solución flexible para video local o enlace) -->
-          <div class="cuy-video-card">
-            <div class="cuy-video-header">
-              <span class="cuy-video-badge">🎬 ${videoData.durationText || '3 min • Aprender juntos'}</span>
-              <h3 style="font-size:1.15rem; color:#1E293B; margin:0;">${videoData.title}</h3>
-            </div>
-
-            <!-- Marco de Reproducción de Video -->
-            <div class="cuy-video-player-frame" id="cuy-video-box">
-              <div class="cuy-video-placeholder-content">
-                <div class="cuy-play-btn-circle" id="btn-play-cuy-video" role="button" tabindex="0" title="Reproducir video educativo">
-                  ▶
-                </div>
-                <strong style="font-size:1.1rem; letter-spacing:0.5px;">Reproducir Video Educativo</strong>
-                <span style="font-size:0.85rem; color:#CBD5E1; max-width:380px;">
-                  Espacio listo para reproducir tu video o enlace. ¡Toca para explorar!
-                </span>
-              </div>
-            </div>
-
-            <p class="cuy-video-desc-text">
-              ${videoData.description}
-            </p>
-
-            <button class="btn-timo-advance" id="btn-start-baskets-game" style="background:#F59E0B; color:#78350F; font-size:1.15rem; padding:12px 38px; box-shadow:0 4px 16px rgba(245, 158, 11, 0.4);">
-              ¡Comenzar el Juego de las Canastas! 🧺
-            </button>
-          </div>
 
         </div>
       </div>
@@ -2790,23 +2737,6 @@ window.emoTIC_Games = {
           act.character.audioTranscript || act.character.greeting,
           "cuy-avatar-stage"
         );
-      });
-    }
-
-    const btnPlayVid = document.getElementById("btn-play-cuy-video");
-    if (btnPlayVid) {
-      btnPlayVid.addEventListener("click", () => {
-        emoTIC_Sound.playClick();
-        // Verificar si existe el archivo de video local o enlace
-        const videoBox = document.getElementById("cuy-video-box");
-        if (videoBox) {
-          videoBox.innerHTML = `
-            <video controls autoplay style="width:100%; height:100%; object-fit:contain; border-radius:18px;">
-              <source src="${videoData.placeholderUrl || 'assets/videos/emociones-sentimientos.mp4'}" type="video/mp4">
-              Tu navegador no soporta video local HTML5.
-            </video>
-          `;
-        }
       });
     }
 

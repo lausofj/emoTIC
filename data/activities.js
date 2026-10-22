@@ -23,15 +23,15 @@ window.EMOTIC_ACTIVITIES = [
       name: "El Gato de las Emociones",
       avatarSvg: "assets/illustrations/gato-alegria.png",
       audioFile: "assets/audio/gato-nivel1.mp3",
-      greeting: "¡Hola! Soy tu amigo el Gato. Hoy aprenderemos sobre las Emociones: alegría, tristeza, enojo, miedo, asco y sorpresa.",
-      explanation: "Primero puedes ver nuestro video educativo para conocer las 6 emociones básicas. Luego, ayúdame a unir cada emoción con su significado trazando una línea con el mouse o con un clic. ¡Miau, vamos a aprender!",
+      greeting: "¡Hola! Soy tu amigo el Gato. Hoy aprenderemos sobre las 6 emociones básicas.",
+      explanation: "Mira el video educativo para conocer las emociones básicas y luego únelas con su significado trazando una línea. ¡Miau, vamos a aprender juntos!",
       audioTranscript: "¡Hola! Soy tu amigo el Gato de las Emociones. Aprenderemos sobre la alegría, la tristeza, el enojo, el miedo, el asco y la sorpresa. Mira el video explicativo y después une cada emoción con su significado trazando una línea con el mouse o tu dedo. ¡Miau, vamos a divertirnos y aprender juntos!"
     },
 
     // Espacio para video educativo del Nivel 1
     video: {
       title: "Video: Conociendo nuestras emociones",
-      placeholderUrl: "assets/videos/emociones-video.mp4",
+      placeholderUrl: "assets/video/emociones-video.mp4",
       description: "Aprende qué sentimos y cómo se refleja cada una de las 6 emociones básicas en nuestro rostro y cuerpo."
     },
 
@@ -129,19 +129,19 @@ window.EMOTIC_ACTIVITIES = [
       name: "Globito el Pez Globo",
       avatarSvg: "assets/illustrations/globito.png",
       audioFile: "assets/audio/globito-cuento.mp3",
-      greeting: "¡Hola! Soy Globito el pez globo. Hoy te contaré mi historia para aprender a calmarnos y no tratar mal a nuestros amigos.",
-      storyText: "Globito es un pez globo que vive en el mar; tiene muchos amigos y le gusta jugar mucho con ellos. Globito estaba preocupado; sus amigos ya no querían estar con él porque se enojaba mucho, los trataba mal y a veces hasta les pegaba. Pero Globito encontró una solución: ¡aprendió a calmarse! Un día se dio cuenta de que, si respiraba profundamente hasta inflarse varias veces, se calmaba y ya no trataba mal a sus amigos y les podía decir calmadamente lo que quería. Ahora, cuando Globito siente rabia o miedo:\n1. Se queda quieto.\n2. Respira profundamente y despacito hasta inflarse varias veces.",
+      greeting: "¡Hola! Soy Globito el pez globo. Mira mi video para aprender la técnica de quedarte quieto y respirar hondo para calmarte.",
+      storyText: "Globito aprendió a calmarse quedándose quieto y respirando hondo dos veces.",
       rules: [
         "1. Se queda quieto.",
-        "2. Respira profundamente y despacito hasta inflarse varias veces."
+        "2. Respira profundamente y despacito hasta inflarse."
       ]
     },
 
     // Espacio para el video del cuento de Globito
     video: {
       title: "Video: La historia de Globito el Pez Globo",
-      placeholderUrl: "assets/videos/globito-cuento.mp4",
-      description: "Descubre cómo Globito aprendió a quedarse quieto y calmarse respirando profundamente antes de lastimar a sus amigos."
+      placeholderUrl: "assets/video/globito-cuento.mp4",
+      description: "Descubre cómo Globito aprendió a quedarse quieto y calmarse respirando profundamente."
     },
 
     gameType: "globito-regulation",
@@ -672,15 +672,8 @@ window.EMOTIC_ACTIVITIES = [
       avatarSvg: "assets/illustrations/cuy.png",
       audioFile: "assets/audio/cuy-nivel6.mp3",
       greeting: "¡Cui, cui, hola! Soy Kori el Cuy. ¿Ves la flor en mi cabeza y mi nariz de corazón? ¡Hoy aprenderemos a diferenciar las emociones de los sentimientos!",
-      explanation: "Las emociones son como chispas rápidas de nuestro cuerpo: aparecen de repente cuando pasa algo. En cambio, los sentimientos duran más tiempo y se quedan a vivir en nuestro corazón. Puedes ver el video educativo y luego ayudarme a clasificar cada tarjeta en su canasta correspondiente. ¡Vamos a llenar las canastas!",
-      audioTranscript: "¡Cui, cui, hola amigos! Soy Kori el Cuy de los sentimientos. ¿Sabías que las emociones y los sentimientos son distintos? Una emoción es rápida e intensa, como el susto al escuchar un trueno o la risa por una sorpresa. Un sentimiento es duradero y profundo, como el amor por tu familia o la gratitud con un amigo. Acompáñame a ver nuestro video y a clasificar cada uno en su canasta correspondiente. ¡Cui, cui, vamos juntos!"
-    },
-
-    video: {
-      title: "Video: ¿En qué se diferencian las emociones y los sentimientos?",
-      placeholderUrl: "assets/videos/emociones-sentimientos.mp4",
-      description: "Espacio preparado para tu video educativo. Puedes colocar tu archivo de video o enlace cuando lo tengas listo.",
-      durationText: "3 min • Aprender juntos"
+      explanation: "Las emociones son como chispas rápidas de nuestro cuerpo: aparecen de repente cuando pasa algo. En cambio, los sentimientos duran más tiempo y se quedan a vivir en nuestro corazón. Ayúdame a clasificar cada tarjeta en su canasta correspondiente. ¡Vamos a llenar las canastas!",
+      audioTranscript: "¡Cui, cui, hola amigos! Soy Kori el Cuy de los sentimientos. ¿Sabías que las emociones y los sentimientos son distintos? Una emoción es rápida e intensa, como el susto al escuchar un trueno o la risa por una sorpresa. Un sentimiento es duradero y profundo, como el amor por tu familia o la gratitud con un amigo. Acompáñame a clasificar cada tarjeta en su canasta correspondiente. ¡Cui, cui, vamos juntos!"
     },
 
     gameType: "baskets-classification",
