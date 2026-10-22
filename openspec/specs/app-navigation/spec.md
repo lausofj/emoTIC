@@ -7,11 +7,11 @@ Define la navegación principal superior y las pantallas activas de la plataform
 ## Requirements
 
 ### Requirement: Barra de navegación superior simplificada
-El encabezado superior de la plataforma SHALL mostrar únicamente los enlaces de navegación a Inicio (logo), «Jugar», «Mis estrellas», el contador de estrellas acumuladas y el acceso al modo «Docente». No SHALL existir ningún botón ni enlace hacia el apartado «Para familias».
+El encabezado superior de la plataforma SHALL mostrar exclusivamente los enlaces a Inicio (logo), «Jugar», «Mis estrellas», el contador de estrellas acumuladas, el indicador de conexión a red, las opciones de accesibilidad y el acceso al modo «Docente». No SHALL existir ningún botón ni enlace hacia «Para familias» ni ningún botón de instalación PWA (`btn-install-app`).
 
 #### Scenario: Visualización de enlaces en la barra superior
 - **WHEN** un usuario visualiza el encabezado principal de la aplicación
-- **THEN** solo observa las opciones «Jugar», «Mis estrellas», el indicador de estrellas y el botón «Docente» sin rastro del botón «Para familias»
+- **THEN** observa las opciones principales de navegación y accesibilidad, sin enlaces a «Para familias» ni botón de instalación PWA
 
 ### Requirement: Exclusión de la pantalla de biblioteca para familias
 La aplicación SHALL no contener ni renderizar la pantalla `library-screen` ni cargar los scripts asociados a la biblioteca de cuentos e imprimibles familiares (`library.js` y `library-data.js`).
@@ -21,8 +21,15 @@ La aplicación SHALL no contener ni renderizar la pantalla `library-screen` ni c
 - **THEN** `library-screen` no es una pantalla registrable ni accesible en el ciclo de navegación
 
 ### Requirement: Limpieza de activos no utilizados en el catálogo de ilustraciones
-El directorio `assets/illustrations/` SHALL contener exclusivamente las ilustraciones requeridas por las mecánicas de juego activas y los avatares de usuario. Los 7 archivos obsoletos o huérfanos (`gato-avatar.png`, `gatos-emociones.png`, `nina-home.svg`, `nino-home.svg`, `ayuda.svg`, `dino.svg`, `lola-lalo.svg`) SHALL ser eliminados del sistema de archivos y de la lista de recursos precacheados del Service Worker.
+El directorio `assets/illustrations/` SHALL contener exclusivamente las ilustraciones activas en formato PNG requeridas por las mecánicas de juego y avatares. Los 6 archivos vectoriales obsoletos (`avatar-explorador.svg`, `avatar-exploradora.svg`, `avatar-fantastico.svg`, `cuy.svg`, `lumi.svg`, `timo.svg`) SHALL ser eliminados del sistema de archivos, y todas las referencias activas en la aplicación SHALL apuntar a sus versiones `.png`.
 
 #### Scenario: Verificación de activos de ilustraciones
-- **WHEN** se inspecciona el directorio de ilustraciones y la caché de la aplicación
-- **THEN** no existen referencias ni archivos de los 7 activos eliminados y todos los juegos cargan sus ilustraciones sin errores 404
+- **WHEN** se inspecciona el directorio `assets/illustrations/` y se navega por los juegos
+- **THEN** no existen los 6 archivos `.svg` obsoletos y todas las imágenes de personajes se cargan satisfactoriamente en formato PNG
+
+### Requirement: Desactivación de Progressive Web App y Service Worker
+La aplicación SHALL operar como una aplicación web tradicional sin infraestructura PWA ni Service Worker. El sistema SHALL desvincular el archivo de manifiesto (`manifest.webmanifest`), no registrar ningún Service Worker y desregistrar programáticamente cualquier Service Worker previamente activo en el navegador del cliente para evitar problemas de almacenamiento en caché persistente.
+
+#### Scenario: Desregistro e inactividad de Service Worker
+- **WHEN** un usuario carga o recarga la plataforma emoTIC
+- **THEN** el navegador no registra ningún Service Worker, desregistra los existentes si los hubiera y la aplicación no depende de caché de Service Worker
