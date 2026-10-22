@@ -53,12 +53,30 @@ window.emoTIC_Games = {
   // Reproductor de audio local grabado
   audioPlayer: null,
   isPlayingAudio: false,
+  activityStartTime: null,
+  activityMistakes: 0,
+
+  getAttemptDuration() {
+    if (!this.activityStartTime) return 30;
+    return Math.max(5, Math.round((Date.now() - this.activityStartTime) / 1000));
+  },
+
+  async getStudentContext() {
+    const avatar = (await emoTIC_DB.getSetting("homeAvatarSelected", "nina")) || "nina";
+    const grade = (await emoTIC_DB.getSetting("studentGrade", "1° Primaria")) || "1° Primaria";
+    return {
+      gender: avatar === "nino" ? "nino" : "nina",
+      grade_level: grade
+    };
+  },
 
   // =========================================================================
   // ENTRADA PRINCIPAL A CUALQUIER ACTIVIDAD
   // =========================================================================
   launchActivity(activity, containerId = "activity-player-container") {
     this.currentActivity = activity;
+    this.activityStartTime = Date.now();
+    this.activityMistakes = 0;
     this.stopAudio();
 
     if (activity.gameType === "matching-emotions" || activity.id === "act-1") {
@@ -108,6 +126,7 @@ window.emoTIC_Games = {
     path.setAttribute("fill", "none");
 
     if (isError) {
+      this.activityMistakes = (this.activityMistakes || 0) + 1;
       path.setAttribute("class", "matching-svg-error-line");
       path.setAttribute("stroke", "#EF4444");
     } else if (isTemp) {
@@ -661,11 +680,21 @@ window.emoTIC_Games = {
   async handleMatchingVictory() {
     this.stopAudio();
     emoTIC_Sound.playSuccess();
+    const studentCtx = await this.getStudentContext();
 
     await emoTIC_DB.saveProgress({
       activityId: "act-1",
       title: "Emociones",
       stars: 3,
+      score: 150,
+      mistakes_count: this.activityMistakes || 0,
+      duration_seconds: this.getAttemptDuration(),
+      gender: studentCtx.gender,
+      grade_level: studentCtx.grade_level,
+      details: {
+        totalPairs: this.matchingState.totalPairs || 6,
+        connectionsCount: (this.matchingState.connections || []).length
+      },
       badgeName: "Maestro de las Emociones",
       badgeIcon: "🐱",
       completedAt: new Date().toISOString()
@@ -1104,11 +1133,21 @@ window.emoTIC_Games = {
   async handleGlobitoVictory() {
     this.stopAudio();
     emoTIC_Sound.playSuccess();
+    const studentCtx = await this.getStudentContext();
 
     await emoTIC_DB.saveProgress({
       activityId: "act-2",
       title: "La historia de Globito: Regular nuestras emociones",
       stars: 3,
+      score: 180,
+      mistakes_count: this.activityMistakes || 0,
+      duration_seconds: this.getAttemptDuration(),
+      gender: studentCtx.gender,
+      grade_level: studentCtx.grade_level,
+      details: {
+        breathsCompleted: this.globitoState.breathsCompleted || 3,
+        sliderValue: this.globitoState.sliderValue || 3
+      },
       badgeName: "Maestro de la Calma",
       badgeIcon: "🐡",
       completedAt: new Date().toISOString()
@@ -1154,11 +1193,18 @@ window.emoTIC_Games = {
   async handleGameVictory(characterType = "gato") {
     this.stopAudio();
     emoTIC_Sound.playSuccess();
+    const studentCtx = await this.getStudentContext();
 
     await emoTIC_DB.saveProgress({
       activityId: this.currentActivity.id,
       title: this.currentActivity.title,
       stars: 3,
+      score: 120,
+      mistakes_count: this.activityMistakes || 0,
+      duration_seconds: this.getAttemptDuration(),
+      gender: studentCtx.gender,
+      grade_level: studentCtx.grade_level,
+      details: { characterType },
       badgeName: "Maestro de las Emociones",
       badgeIcon: "🐱",
       completedAt: new Date().toISOString()
@@ -1460,11 +1506,21 @@ window.emoTIC_Games = {
   async handleEmpathyVictory() {
     this.stopAudio();
     emoTIC_Sound.playSuccess();
+    const studentCtx = await this.getStudentContext();
 
     await emoTIC_DB.saveProgress({
       activityId: "act-3",
       title: "Descubriendo las emociones de los demás",
       stars: 3,
+      score: this.empathyState.score || 200,
+      mistakes_count: this.activityMistakes || 0,
+      duration_seconds: this.getAttemptDuration(),
+      gender: studentCtx.gender,
+      grade_level: studentCtx.grade_level,
+      details: {
+        missionIndex: this.empathyState.missionIndex,
+        score: this.empathyState.score
+      },
       badgeName: "Detective de la Empatía",
       badgeIcon: "🤝",
       completedAt: new Date().toISOString()
@@ -1962,11 +2018,18 @@ window.emoTIC_Games = {
   async handleHeroVictory() {
     this.stopAudio();
     emoTIC_Sound.playSuccess();
+    const studentCtx = await this.getStudentContext();
 
     await emoTIC_DB.saveProgress({
       activityId: "act-4",
       title: "Amigo que ayuda",
       stars: 3,
+      score: 160,
+      mistakes_count: this.activityMistakes || 0,
+      duration_seconds: this.getAttemptDuration(),
+      gender: studentCtx.gender,
+      grade_level: studentCtx.grade_level,
+      details: { completedMission: "hero-helping" },
       badgeName: "Superamigo que Ayuda",
       badgeIcon: "🦸",
       completedAt: new Date().toISOString()
@@ -2506,11 +2569,18 @@ window.emoTIC_Games = {
   async handleTimoVictory() {
     this.stopAudio();
     emoTIC_Sound.playSuccess();
+    const studentCtx = await this.getStudentContext();
 
     await emoTIC_DB.saveProgress({
       activityId: "act-5",
       title: "El bosque de las familias",
       stars: 3,
+      score: 150,
+      mistakes_count: this.activityMistakes || 0,
+      duration_seconds: this.getAttemptDuration(),
+      gender: studentCtx.gender,
+      grade_level: studentCtx.grade_level,
+      details: { completedMission: "family-forest" },
       badgeName: "Guardián de las Familias",
       badgeIcon: "🌳",
       completedAt: new Date().toISOString()
@@ -2918,11 +2988,18 @@ window.emoTIC_Games = {
   async handleCuyVictory() {
     this.stopAudio();
     emoTIC_Sound.playSuccess();
+    const studentCtx = await this.getStudentContext();
 
     await emoTIC_DB.saveProgress({
       activityId: "act-6",
       title: "Emociones y sentimientos",
       stars: 3,
+      score: 200,
+      mistakes_count: this.activityMistakes || 0,
+      duration_seconds: this.getAttemptDuration(),
+      gender: studentCtx.gender,
+      grade_level: studentCtx.grade_level,
+      details: { completedMission: "baskets-classification" },
       badgeName: "Gran Maestro Emocional",
       badgeIcon: "🏆",
       completedAt: new Date().toISOString()

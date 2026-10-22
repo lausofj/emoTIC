@@ -1,36 +1,74 @@
 /**
  * emoTIC - Módulo del Docente y Adulto Responsable
- * Matriz curricular, pautas pedagógicas, gestor de contenidos, informe de progreso y diagnóstico offline.
+ * Matriz curricular, pautas pedagógicas, gestor de contenidos, informe de progreso y seguimiento de intentos MySQL.
  */
 
 window.emoTIC_Teacher = {
   activeTab: "curriculum",
 
-  // Reto de acceso seguro para adultos
+  // Estado de autenticación
+  isAuthenticated() {
+    const token = this.getToken();
+    return !!token;
+  },
+
+  getToken() {
+    return sessionStorage.getItem("emotic_teacher_token") || localStorage.getItem("emotic_teacher_token");
+  },
+
+  getTeacherInfo() {
+    try {
+      const raw = sessionStorage.getItem("emotic_teacher_info") || localStorage.getItem("emotic_teacher_info");
+      return raw ? JSON.parse(raw) : { username: "docente", full_name: "Docente emoTIC" };
+    } catch (e) {
+      return { username: "docente", full_name: "Docente emoTIC" };
+    }
+  },
+
+  logout() {
+    sessionStorage.removeItem("emotic_teacher_token");
+    sessionStorage.removeItem("emotic_teacher_info");
+    localStorage.removeItem("emotic_teacher_token");
+    localStorage.removeItem("emotic_teacher_info");
+    emoTIC_Sound.playClick();
+    emoTIC_Navigation.showScreen("welcome-screen");
+  },
+
+  // Modal de inicio de sesión docente con usuario y contraseña (reemplaza el reto de suma)
   checkAccess(onSuccess) {
-    const n1 = Math.floor(Math.random() * 8) + 6; // 6 a 13
-    const n2 = Math.floor(Math.random() * 8) + 5; // 5 a 12
-    const ans = n1 + n2;
+    if (this.isAuthenticated()) {
+      onSuccess();
+      return;
+    }
 
     const modal = document.createElement("div");
     modal.className = "lumi-modal-overlay";
+    modal.id = "teacher-login-modal";
     modal.innerHTML = `
       <div class="lumi-modal-card" style="max-width:440px;">
         <div class="lumi-modal-header">
           <h2 class="lumi-title">🔒 Acceso al Área Docente</h2>
-          <button class="lumi-close-btn" id="btn-close-math">&times;</button>
+          <button class="lumi-close-btn" id="btn-close-login" aria-label="Cerrar modal">&times;</button>
         </div>
-        <div class="lumi-modal-body" style="text-align:center;">
-          <p>Para proteger la navegación de los niños, resuelve esta sencilla operación matemática:</p>
-          <div style="font-size:1.8rem; font-weight:900; color:#5C6BC0; margin:16px 0;">
-            ¿Cuánto es ${n1} + ${n2}?
-          </div>
-          <input type="number" id="math-challenge-input" class="form-input-number" placeholder="Tu respuesta..." autofocus style="font-size:1.4rem; text-align:center; padding:10px; width:140px; margin:0 auto;"/>
-          <p id="math-err-msg" style="color:#D32F2F; margin-top:10px; display:none;">Respuesta incorrecta. Inténtalo de nuevo.</p>
+        <div class="lumi-modal-body" style="text-align:left;">
+          <p style="color:#546E7A; font-size:0.95rem; margin-bottom:16px;">
+            Ingresa tus credenciales de docente para consultar reportes pedagógicos, métricas de intentos y herramientas curriculares.
+          </p>
+          <form id="form-teacher-login" onsubmit="return false;">
+            <div style="margin-bottom:12px;">
+              <label for="login-username" style="display:block; font-weight:700; color:#37474F; margin-bottom:4px; font-size:0.9rem;">Usuario:</label>
+              <input type="text" id="login-username" class="form-input" placeholder="Nombre de usuario (ej. docente)" required autocomplete="username" style="width:100%; padding:10px 12px; border:2px solid #E2E8F0; border-radius:8px; font-size:1rem; box-sizing:border-box;" />
+            </div>
+            <div style="margin-bottom:14px;">
+              <label for="login-password" style="display:block; font-weight:700; color:#37474F; margin-bottom:4px; font-size:0.9rem;">Contraseña:</label>
+              <input type="password" id="login-password" class="form-input" placeholder="Contraseña..." required autocomplete="current-password" style="width:100%; padding:10px 12px; border:2px solid #E2E8F0; border-radius:8px; font-size:1rem; box-sizing:border-box;" />
+            </div>
+            <p id="login-err-msg" style="color:#D32F2F; margin-top:8px; font-size:0.9rem; display:none;"></p>
+          </form>
         </div>
         <div class="lumi-modal-footer">
-          <button class="btn-secondary" id="btn-cancel-math">Cancelar</button>
-          <button class="btn-primary" id="btn-confirm-math">Verificar e Ingresar</button>
+          <button class="btn-secondary" id="btn-cancel-login">Cancelar</button>
+          <button class="btn-primary" id="btn-submit-login">Iniciar Sesión</button>
         </div>
       </div>
     `;
@@ -38,23 +76,77 @@ window.emoTIC_Teacher = {
     document.body.appendChild(modal);
 
     const close = () => modal.remove();
-    document.getElementById("btn-close-math").addEventListener("click", close);
-    document.getElementById("btn-cancel-math").addEventListener("click", close);
+    document.getElementById("btn-close-login").addEventListener("click", close);
+    document.getElementById("btn-cancel-login").addEventListener("click", close);
 
-    document.getElementById("btn-confirm-math").addEventListener("click", () => {
-      const input = document.getElementById("math-challenge-input");
-      if (parseInt(input.value, 10) === ans) {
-        modal.remove();
-        emoTIC_Sound.playSuccess();
-        onSuccess();
-      } else {
-        emoTIC_Sound.playGentleNotice();
-        const err = document.getElementById("math-err-msg");
-        if (err) err.style.display = "block";
-        input.value = "";
-        input.focus();
+    const doLogin = async () => {
+      const uInput = document.getElementById("login-username");
+      const pInput = document.getElementById("login-password");
+      const errEl = document.getElementById("login-err-msg");
+      const btnSubmit = document.getElementById("btn-submit-login");
+
+      const username = uInput ? uInput.value.trim() : "";
+      const password = pInput ? pInput.value : "";
+
+      if (!username || !password) {
+        if (errEl) {
+          errEl.textContent = "Por favor ingresa tu usuario y contraseña.";
+          errEl.style.display = "block";
+        }
+        return;
       }
+
+      btnSubmit.disabled = true;
+      btnSubmit.textContent = "Verificando...";
+
+      try {
+        const res = await fetch("backend/api/auth/login.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+
+        if (res.ok && data.success && data.token) {
+          sessionStorage.setItem("emotic_teacher_token", data.token);
+          sessionStorage.setItem("emotic_teacher_info", JSON.stringify(data.teacher || { username }));
+          localStorage.setItem("emotic_teacher_token", data.token);
+          localStorage.setItem("emotic_teacher_info", JSON.stringify(data.teacher || { username }));
+
+          modal.remove();
+          emoTIC_Sound.playSuccess();
+          onSuccess();
+        } else {
+          emoTIC_Sound.playGentleNotice();
+          if (errEl) {
+            errEl.textContent = data.message || "Usuario o contraseña incorrectos.";
+            errEl.style.display = "block";
+          }
+          btnSubmit.disabled = false;
+          btnSubmit.textContent = "Iniciar Sesión";
+          if (pInput) { pInput.value = ""; pInput.focus(); }
+        }
+      } catch (err) {
+        emoTIC_Sound.playGentleNotice();
+        if (errEl) {
+          errEl.textContent = "No se pudo conectar con el servidor de autenticación.";
+          errEl.style.display = "block";
+        }
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = "Iniciar Sesión";
+      }
+    };
+
+    document.getElementById("btn-submit-login").addEventListener("click", doLogin);
+    modal.querySelector("form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      doLogin();
     });
+
+    setTimeout(() => {
+      const u = document.getElementById("login-username");
+      if (u) u.focus();
+    }, 50);
   },
 
   // Renderizar la pantalla completa del Modo Docente
@@ -62,6 +154,12 @@ window.emoTIC_Teacher = {
     const container = document.getElementById(containerId);
     if (!container) return;
 
+    if (!this.isAuthenticated()) {
+      this.checkAccess(() => this.renderTeacherDashboard(containerId));
+      return;
+    }
+
+    const teacherInfo = this.getTeacherInfo();
     const allProgress = await emoTIC_DB.getAllProgress();
     const progressList = Object.values(allProgress);
 
@@ -69,12 +167,16 @@ window.emoTIC_Teacher = {
       <div class="teacher-header-bar">
         <div>
           <button class="btn-back-nav" id="btn-exit-teacher">← Volver al Menú Principal</button>
-          <h2 class="teacher-main-title">👩‍🏫 Área Pedagógica para Docentes y Familias</h2>
+          <h2 class="teacher-main-title">👩‍🏫 Área Pedagógica para Docentes</h2>
           <p class="teacher-subtitle">Programa «Emociones para la Vida» • Secretaría de Educación de Bogotá / MEN / Banco Mundial</p>
         </div>
-        <div class="teacher-header-actions">
-          <button class="btn-secondary" id="btn-export-report">📄 Exportar Informe de Progreso</button>
-          <button class="btn-danger-outline" id="btn-reset-data">⚠️ Reiniciar Datos</button>
+        <div class="teacher-header-actions" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <span style="font-size:0.9rem; color:#475569; background:#F1F5F9; padding:6px 12px; border-radius:20px;">
+            Docente: <strong>${teacherInfo.full_name || teacherInfo.username}</strong>
+          </span>
+          <button class="btn-secondary" id="btn-export-report">📄 Exportar Informe</button>
+          <button class="btn-danger-outline" id="btn-reset-data">⚠️ Reiniciar Local</button>
+          <button class="btn-danger" id="btn-logout-teacher" style="padding:6px 14px; font-size:0.9rem;">🚪 Cerrar Sesión</button>
         </div>
       </div>
 
@@ -82,7 +184,7 @@ window.emoTIC_Teacher = {
       <nav class="teacher-tabs-nav" aria-label="Secciones docentes">
         <button class="t-tab ${this.activeTab === 'curriculum' ? 'active' : ''}" data-target="t-pane-curriculum">📋 Matriz Curricular</button>
         <button class="t-tab ${this.activeTab === 'guidelines' ? 'active' : ''}" data-target="t-pane-guidelines">📖 Pautas Pedagógicas Oficiales</button>
-        <button class="t-tab ${this.activeTab === 'progress' ? 'active' : ''}" data-target="t-pane-progress">📊 Progreso en el Dispositivo (${progressList.length})</button>
+        <button class="t-tab ${this.activeTab === 'progress' ? 'active' : ''}" data-target="t-pane-progress">📊 Intentos en MySQL / Dispositivo</button>
         <button class="t-tab ${this.activeTab === 'new-activity' ? 'active' : ''}" data-target="t-pane-new-activity">➕ Crear Actividad / Pregunta</button>
         <button class="t-tab ${this.activeTab === 'offline-tool' ? 'active' : ''}" data-target="t-pane-offline-tool">💾 Diagnóstico y Modo Sin Internet</button>
       </nav>
@@ -148,55 +250,29 @@ window.emoTIC_Teacher = {
                   <td><strong>Empatía</strong></td>
                   <td>Observar la cara de alguien para saber cómo se siente (Jatrón).</td>
                   <td>Ponerme en el lugar del otro para entender cómo se siente.</td>
-                  <td>Entender lo que sienten los demás cuando les pasa algo malo.</td>
-                  <td>Ponerme en el lugar de alguien que es maltratado.</td>
+                  <td>Sintonizarme con las emociones de los demás.</td>
+                  <td>Demostrar comprensión y compasión genuina.</td>
                 </tr>
                 <tr>
-                  <td><strong>Comportamiento prosocial</strong></td>
-                  <td>Darme cuenta cuando alguien necesita ayuda (Código de Ayuda).</td>
-                  <td>Compartir lo que tengo.</td>
-                  <td>Incluir al que está solo.</td>
-                  <td>Consolar a los demás.</td>
-                </tr>
-                <tr>
-                  <td rowspan="3" class="td-world-w3">Mundo 3: Comunicación y conflictos</td>
-                  <td><strong>Escucha activa</strong></td>
-                  <td>Escuchar atentamente y sin interrumpir (Objeto de la palabra).</td>
-                  <td>Hacer que el otro sienta que le escucho y me importa.</td>
-                  <td>Mostrar interés sin usar palabras.</td>
-                  <td>Verificar que entiendo lo que me quieren decir.</td>
-                </tr>
-                <tr>
-                  <td><strong>Asertividad</strong></td>
-                  <td>Decir que no con respeto y firmeza (DiNo).</td>
-                  <td>Pedirle a quien maltrata a otro, que pare.</td>
-                  <td>Responder con claridad y firmeza, pero sin agredir.</td>
-                  <td>Expresar lo que pienso y siento sin hacer daño a otros.</td>
-                </tr>
-                <tr>
-                  <td><strong>Manejo de conflictos</strong></td>
-                  <td>Turnarme con mis amigos (Lola y Lalo).</td>
-                  <td>Buscar soluciones gana - gana.</td>
-                  <td>Pensar antes de actuar con rabia.</td>
-                  <td>Manejar la «temperatura» de una situación conflictiva.</td>
+                  <td><strong>Comunicación asertiva</strong></td>
+                  <td>Expresar lo que siento sin herir a otros.</td>
+                  <td>Usar el mensaje en primera persona ("Yo siento...").</td>
+                  <td>Escuchar activamente antes de juzgar.</td>
+                  <td>Resolver desacuerdos mediante el diálogo.</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div class="pedagogical-legal-note">
-            📌 <em>Nota de rigor metodológico:</em> Grado 1º implementa las 9 sesiones detalladas directamente de los documentos originales de <em>Emociones para la Vida</em>. Grados 2º, 3º y 4º son adaptaciones pedagógicas originales desarrolladas para emoTIC fundamentadas estrictamente en la matriz de objetivos de la Guía Oficial.
-          </div>
         </div>
 
-        <!-- PESTAÑA 2: PAUTAS PEDAGÓGICAS OFICIALES -->
+        <!-- PESTAÑA 2: PAUTAS PEDAGÓGICAS -->
         <div class="teacher-pane ${this.activeTab === 'guidelines' ? 'active' : ''}" id="t-pane-guidelines">
-          <div class="guidelines-dual-grid">
+          <div class="guidelines-card-container">
             <div class="guide-box-yes">
-              <h3>✅ QUÉ SÍ HACER (Recomendaciones de la Guía)</h3>
+              <h3>✅ QUÉ HACER (Recomendaciones de la Guía)</h3>
               <ul>
-                <li><strong>Priorizar la escucha:</strong> Dar la palabra a los niños; el aprendizaje socioemocional no se aprende con sermones ni discursos.</li>
-                <li><strong>Validar las emociones:</strong> Recordar que no existen emociones buenas ni malas; todas tienen una función informativa.</li>
-                <li><strong>Felicitar el esfuerzo:</strong> Reconocer la perseverancia, la honestidad y el trato respetuoso, no solo la respuesta correcta.</li>
+                <li><strong>Validar todas las emociones:</strong> Recordar a los estudiantes que no hay emociones "buenas" o "malas"; todas son mensajeras naturales.</li>
+                <li><strong>Promover la respiración consciente:</strong> Usar la técnica de Globito antes de situaciones de evaluación o tensión.</li>
                 <li><strong>Modelar con el ejemplo:</strong> Mantener la calma, la asertividad y la empatía en el trato cotidiano en el aula.</li>
                 <li><strong>Respetar el silencio:</strong> Permitir que los estudiantes decidan no responder si no se sienten cómodos compartiendo una vivencia personal.</li>
               </ul>
@@ -214,60 +290,73 @@ window.emoTIC_Teacher = {
           </div>
         </div>
 
-        <!-- PESTAÑA 3: PROGRESO EN EL DISPOSITIVO -->
+        <!-- PESTAÑA 3: PROGRESO E INTENTOS EN MYSQL -->
         <div class="teacher-pane ${this.activeTab === 'progress' ? 'active' : ''}" id="t-pane-progress">
-          <div class="progress-summary-card">
-            <h3>Registro de Avance en este Navegador</h3>
-            <p>Se han completado <strong>${progressList.length}</strong> actividades en este dispositivo.</p>
+          <div class="progress-summary-card" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <div>
+              <h3 style="margin:0;">📊 Historial Pedagógico de Intentos</h3>
+              <p style="margin:4px 0 0 0; color:#546E7A;">Intentos registrados y sincronizados con la base de datos MySQL central.</p>
+            </div>
+            <div id="attempts-data-badge" style="background:#E0E7FF; color:#3730A3; padding:6px 14px; border-radius:20px; font-weight:700; font-size:0.85rem;">
+              Cargando intentos...
+            </div>
           </div>
-          ${progressList.length === 0 ? `
-            <div class="empty-state-notice">
-              <span class="empty-icon">🌱</span>
-              <p>Aún no hay actividades completadas en este dispositivo. Cuando los estudiantes jueguen en los mundos, aquí se mostrarán sus insignias, reflexiones y fechas.</p>
+
+          <!-- Filtros de búsqueda pedagógica -->
+          <div class="attempts-filter-bar" style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; padding:12px 16px; margin:16px 0; display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
+            <div>
+              <label for="filter-grade" style="display:block; font-size:0.85rem; font-weight:700; color:#475569; margin-bottom:4px;">Grado:</label>
+              <select id="filter-grade" class="form-select" style="padding:6px 10px; border-radius:6px; border:1px solid #CBD5E1;">
+                <option value="">Todos los grados</option>
+                <option value="1° Primaria">1° Primaria</option>
+                <option value="2° Primaria">2° Primaria</option>
+                <option value="3° Primaria">3° Primaria</option>
+                <option value="4° Primaria">4° Primaria</option>
+                <option value="5° Primaria">5° Primaria</option>
+              </select>
             </div>
-          ` : `
-            <div class="table-responsive-wrapper">
-              <table class="progress-data-table">
-                <thead>
-                  <tr>
-                    <th>Actividad</th>
-                    <th>Grado</th>
-                    <th>Competencia</th>
-                    <th>Insignia Obtenida</th>
-                    <th>Estrellas</th>
-                    <th>Fecha</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${progressList.map(item => `
-                    <tr>
-                      <td><strong>${item.title}</strong></td>
-                      <td>Grado ${item.grade}º</td>
-                      <td>${item.competence}</td>
-                      <td>${item.badgeIcon || '🌟'} ${item.badgeName}</td>
-                      <td>${'⭐'.repeat(item.stars || 3)}</td>
-                      <td>${new Date(item.completedAt).toLocaleDateString()}</td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
+            <div>
+              <label for="filter-gender" style="display:block; font-size:0.85rem; font-weight:700; color:#475569; margin-bottom:4px;">Género:</label>
+              <select id="filter-gender" class="form-select" style="padding:6px 10px; border-radius:6px; border:1px solid #CBD5E1;">
+                <option value="">Todos</option>
+                <option value="nino">Niño 👦</option>
+                <option value="nina">Niña 👧</option>
+              </select>
             </div>
-          `}
+            <div>
+              <label for="filter-activity" style="display:block; font-size:0.85rem; font-weight:700; color:#475569; margin-bottom:4px;">Actividad:</label>
+              <select id="filter-activity" class="form-select" style="padding:6px 10px; border-radius:6px; border:1px solid #CBD5E1;">
+                <option value="">Todas las actividades</option>
+                <option value="act-1">Nivel 1: Emociones (Gato)</option>
+                <option value="act-2">Nivel 2: Historia de Globito</option>
+                <option value="act-3">Nivel 3: Empatía</option>
+                <option value="act-4">Nivel 4: Amigo que ayuda</option>
+                <option value="act-5">Nivel 5: Bosque de las familias</option>
+                <option value="act-6">Nivel 6: Emociones y sentimientos</option>
+              </select>
+            </div>
+            <button class="btn-primary" id="btn-apply-attempts-filter" style="padding:8px 16px; font-size:0.9rem;">🔍 Filtrar</button>
+            <button class="btn-secondary" id="btn-sync-attempts-now" style="padding:8px 16px; font-size:0.9rem;">🔄 Sincronizar Pendientes</button>
+          </div>
+
+          <div id="attempts-table-container">
+            <!-- Renderizado dinámico de la tabla de intentos -->
+          </div>
         </div>
 
         <!-- PESTAÑA 4: CREAR ACTIVIDAD / PREGUNTA -->
         <div class="teacher-pane ${this.activeTab === 'new-activity' ? 'active' : ''}" id="t-pane-new-activity">
           <div class="form-activity-creator">
-            <h3>➕ Añadir Nueva Actividad o Situación Pedagógica</h3>
-            <p>Puedes incorporar nuevos casos o preguntas personalizadas que se guardarán localmente en el dispositivo para tus estudiantes:</p>
+            <h3>Crear Actividad / Pregunta Personalizada</h3>
+            <p>Las actividades creadas se integran a la matriz y al mapa de mundos del dispositivo.</p>
             <form id="form-create-activity">
               <div class="form-row">
-                <div class="form-col">
-                  <label>Título de la Actividad:</label>
-                  <input type="text" id="act-new-title" class="form-input" required placeholder="Ej: La lonchera compartida"/>
+                <div class="form-group">
+                  <label for="act-new-title">Título de la Actividad:</label>
+                  <input type="text" id="act-new-title" class="form-input" required placeholder="Ej. El reto de la empatía en el recreo" />
                 </div>
-                <div class="form-col">
-                  <label>Grado Escolar:</label>
+                <div class="form-group">
+                  <label for="act-new-grade">Grado Escolar:</label>
                   <select id="act-new-grade" class="form-select">
                     <option value="1">1º de Primaria</option>
                     <option value="2">2º de Primaria</option>
@@ -278,41 +367,43 @@ window.emoTIC_Teacher = {
               </div>
 
               <div class="form-row">
-                <div class="form-col">
-                  <label>Mundo / Territorio:</label>
+                <div class="form-group">
+                  <label for="act-new-world">Mundo Asociado:</label>
                   <select id="act-new-world" class="form-select">
-                    <option value="world-1">Mundo 1: Mi mundo emocional</option>
-                    <option value="world-2">Mundo 2: En los zapatos de los demás</option>
-                    <option value="world-3">Mundo 3: Comunicación y conflictos</option>
+                    <option value="w1">Mundo 1: Mi mundo emocional</option>
+                    <option value="w2">Mundo 2: En los zapatos del otro</option>
+                    <option value="w3">Mundo 3: Mi bosque de la calma</option>
+                    <option value="w4">Mundo 4: Construyendo acuerdos</option>
                   </select>
                 </div>
-                <div class="form-col">
-                  <label>Competencia Socioemocional:</label>
-                  <input type="text" id="act-new-comp" class="form-input" required placeholder="Ej: Empatía / Asertividad"/>
+                <div class="form-group">
+                  <label for="act-new-comp">Competencia Socioemocional:</label>
+                  <input type="text" id="act-new-comp" class="form-input" required placeholder="Ej. Escucha activa y asertividad" />
                 </div>
               </div>
 
               <div class="form-group">
-                <label>Situación o Pregunta para el Estudiante:</label>
-                <textarea id="act-new-prompt" class="form-textarea" rows="3" required placeholder="Describe la situación cotidiana..."></textarea>
+                <label for="act-new-prompt">Situación o Pregunta Reflexiva:</label>
+                <textarea id="act-new-prompt" class="form-textarea" rows="3" required placeholder="Describe una situación cotidiana del aula o del hogar..."></textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="act-new-opt-correct">Opción Recomendada / Asertiva:</label>
+                  <input type="text" id="act-new-opt-correct" class="form-input" required placeholder="Ej. Hablo con mi compañero y le expreso cómo me siento." />
+                </div>
+                <div class="form-group">
+                  <label for="act-new-opt-distract">Opción a Mejorar (Distractor):</label>
+                  <input type="text" id="act-new-opt-distract" class="form-input" required placeholder="Ej. Me enojo y no le hablo en todo el día." />
+                </div>
               </div>
 
               <div class="form-group">
-                <label>Opción Adecuada (Respuesta Constructiva):</label>
-                <input type="text" id="act-new-opt-correct" class="form-input" required placeholder="Acción constructiva o empática"/>
+                <label for="act-new-feedback">Retroalimentación Positiva:</label>
+                <input type="text" id="act-new-feedback" class="form-input" required placeholder="¡Excelente decisión! Expresar lo que sentimos con respeto previene conflictos." />
               </div>
 
-              <div class="form-group">
-                <label>Opción a Reflexionar (Distractor Formativo):</label>
-                <input type="text" id="act-new-opt-distract" class="form-input" required placeholder="Reacción impulsiva o inadecuada"/>
-              </div>
-
-              <div class="form-group">
-                <label>Retroalimentación Formativa:</label>
-                <input type="text" id="act-new-feedback" class="form-input" required placeholder="Explicación amable de por qué la opción constructiva fomenta la paz"/>
-              </div>
-
-              <button type="submit" class="btn-primary-large">💾 Guardar Actividad en el Dispositivo</button>
+              <button type="submit" class="btn-primary" style="margin-top:16px;">💾 Guardar Actividad Personalizada</button>
             </form>
           </div>
         </div>
@@ -320,32 +411,30 @@ window.emoTIC_Teacher = {
         <!-- PESTAÑA 5: DIAGNÓSTICO OFFLINE -->
         <div class="teacher-pane ${this.activeTab === 'offline-tool' ? 'active' : ''}" id="t-pane-offline-tool">
           <div class="offline-diagnostic-card">
-            <h3>📶 Estado de Conectividad y Caché Local</h3>
-            <div class="status-grid-check">
-              <div class="check-item">
-                <span>Conexión a Internet actual:</span>
-                <strong id="diag-online-status">${navigator.onLine ? '🟢 En Línea' : '🟠 Sin Conexión (Offline)'}</strong>
-              </div>
-              <div class="check-item">
-                <span>Modo de Ejecución:</span>
-                <strong id="diag-sw-status">Web Estándar (Sin Service Worker)</strong>
-              </div>
-              <div class="check-item">
-                <span>Almacenamiento Local (IndexedDB):</span>
-                <strong id="diag-idb-status">Activo y Operativo</strong>
-              </div>
+            <h3>Estado de Conectividad y Almacenamiento Local</h3>
+            <p>emoTIC está diseñado para operar con tolerancia total a caídas de red escolar (Offline-First).</p>
+            <div class="diag-status-row">
+              <span class="diag-label">Conexión a Internet:</span>
+              <span class="diag-val" id="diag-net-status">${navigator.onLine ? "🟢 Conectado" : "🟠 Modo Fuera de Línea"}</span>
             </div>
-
-            <div class="cache-actions-box">
-              <h4>Estado de la Plataforma</h4>
-              <p>La plataforma se ejecuta de forma directa y optimizada en el navegador web, registrando de manera automática el progreso educativo y las actividades en la base de datos local IndexedDB.</p>
+            <div class="diag-status-row">
+              <span class="diag-label">Motor de Base de Datos Local:</span>
+              <span class="diag-val">🟢 IndexedDB Activo (Respaldo en LocalStorage)</span>
+            </div>
+            <div class="diag-status-row">
+              <span class="diag-label">Base de Datos Central:</span>
+              <span class="diag-val">🟢 MySQL (emotic_db) con cola resiliente</span>
+            </div>
+            <div class="diag-status-row">
+              <span class="diag-label">Service Worker (PWA):</span>
+              <span class="diag-val" id="diag-sw-status">Verificando...</span>
             </div>
           </div>
         </div>
       </div>
     `;
 
-    // Eventos de pestañas
+    // Interacción de pestañas
     const tabs = container.querySelectorAll(".t-tab");
     tabs.forEach(tab => {
       tab.addEventListener("click", () => {
@@ -358,6 +447,9 @@ window.emoTIC_Teacher = {
         this.activeTab = targetId.replace("t-pane-", "");
         const pane = document.getElementById(targetId);
         if (pane) pane.classList.add("active");
+        if (this.activeTab === "progress") {
+          this.loadAttemptsTable();
+        }
       });
     });
 
@@ -367,6 +459,12 @@ window.emoTIC_Teacher = {
       emoTIC_Navigation.showScreen("welcome-screen");
     });
 
+    // Cerrar sesión docente
+    const btnLogout = document.getElementById("btn-logout-teacher");
+    if (btnLogout) {
+      btnLogout.addEventListener("click", () => this.logout());
+    }
+
     // Exportar informe
     document.getElementById("btn-export-report").addEventListener("click", () => {
       this.exportReport(progressList);
@@ -374,13 +472,31 @@ window.emoTIC_Teacher = {
 
     // Reiniciar datos
     document.getElementById("btn-reset-data").addEventListener("click", async () => {
-      if (confirm("¿Estás seguro de que deseas reiniciar todo el progreso de este dispositivo? Esta acción no se puede deshacer.")) {
+      if (confirm("¿Estás seguro de que deseas reiniciar todo el progreso local de este dispositivo? Esta acción no se puede deshacer.")) {
         await emoTIC_DB.resetAllProgress();
         emoTIC_Sound.playGentleNotice();
-        alert("Los datos han sido reiniciados.");
+        alert("Los datos locales han sido reiniciados.");
         this.renderTeacherDashboard();
       }
     });
+
+    // Filtros de intentos
+    const btnFilter = document.getElementById("btn-apply-attempts-filter");
+    if (btnFilter) {
+      btnFilter.addEventListener("click", () => this.loadAttemptsTable());
+    }
+
+    const btnSync = document.getElementById("btn-sync-attempts-now");
+    if (btnSync) {
+      btnSync.addEventListener("click", async () => {
+        btnSync.disabled = true;
+        btnSync.textContent = "Sincronizando...";
+        await emoTIC_DB.syncPendingAttempts();
+        btnSync.disabled = false;
+        btnSync.textContent = "🔄 Sincronizar Pendientes";
+        this.loadAttemptsTable();
+      });
+    }
 
     // Guardar nueva actividad
     const form = document.getElementById("form-create-activity");
@@ -421,20 +537,165 @@ window.emoTIC_Teacher = {
       });
     }
 
-    // Comprobación de estado
+    // Cargar intentos inicialmente si está en la pestaña progreso
+    if (this.activeTab === "progress") {
+      this.loadAttemptsTable();
+    }
+
     this.updateSWDiagnostic();
+  },
+
+  // Carga y renderizado dinámico de la tabla de intentos desde backend/api/attempts.php
+  async loadAttemptsTable() {
+    const container = document.getElementById("attempts-table-container");
+    const badge = document.getElementById("attempts-data-badge");
+    if (!container) return;
+
+    const token = this.getToken();
+    if (!token) {
+      container.innerHTML = `<p style="color:#D32F2F;">Debes iniciar sesión para consultar los intentos.</p>`;
+      return;
+    }
+
+    const grade = document.getElementById("filter-grade")?.value || "";
+    const gender = document.getElementById("filter-gender")?.value || "";
+    const activity = document.getElementById("filter-activity")?.value || "";
+
+    const params = new URLSearchParams();
+    if (grade) params.append("grade_level", grade);
+    if (gender) params.append("gender", gender);
+    if (activity) params.append("activity_id", activity);
+
+    container.innerHTML = `<p style="color:#64748B; text-align:center; padding:20px;">Cargando registros desde la base de datos...</p>`;
+
+    try {
+      const res = await fetch(`backend/api/attempts.php?${params.toString()}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (res.status === 401) {
+        this.logout();
+        return;
+      }
+
+      const result = await res.json();
+
+      if (res.ok && result.success && Array.isArray(result.data)) {
+        const attempts = result.data;
+        if (badge) {
+          badge.textContent = `MySQL: ${attempts.length} intentos`;
+          badge.style.background = "#DCFCE7";
+          badge.style.color = "#166534";
+        }
+
+        if (attempts.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state-notice" style="text-align:center; padding:30px; background:#F8FAFC; border-radius:12px; border:1px dashed #CBD5E1;">
+              <span class="empty-icon" style="font-size:2.5rem;">🌱</span>
+              <p style="color:#475569; font-weight:600; margin-top:8px;">No se encontraron intentos para los filtros seleccionados.</p>
+              <p style="color:#94A3B8; font-size:0.9rem;">Cuando los estudiantes jueguen en los mundos, los intentos se registrarán automáticamente.</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = `
+          <div class="table-responsive-wrapper">
+            <table class="progress-data-table" style="width:100%; border-collapse:collapse; margin-top:8px;">
+              <thead>
+                <tr style="background:#EEF2F6; text-align:left;">
+                  <th style="padding:10px;">Actividad</th>
+                  <th style="padding:10px;">Estudiante</th>
+                  <th style="padding:10px;">Grado</th>
+                  <th style="padding:10px;">Estrellas</th>
+                  <th style="padding:10px;">Puntaje</th>
+                  <th style="padding:10px;">Errores</th>
+                  <th style="padding:10px;">Duración</th>
+                  <th style="padding:10px;">Fecha y Hora</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${attempts.map(row => `
+                  <tr style="border-bottom:1px solid #E2E8F0;">
+                    <td style="padding:10px;"><strong>${row.activity_title}</strong></td>
+                    <td style="padding:10px;">${row.gender === 'nina' ? '👧 Niña' : '👦 Niño'}</td>
+                    <td style="padding:10px;">${row.grade_level}</td>
+                    <td style="padding:10px; color:#F59E0B;">${'⭐'.repeat(row.stars || 1)}</td>
+                    <td style="padding:10px;">${row.score} pts</td>
+                    <td style="padding:10px;">${row.mistakes_count}</td>
+                    <td style="padding:10px;">${row.duration_seconds}s</td>
+                    <td style="padding:10px; font-size:0.85rem; color:#64748B;">${new Date(row.client_timestamp || row.created_at).toLocaleString()}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+        return;
+      }
+    } catch (netErr) {
+      console.warn("Fallo consultando MySQL backend, recurriendo a LocalStorage:", netErr);
+    }
+
+    // Respaldo en datos locales si el backend no respondió
+    if (badge) {
+      badge.textContent = `Modo Local (Sin red)`;
+      badge.style.background = "#FEF3C7";
+      badge.style.color = "#92400E";
+    }
+
+    const allLocal = await emoTIC_DB.getAllProgress();
+    const localList = Object.values(allLocal);
+
+    if (localList.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state-notice" style="text-align:center; padding:30px;">
+          <span class="empty-icon">🌱</span>
+          <p>No hay registros de progreso local ni conexión al servidor.</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = `
+      <div class="table-responsive-wrapper">
+        <table class="progress-data-table">
+          <thead>
+            <tr>
+              <th>Actividad</th>
+              <th>Grado</th>
+              <th>Estrellas</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${localList.map(item => `
+              <tr>
+                <td><strong>${item.title}</strong></td>
+                <td>${item.grade_level || "1° Primaria"}</td>
+                <td>${'⭐'.repeat(item.stars || 3)}</td>
+                <td>${new Date(item.completedAt || item.timestamp || Date.now()).toLocaleDateString()}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
   },
 
   updateSWDiagnostic() {
     const swEl = document.getElementById("diag-sw-status");
     if (swEl) {
-      swEl.textContent = "🟢 Web Estándar (Sin Service Worker)";
-      swEl.style.color = "#2E7D32";
+      if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
+        swEl.textContent = "🟢 Service Worker activo y controlando la página (Caché Offline)";
+      } else {
+        swEl.textContent = "🟡 Service Worker en registro o no soportado";
+      }
     }
   },
 
-
-  // Exportar informe de progreso en formato HTML imprimible y JSON
   exportReport(progressList) {
     const printWindow = window.open("", "_blank");
     if (!printWindow) {
@@ -466,42 +727,40 @@ window.emoTIC_Teacher = {
         <div class="no-print" style="margin-bottom:20px;">
           <button onclick="window.print()" style="padding:10px 20px; font-size:1rem; background:#5C6BC0; color:#fff; border:none; border-radius:6px; cursor:pointer;">🖨️ Imprimir / Guardar en PDF</button>
         </div>
-        <h1>Informe Local de Aprendizaje Socioemocional - emoTIC</h1>
+        <h1>Informe de Aprendizaje Socioemocional - emoTIC</h1>
         <div class="meta">
           <p><strong>Plataforma:</strong> emoTIC «Mundos de las Emociones»</p>
           <p><strong>Programa Base:</strong> Emociones para la Vida (MEN / SED Bogotá / Banco Mundial)</p>
           <p><strong>Fecha del Reporte:</strong> ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</p>
         </div>
 
-        <h3>Actividades Completadas en este Dispositivo:</h3>
+        <h3>Actividades Registradas:</h3>
         <table>
           <thead>
             <tr>
               <th>Actividad</th>
-              <th>Grado</th>
-              <th>Competencia</th>
+              <th>Estudiante / Grado</th>
               <th>Insignia</th>
               <th>Estrellas</th>
               <th>Fecha de Registro</th>
             </tr>
           </thead>
           <tbody>
-            ${progressList.length === 0 ? '<tr><td colspan="6" style="text-align:center;">No hay registros de progreso aún.</td></tr>' :
+            ${progressList.length === 0 ? '<tr><td colspan="5" style="text-align:center;">No hay registros aún.</td></tr>' :
               progressList.map(item => `
                 <tr>
                   <td><strong>${item.title}</strong></td>
-                  <td>${item.grade}º de Primaria</td>
-                  <td>${item.competence}</td>
-                  <td>${item.badgeIcon || '🌟'} ${item.badgeName}</td>
+                  <td>${item.gender === 'nina' ? 'Niña' : 'Niño'} - ${item.grade_level || item.grade || '1º Primaria'}</td>
+                  <td>${item.badgeIcon || '🌟'} ${item.badgeName || 'Logro'}</td>
                   <td>${item.stars || 3} / 3</td>
-                  <td>${new Date(item.completedAt).toLocaleString()}</td>
+                  <td>${new Date(item.completedAt || item.timestamp || Date.now()).toLocaleString()}</td>
                 </tr>
               `).join('')}
           </tbody>
         </table>
 
         <div class="footer">
-          <p><em>Este informe refleja el progreso formativo local en el dispositivo. No recopila datos personales sensibles.</em></p>
+          <p><em>Este informe refleja el progreso formativo registrado en emoTIC. Cumple con principios de privacidad y protección de datos de menores.</em></p>
         </div>
       </body>
       </html>

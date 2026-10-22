@@ -187,38 +187,11 @@ function bindGlobalEvents() {
     });
   }
 
-  // Acceso Docente sin login ni password: con suma matemática
+  // Acceso Docente con autenticación
   const btnTeacherEnter = document.getElementById("btn-sidebar-teacher-enter");
-  const mathInput = document.getElementById("home-math-input");
-  const mathErr = document.getElementById("home-math-err");
-
-  const verifyTeacherMath = () => {
-    if (!mathInput) return;
-    const val = parseInt(mathInput.value, 10);
-    if (val === window._homeMathAnswer) {
-      emoTIC_Sound.playSuccess();
-      if (mathErr) mathErr.style.display = "none";
-      mathInput.value = "";
-      emoTIC_Teacher.renderTeacherDashboard();
-      emoTIC_Navigation.showScreen("teacher-screen");
-    } else {
-      emoTIC_Sound.playGentleNotice();
-      if (mathErr) mathErr.style.display = "block";
-      mathInput.value = "";
-      mathInput.focus();
-    }
-  };
-
   if (btnTeacherEnter) {
-    btnTeacherEnter.addEventListener("click", verifyTeacherMath);
-  }
-
-  if (mathInput) {
-    mathInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        verifyTeacherMath();
-      }
+    btnTeacherEnter.addEventListener("click", () => {
+      openTeacherFlow();
     });
   }
 
@@ -253,17 +226,28 @@ function bindGlobalEvents() {
   // Botón Modo Docente (superior y enlace inferior)
   const openTeacherFlow = () => {
     emoTIC_Sound.playClick();
-    emoTIC_Teacher.checkAccess(() => {
+    if (window.emoTIC_Teacher && emoTIC_Teacher.isAuthenticated && emoTIC_Teacher.isAuthenticated()) {
       emoTIC_Teacher.renderTeacherDashboard();
       emoTIC_Navigation.showScreen("teacher-screen");
-    });
+    } else if (window.emoTIC_Teacher) {
+      emoTIC_Teacher.checkAccess(() => {
+        emoTIC_Teacher.renderTeacherDashboard();
+        emoTIC_Navigation.showScreen("teacher-screen");
+      });
+    }
   };
 
   const btnTeacherTop = document.getElementById("btn-header-teacher");
   if (btnTeacherTop) {
     btnTeacherTop.addEventListener("click", () => {
-      if (emoTIC_Navigation.currentScreen !== "welcome-screen") {
-        emoTIC_Sound.playClick();
+      emoTIC_Sound.playClick();
+      if (emoTIC_Navigation.currentScreen === "teacher-screen") {
+        if (window.emoTIC_Teacher && typeof emoTIC_Teacher.logout === "function") {
+          emoTIC_Teacher.logout();
+        } else {
+          emoTIC_Navigation.showScreen("welcome-screen");
+        }
+      } else if (emoTIC_Navigation.currentScreen !== "welcome-screen") {
         emoTIC_Navigation.showScreen("welcome-screen");
       } else {
         openTeacherFlow();

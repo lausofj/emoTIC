@@ -31,7 +31,13 @@ window.emoTIC_Navigation = {
       // Acciones específicas al entrar a una pantalla
       const headerBtn = document.getElementById("btn-header-teacher");
       if (headerBtn) {
-        headerBtn.textContent = (screenId === "welcome-screen") ? "Docente" : "Salir";
+        if (screenId === "teacher-screen") {
+          headerBtn.textContent = "Cerrar Sesión";
+        } else if (screenId === "welcome-screen") {
+          headerBtn.textContent = "Docente";
+        } else {
+          headerBtn.textContent = "Salir";
+        }
       }
 
       // Marcar visualmente el enlace activo del encabezado
@@ -139,19 +145,6 @@ window.emoTIC_Navigation = {
     } catch (e) {
       console.warn("Error restaurando avatar:", e);
     }
-
-    // Generar nueva suma matemática para el acceso Docente (sin login ni password)
-    const n1 = Math.floor(Math.random() * 8) + 4; // 4 a 11
-    const n2 = Math.floor(Math.random() * 8) + 3; // 3 a 10
-    window._homeMathAnswer = n1 + n2;
-
-    const mathQuestion = document.getElementById("home-math-question");
-    if (mathQuestion) {
-      mathQuestion.textContent = `¿Cuánto es ${n1} + ${n2}?`;
-    }
-
-    const mathErr = document.getElementById("home-math-err");
-    if (mathErr) mathErr.style.display = "none";
   },
 
   // Clics directos desde las tarjetas de mundo en la pantalla principal
