@@ -31,20 +31,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   emoTIC_Navigation.renderWelcomeScreen();
 });
 
-// Configuración de accesibilidad (sin modo nocturno, garantizando paleta clara y alegre)
+// Configuración de accesibilidad (diseño diurno, alegre y claro)
 async function initAccessibilitySettings() {
-  const isLargeText = await emoTIC_DB.getSetting("largeText", false);
   const isReducedMotion = await emoTIC_DB.getSetting("reducedMotion", false);
-  const isMuted = await emoTIC_DB.getSetting("soundMuted", false);
-
-  if (isLargeText) document.body.classList.add("large-text");
   if (isReducedMotion) document.body.classList.add("reduced-motion");
-  if (isMuted) {
-    emoTIC_Sound.soundEnabled = false;
-    emoTIC_Sound.speechEnabled = false;
-    const btnMute = document.getElementById("btn-toggle-sound");
-    if (btnMute) btnMute.textContent = "🔇";
-  }
 }
 
 function bindGlobalEvents() {
@@ -270,35 +260,7 @@ function bindGlobalEvents() {
     });
   }
 
-  // Control de selector de voz interactivo
-  const btnVoice = document.getElementById("btn-voice-settings");
-  if (btnVoice) {
-    btnVoice.addEventListener("click", () => {
-      emoTIC_Sound.playClick();
-      emoTIC_Sound.openVoiceSettingsModal();
-    });
-  }
 
-  const btnText = document.getElementById("btn-toggle-text-size");
-  if (btnText) {
-    btnText.addEventListener("click", async () => {
-      emoTIC_Sound.playClick();
-      const active = document.body.classList.toggle("large-text");
-      await emoTIC_DB.saveSetting("largeText", active);
-      btnText.setAttribute("aria-pressed", active ? "true" : "false");
-    });
-  }
-
-  const btnSound = document.getElementById("btn-toggle-sound");
-  if (btnSound) {
-    btnSound.addEventListener("click", async () => {
-      emoTIC_Sound.soundEnabled = !emoTIC_Sound.soundEnabled;
-      emoTIC_Sound.speechEnabled = emoTIC_Sound.soundEnabled;
-      btnSound.textContent = emoTIC_Sound.soundEnabled ? "🔊" : "🔇";
-      await emoTIC_DB.saveSetting("soundMuted", !emoTIC_Sound.soundEnabled);
-      if (emoTIC_Sound.soundEnabled) emoTIC_Sound.playSuccess();
-    });
-  }
 
   // Enlaces de navegación rápida en el encabezado
   const btnNavHome = document.getElementById("nav-link-home");

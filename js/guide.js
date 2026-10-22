@@ -211,14 +211,6 @@ window.emoTIC_Guide = {
       const text = document.getElementById("lumi-txt-hacer").textContent;
       emoTIC_Sound.speak(text);
     });
-
-    const btnConfigVoice = document.getElementById("btn-config-voice-from-guide");
-    if (btnConfigVoice) {
-      btnConfigVoice.addEventListener("click", () => {
-        emoTIC_Sound.playClick();
-        emoTIC_Sound.openVoiceSettingsModal();
-      });
-    }
   },
 
   setContextActivity(activity) {

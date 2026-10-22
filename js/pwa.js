@@ -9,7 +9,6 @@ window.emoTIC_PWA = {
   init() {
     this.unregisterExistingServiceWorkers();
     this.setupNetworkMonitor();
-    this.updateNetworkUI();
   },
 
   // Desregistrar Service Workers existentes y limpiar cachés PWA
@@ -41,33 +40,15 @@ window.emoTIC_PWA = {
   setupNetworkMonitor() {
     window.addEventListener("online", () => {
       this.isOnline = true;
-      this.updateNetworkUI();
       emoTIC_Sound.playSuccess();
       emoTIC_Guide.showFeedbackToast("¡Conexión a internet restablecida! Recursos en línea disponibles.", true);
     });
 
     window.addEventListener("offline", () => {
       this.isOnline = false;
-      this.updateNetworkUI();
       emoTIC_Sound.playGentleNotice();
       emoTIC_Guide.showFeedbackToast("Estás en modo sin internet. ¡Los juegos y cuentos locales siguen funcionando perfectamente!", true);
     });
-  },
-
-  // Actualizar la insignia visual en la barra superior
-  updateNetworkUI() {
-    const pill = document.getElementById("network-status-pill");
-    if (!pill) return;
-
-    if (navigator.onLine) {
-      pill.className = "network-pill online";
-      pill.innerHTML = `🟢 <span>En Línea</span>`;
-      pill.title = "Conexión a internet activa. Videos y recursos externos disponibles.";
-    } else {
-      pill.className = "network-pill offline";
-      pill.innerHTML = `🟠 <span>Sin Internet</span>`;
-      pill.title = "Modo sin conexión. Todos los juegos y actividades locales siguen disponibles.";
-    }
   },
 
   // Mostrar modal informativo de cómo utilizar la plataforma

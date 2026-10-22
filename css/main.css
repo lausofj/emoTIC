@@ -180,29 +180,7 @@ body {
   color: var(--emoti-purple);
 }
 
-/* Pastilla de Conexión en Tiempo Real */
-.network-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: var(--radius-pill);
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-}
 
-.network-pill.online {
-  background: #E8F5E9;
-  color: #2E7D32;
-  border: 1px solid #A5D6A7;
-}
-
-.network-pill.offline {
-  background: #FFF3E0;
-  color: #E65100;
-  border: 1px solid #FFCC80;
-}
 
 /* Botón de Instalación PWA */
 .btn-install-pwa {
@@ -225,20 +203,7 @@ body {
   transform: scale(1.04);
 }
 
-/* Controles de accesibilidad pequeños */
-.access-btn {
-  background: #F1F3F9;
-  border: 1px solid #CFD8DC;
-  font-size: 1rem;
-  padding: 6px 10px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-weight: bold;
-}
 
-.access-btn:hover {
-  background: #E0E7FF;
-}
 
 /* ========================================================
    ESTRUCTURA DE PANTALLAS
