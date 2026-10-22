@@ -6,15 +6,15 @@ Define las reglas de presentación de medios audiovisuales e interfaces introduc
 ## Requirements
 
 ### Requirement: Presentación con Video Prioritario en Niveles 1 y 2
-La aplicación SHALL presentar el reproductor de video local como elemento principal de aprendizaje en los Niveles 1 y 2, suprimiendo los bloques de texto extenso del cuento o explicación y manteniendo el botón de reproducción de audio y el botón de inicio del juego.
+La aplicación SHALL presentar el reproductor de video nativo HTML5 directamente en los Niveles 1 y 2 sin marquesinas previas de interacción ni selectores de carga manual de archivos, vinculado a los archivos de video configurados en `assets/video/`, manteniendo los controles de reproducción y el botón para iniciar el juego.
 
 #### Scenario: Carga de video local en Nivel 1
 - **WHEN** el usuario ingresa al Nivel 1 («Emociones»)
-- **THEN** la interfaz muestra la tarjeta del Gato sin texto extenso y el reproductor de video vinculado a `assets/video/emociones-video.mp4` listo para reproducirse antes de comenzar el juego
+- **THEN** la interfaz muestra la tarjeta del Gato y renderiza de inmediato el reproductor `<video controls autoplay playsinline>` con la fuente `assets/video/emociones-video.mp4` sin marquesina intermedia de reproducción
 
 #### Scenario: Carga de video local en Nivel 2
 - **WHEN** el usuario ingresa al Nivel 2 («La historia de Globito»)
-- **THEN** la interfaz muestra a Globito sin el texto largo del cuento y el reproductor de video vinculado a `assets/video/globito-cuento.mp4` como medio principal de aprendizaje
+- **THEN** la interfaz muestra a Globito y renderiza de inmediato el reproductor `<video controls autoplay playsinline>` con la fuente `assets/video/globito-cuento.mp4` sin marquesina intermedia de reproducción
 
 ### Requirement: Supresión de Video e Indicadores de Audio en Niveles 3 a 6
 La aplicación SHALL suprimir las secciones de video en los niveles 3, 4, 5 y 6, y SHALL ocultar o suprimir todas las etiquetas visuales de desarrollo de rutas de archivos de audio (`📁 assets/audio/*.mp3`), ubicando el botón de inicio de juego en la tarjeta del personaje.
