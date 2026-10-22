@@ -56,15 +56,6 @@ window.emoTIC_Navigation = {
     }
   },
 
-  // Mostrar directamente la pestaña de estrellas
-  showStarsTab() {
-    this.showScreen("welcome-screen");
-    setTimeout(() => {
-      const tabEstrellas = document.getElementById("tab-home-estrellas");
-      if (tabEstrellas) tabEstrellas.click();
-    }, 50);
-  },
-
   // Obtener la lista de actividades actualizada
   getAllActivities() {
     return window.EMOTIC_ACTIVITIES || [];

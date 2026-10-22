@@ -38,43 +38,7 @@ async function initAccessibilitySettings() {
 }
 
 function bindGlobalEvents() {
-  // Pestañas de la pantalla de inicio estilo Emoti
-  const tabJugar = document.getElementById("tab-home-jugar");
-  const tabEstrellas = document.getElementById("tab-home-estrellas");
-  const tabDocente = document.getElementById("tab-home-docente");
-  const panelJugar = document.getElementById("card-panel-jugar");
-  const panelEstrellas = document.getElementById("card-panel-estrellas");
 
-  if (tabJugar && tabEstrellas && panelJugar && panelEstrellas) {
-    tabJugar.addEventListener("click", () => {
-      emoTIC_Sound.playClick();
-      tabJugar.classList.add("active");
-      tabEstrellas.classList.remove("active");
-      if (tabDocente) tabDocente.classList.remove("active");
-      panelJugar.style.display = "block";
-      panelEstrellas.style.display = "none";
-    });
-
-    tabEstrellas.addEventListener("click", () => {
-      emoTIC_Sound.playClick();
-      tabEstrellas.classList.add("active");
-      tabJugar.classList.remove("active");
-      if (tabDocente) tabDocente.classList.remove("active");
-      panelJugar.style.display = "none";
-      panelEstrellas.style.display = "block";
-      renderHomeStarsBadges();
-    });
-
-    if (tabDocente) {
-      tabDocente.addEventListener("click", () => {
-        emoTIC_Sound.playClick();
-        emoTIC_Teacher.checkAccess(() => {
-          emoTIC_Teacher.renderTeacherDashboard();
-          emoTIC_Navigation.showScreen("teacher-screen");
-        });
-      });
-    }
-  }
 
   // Botón comenzar aventura / Jugar desde la pantalla principal -> Inicia directamente el Nivel 1
   const btnStart = document.getElementById("btn-start-adventure");
@@ -278,40 +242,5 @@ function bindGlobalEvents() {
       emoTIC_Navigation.showScreen("worlds-screen");
     });
   }
-
-  const btnNavStars = document.getElementById("nav-link-stars");
-  if (btnNavStars) {
-    btnNavStars.addEventListener("click", () => {
-      emoTIC_Sound.playClick();
-      emoTIC_Navigation.showStarsTab();
-    });
-  }
 }
 
-// Renderizar insignias y estrellas en la pestaña de inicio
-async function renderHomeStarsBadges() {
-  const container = document.getElementById("home-stars-badges-grid");
-  if (!container) return;
-
-  const allProgress = await emoTIC_DB.getAllProgress();
-  const completedList = Object.values(allProgress);
-
-  if (completedList.length === 0) {
-    container.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 24px 12px; color: var(--emoti-purple-sub);">
-        <span style="font-size: 2.4rem; display:block; margin-bottom: 8px;">🌟</span>
-        <strong style="font-size: 1rem; color: #2D2158; display:block;">Aún no tienes estrellas acumuladas</strong>
-        <p style="font-size: 0.88rem; margin-top: 6px; line-height: 1.4;">¡Presiona el botón "Jugar" y completa tu primer reto para ganar tu primera insignia brillante!</p>
-      </div>
-    `;
-    return;
-  }
-
-  container.innerHTML = completedList.map(rec => `
-    <div style="background:#F8FAFD; border:1px solid #D5DCED; border-radius:14px; padding:12px 10px; text-align:center;">
-      <span style="font-size:2rem; display:block; margin-bottom:4px;">${rec.badgeIcon || '⭐'}</span>
-      <strong style="font-size:0.85rem; color:#2D2158; display:block; line-height:1.2;">${rec.badgeName || rec.title}</strong>
-      <span style="font-size:0.75rem; color:#F59E0B; font-weight:800; display:block; margin-top:4px;">⭐⭐⭐</span>
-    </div>
-  `).join('');
-}
