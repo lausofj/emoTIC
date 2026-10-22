@@ -1,31 +1,38 @@
 /**
- * emoTIC - Módulo PWA y Gestión Sin Conexión (Offline)
- * Registro de Service Worker, instalación en dispositivo y monitor de conexión en tiempo real.
+ * emoTIC - Módulo de Estado de Conexión y Red
+ * Monitor de conexión en tiempo real y desregistro preventivo de Service Workers.
  */
 
 window.emoTIC_PWA = {
-  deferredPrompt: null,
   isOnline: navigator.onLine,
 
   init() {
-    this.registerServiceWorker();
+    this.unregisterExistingServiceWorkers();
     this.setupNetworkMonitor();
-    this.setupInstallPrompt();
     this.updateNetworkUI();
   },
 
-  // Registrar Service Worker
-  registerServiceWorker() {
+  // Desregistrar Service Workers existentes y limpiar cachés PWA
+  unregisterExistingServiceWorkers() {
     if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./service-worker.js")
-          .then(registration => {
-            console.log("Service Worker de emoTIC registrado con éxito:", registration.scope);
-            registration.update();
-          })
-          .catch(error => {
-            console.warn("Fallo en registro de Service Worker (esperable en file:// directo):", error);
+      navigator.serviceWorker.getRegistrations().then(registrations => {
+        for (let registration of registrations) {
+          registration.unregister().then(success => {
+            if (success) {
+              console.log("Service Worker de emoTIC desregistrado correctamente.");
+            }
           });
+        }
+      }).catch(err => {
+        console.warn("Aviso al consultar Service Workers:", err);
+      });
+    }
+
+    if ("caches" in window) {
+      caches.keys().then(keys => {
+        return Promise.all(keys.map(k => caches.delete(k)));
+      }).catch(err => {
+        console.warn("Aviso al limpiar cachés previas:", err);
       });
     }
   },
@@ -43,7 +50,7 @@ window.emoTIC_PWA = {
       this.isOnline = false;
       this.updateNetworkUI();
       emoTIC_Sound.playGentleNotice();
-      emoTIC_Guide.showFeedbackToast("Estás en modo sin internet. ¡Todos los juegos y cuentos locales siguen funcionando perfectamente!", true);
+      emoTIC_Guide.showFeedbackToast("Estás en modo sin internet. ¡Los juegos y cuentos locales siguen funcionando perfectamente!", true);
     });
   },
 
@@ -58,48 +65,12 @@ window.emoTIC_PWA = {
       pill.title = "Conexión a internet activa. Videos y recursos externos disponibles.";
     } else {
       pill.className = "network-pill offline";
-      pill.innerHTML = `🟠 <span>Sin Internet (Juegos listos)</span>`;
-      pill.title = "Modo sin conexión activo. Todos los juegos y actividades esenciales siguen disponibles.";
+      pill.innerHTML = `🟠 <span>Sin Internet</span>`;
+      pill.title = "Modo sin conexión. Todos los juegos y actividades locales siguen disponibles.";
     }
   },
 
-  // Capturar evento para botón de instalación
-  setupInstallPrompt() {
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      this.deferredPrompt = e;
-
-      // Mostrar botón de instalación
-      const btnInstall = document.getElementById("btn-install-app");
-      if (btnInstall) {
-        btnInstall.style.display = "inline-flex";
-        btnInstall.addEventListener("click", () => this.promptInstall());
-      }
-    });
-
-    window.addEventListener("appinstalled", () => {
-      console.log("emoTIC ha sido instalada exitosamente en el dispositivo.");
-      const btnInstall = document.getElementById("btn-install-app");
-      if (btnInstall) btnInstall.style.display = "none";
-      emoTIC_Guide.showFeedbackToast("¡emoTIC instalada! Ahora puedes abrirla desde tu pantalla de inicio sin internet.", true);
-    });
-  },
-
-  promptInstall() {
-    if (!this.deferredPrompt) {
-      alert("Para instalar emoTIC, abre el menú de tu navegador (los tres puntos o el botón de compartir) y selecciona 'Instalar aplicación' o 'Agregar a la pantalla principal'.");
-      return;
-    }
-    this.deferredPrompt.prompt();
-    this.deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === "accepted") {
-        console.log("Usuario aceptó la instalación de emoTIC.");
-      }
-      this.deferredPrompt = null;
-    });
-  },
-
-  // Mostrar modal informativo de cómo preparar el modo sin conexión
+  // Mostrar modal informativo de cómo utilizar la plataforma
   showOfflineHelpModal() {
     let modal = document.getElementById("offline-help-modal");
     if (!modal) {
@@ -112,38 +83,31 @@ window.emoTIC_PWA = {
     modal.innerHTML = `
       <div class="lumi-modal-card" style="max-width:540px;">
         <div class="lumi-modal-header">
-          <h2 class="lumi-title">📶 Cómo usar emoTIC sin internet</h2>
+          <h2 class="lumi-title">📶 Cómo usar emoTIC</h2>
           <button class="lumi-close-btn" id="btn-close-offhelp">&times;</button>
         </div>
         <div class="lumi-modal-body">
-          <p>emoTIC está diseñada como una <strong>PWA (Progressive Web App)</strong> para que las escuelas y hogares puedan utilizarla en cualquier lugar, incluso sin conexión a internet.</p>
+          <p>emoTIC está diseñada para que las escuelas y hogares puedan utilizarla en cualquier navegador de forma rápida y sencilla.</p>
           
           <div class="offline-steps-list">
             <div class="off-step">
               <span class="off-step-num">1</span>
               <div>
-                <strong>Abre la aplicación con conexión la primera vez:</strong>
-                <p>Al abrir la aplicación con internet, el Service Worker descarga y guarda automáticamente todos los juegos, personajes y sonidos en la memoria de tu dispositivo.</p>
+                <strong>Aprende a tu propio ritmo:</strong>
+                <p>Todos los territorios, actividades guiadas y retos de autoconocimiento emocional están disponibles directamente desde el navegador.</p>
               </div>
             </div>
             <div class="off-step">
               <span class="off-step-num">2</span>
               <div>
-                <strong>Instálala como aplicación:</strong>
-                <p>Presiona el botón verde <strong>«Instalar App»</strong> o elige 'Agregar a inicio' en tu celular o computador.</p>
-              </div>
-            </div>
-            <div class="off-step">
-              <span class="off-step-num">3</span>
-              <div>
-                <strong>¡Aprende sin conexión!</strong>
-                <p>Desconecta el WiFi o viaja a zonas rurales. Todos los 3 territorios, los 18 niveles ordenados de la aventura y el guardado de progreso seguirán funcionando al 100%.</p>
+                <strong>Progreso y estrellas:</strong>
+                <p>Tus avances y estrellas se guardan automáticamente en tu navegador para que nunca pierdas tus logros.</p>
               </div>
             </div>
           </div>
 
           <div class="off-note-warning">
-            📌 <em>Nota importante:</em> Los videos externos de YouTube requieren internet, pero cada video cuenta con su actividad o cuento local alternativo que nunca se apaga.
+            📌 <em>Nota:</em> Los videos externos requieren conexión a internet activa, pero las dinámicas interactivas locales están siempre listas.
           </div>
         </div>
         <div class="lumi-modal-footer">

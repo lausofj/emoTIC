@@ -572,7 +572,7 @@ window.EMOTIC_ACTIVITIES = [
     character: {
       id: "timo",
       name: "Timo",
-      avatarSvg: "assets/illustrations/timo.svg",
+      avatarSvg: "assets/illustrations/timo.png",
       audioFile: "assets/audio/timo-nivel5.mp3",
       greeting: "¡Hola, explorador! Soy Timo, tu compañero alegre y curioso en el Bosque de las Familias. ¡Vamos a descubrir qué sentimos!",
       phrases: [
@@ -586,9 +586,9 @@ window.EMOTIC_ACTIVITIES = [
     },
 
     avatars: [
-      { id: "explorador", name: "Explorador", svg: "assets/illustrations/avatar-explorador.svg", icon: "🧭" },
-      { id: "exploradora", name: "Exploradora", svg: "assets/illustrations/avatar-exploradora.svg", icon: "🎒" },
-      { id: "fantastico", name: "Animal Fantástico", svg: "assets/illustrations/avatar-fantastico.svg", icon: "🦊" }
+      { id: "explorador", name: "Explorador", svg: "assets/illustrations/avatar-explorador.png", icon: "🧭" },
+      { id: "exploradora", name: "Exploradora", svg: "assets/illustrations/avatar-exploradora.png", icon: "🎒" },
+      { id: "fantastico", name: "Animal Fantástico", svg: "assets/illustrations/avatar-fantastico.png", icon: "🦊" }
     ],
 
     gameType: "family-forest",
@@ -729,7 +729,7 @@ window.EMOTIC_ACTIVITIES = [
     character: {
       id: "cuy",
       name: "Kori el Cuy",
-      avatarSvg: "assets/illustrations/cuy.svg",
+      avatarSvg: "assets/illustrations/cuy.png",
       audioFile: "assets/audio/cuy-nivel6.mp3",
       greeting: "¡Cui, cui, hola! Soy Kori el Cuy. ¿Ves la flor en mi cabeza y mi nariz de corazón? ¡Hoy aprenderemos a diferenciar las emociones de los sentimientos!",
       explanation: "Las emociones son como chispas rápidas de nuestro cuerpo: aparecen de repente cuando pasa algo. En cambio, los sentimientos duran más tiempo y se quedan a vivir en nuestro corazón. Puedes ver el video educativo y luego ayudarme a clasificar cada tarjeta en su canasta correspondiente. ¡Vamos a llenar las canastas!",

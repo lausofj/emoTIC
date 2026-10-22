@@ -327,8 +327,8 @@ window.emoTIC_Teacher = {
                 <strong id="diag-online-status">${navigator.onLine ? '🟢 En Línea' : '🟠 Sin Conexión (Offline)'}</strong>
               </div>
               <div class="check-item">
-                <span>Service Worker registrado:</span>
-                <strong id="diag-sw-status">Comprobando...</strong>
+                <span>Modo de Ejecución:</span>
+                <strong id="diag-sw-status">Web Estándar (Sin Service Worker)</strong>
               </div>
               <div class="check-item">
                 <span>Almacenamiento Local (IndexedDB):</span>
@@ -337,10 +337,8 @@ window.emoTIC_Teacher = {
             </div>
 
             <div class="cache-actions-box">
-              <h4>Preparación para el Aula sin Internet</h4>
-              <p>Antes de llevar el computador o tableta a un salón sin señal de internet, presiona el siguiente botón para precargar y verificar todos los recursos esenciales en la caché local:</p>
-              <button class="btn-primary" id="btn-precache-all">📥 Preparar y Guardar Todo para Modo Sin Internet</button>
-              <div id="cache-progress-msg" style="margin-top:12px; font-weight:bold; display:none;"></div>
+              <h4>Estado de la Plataforma</h4>
+              <p>La plataforma se ejecuta de forma directa y optimizada en el navegador web, registrando de manera automática el progreso educativo y las actividades en la base de datos local IndexedDB.</p>
             </div>
           </div>
         </div>
@@ -423,91 +421,18 @@ window.emoTIC_Teacher = {
       });
     }
 
-    // Comprobación de SW y precarga
+    // Comprobación de estado
     this.updateSWDiagnostic();
-    const btnPrecache = document.getElementById("btn-precache-all");
-    if (btnPrecache) {
-      btnPrecache.addEventListener("click", () => this.runPrecache());
-    }
   },
 
   updateSWDiagnostic() {
     const swEl = document.getElementById("diag-sw-status");
     if (swEl) {
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.getRegistration().then(reg => {
-          if (reg && reg.active) {
-            swEl.textContent = "🟢 Activo y controlando la aplicación";
-            swEl.style.color = "#2E7D32";
-          } else {
-            swEl.textContent = "🟡 Registrado (Se activará tras el primer refresco)";
-            swEl.style.color = "#E65100";
-          }
-        }).catch(() => {
-          swEl.textContent = "⚪ No registrado aún";
-        });
-      } else {
-        swEl.textContent = "❌ No soportado por este navegador";
-      }
+      swEl.textContent = "🟢 Web Estándar (Sin Service Worker)";
+      swEl.style.color = "#2E7D32";
     }
   },
 
-  async runPrecache() {
-    const msg = document.getElementById("cache-progress-msg");
-    if (msg) {
-      msg.style.display = "block";
-      msg.textContent = "⏳ Guardando recursos esenciales en la caché local...";
-      msg.style.color = "#0288D1";
-    }
-
-    if ("caches" in window) {
-      try {
-        const cache = await caches.open("emotic-v3");
-        const urlsToCache = [
-          "./",
-          "./index.html",
-          "./manifest.webmanifest",
-          "./service-worker.js",
-          "./css/main.css",
-          "./css/worlds.css",
-          "./css/games.css",
-          "./css/teacher.css",
-          "./css/accessibility.css",
-          "./js/app.js",
-          "./js/db.js",
-          "./js/sound.js",
-          "./js/navigation.js",
-          "./js/guide.js",
-          "./js/games.js",
-          "./js/teacher.js",
-          "./js/pwa.js",
-          "./data/curriculum.js",
-          "./data/activities.js",
-          "./assets/illustrations/lumi.svg",
-          "./assets/illustrations/globito.png",
-          "./assets/icons/icon-192.svg",
-          "./assets/icons/icon-512.svg",
-          "./emotic-logo.png"
-        ];
-        await cache.addAll(urlsToCache);
-        if (msg) {
-          msg.textContent = "✅ ¡Todos los recursos esenciales están guardados en caché! La plataforma está 100% lista para usarse sin internet.";
-          msg.style.color = "#2E7D32";
-        }
-        emoTIC_Sound.playSuccess();
-      } catch (err) {
-        if (msg) {
-          msg.textContent = "ℹ️ Los recursos fueron indexados localmente en el dispositivo.";
-          msg.style.color = "#1565C0";
-        }
-      }
-    } else {
-      if (msg) {
-        msg.textContent = "ℹ️ Almacenamiento local mediante IndexedDB listo.";
-        msg.style.color = "#2E7D32";
-      }
-    }
-  },
 
   // Exportar informe de progreso en formato HTML imprimible y JSON
   exportReport(progressList) {

@@ -2161,7 +2161,7 @@ window.emoTIC_Games = {
 
         <section class="empathy-presentation-card">
           <div class="empathy-avatar-stage" id="timo-avatar-stage" style="background: radial-gradient(circle, #ECFDF5 30%, #D1FAE5 100%);">
-            <img src="${timo.avatarSvg || 'assets/illustrations/timo.svg'}" alt="Timo" class="empathy-avatar-img" />
+            <img src="${timo.avatarSvg || 'assets/illustrations/timo.png'}" alt="Timo" class="empathy-avatar-img" />
           </div>
 
           <div class="character-speech-bubble">
@@ -2640,7 +2640,7 @@ window.emoTIC_Games = {
     modal.innerHTML = `
       <div class="victory-card-box">
         <div class="victory-cat-avatar" style="background: radial-gradient(circle, #ECFDF5 30%, #D1FAE5 100%); box-shadow: 0 8px 24px rgba(5, 150, 105, 0.3);">
-          <img src="assets/illustrations/timo.svg" alt="Timo Feliz" style="width: 85px; height: 85px; object-fit: contain;" />
+          <img src="assets/illustrations/timo.png" alt="Timo Feliz" style="width: 85px; height: 85px; object-fit: contain;" />
         </div>
         <h3 class="victory-title" style="color:#065F46;">¡Guardián del Bosque de las Familias!</h3>
         <div class="victory-stars-row">⭐⭐⭐</div>
@@ -2714,7 +2714,7 @@ window.emoTIC_Games = {
           <!-- Tarjeta de Presentación de Kori el Cuy -->
           <section class="empathy-presentation-card">
             <div class="empathy-avatar-stage" id="cuy-avatar-stage" style="background: radial-gradient(circle, #FEF3C7 30%, #FDE68A 100%);">
-              <img src="${cuy.avatarSvg || 'assets/illustrations/cuy.svg'}" alt="Kori el Cuy" class="empathy-avatar-img" />
+              <img src="${cuy.avatarSvg || 'assets/illustrations/cuy.png'}" alt="Kori el Cuy" class="empathy-avatar-img" />
             </div>
 
             <div class="character-speech-bubble">
@@ -2980,7 +2980,7 @@ window.emoTIC_Games = {
         if (feedbackBox) {
           feedbackBox.innerHTML = `
             <div class="cuy-feedback-bubble" style="background:#ECFDF5; border-color:#86EFAC;">
-              <img src="assets/illustrations/cuy.svg" alt="Kori" class="cuy-mini-avatar-img" />
+              <img src="assets/illustrations/cuy.png" alt="Kori" class="cuy-mini-avatar-img" />
               <p style="color:#065F46;">
                 ✨ ¡Cui, cui, excelente! ${currentItem.feedback}
               </p>
@@ -3008,7 +3008,7 @@ window.emoTIC_Games = {
         if (feedbackBox) {
           feedbackBox.innerHTML = `
             <div class="cuy-feedback-bubble">
-              <img src="assets/illustrations/cuy.svg" alt="Kori" class="cuy-mini-avatar-img" />
+              <img src="assets/illustrations/cuy.png" alt="Kori" class="cuy-mini-avatar-img" />
               <p>💡 ${hintText}</p>
             </div>
           `;
@@ -3096,7 +3096,7 @@ window.emoTIC_Games = {
     modal.innerHTML = `
       <div class="victory-card-box">
         <div class="victory-cat-avatar" style="background: radial-gradient(circle, #FEF3C7 30%, #FDE68A 100%); box-shadow: 0 8px 24px rgba(245, 158, 11, 0.35);">
-          <img src="assets/illustrations/cuy.svg" alt="Kori el Cuy" style="width: 85px; height: 85px; object-fit: contain;" />
+          <img src="assets/illustrations/cuy.png" alt="Kori el Cuy" style="width: 85px; height: 85px; object-fit: contain;" />
         </div>
         <h3 class="victory-title" style="color:#92400E;">¡Cui, cui, Misión Conquistada! 🏆</h3>
         <div class="victory-stars-row">⭐⭐⭐</div>

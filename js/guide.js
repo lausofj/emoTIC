@@ -20,7 +20,7 @@ window.emoTIC_Guide = {
     btn.setAttribute("aria-label", "Abrir ayuda de Lumi, tu personaje guía");
     btn.innerHTML = `
       <div class="lumi-avatar-wrapper">
-        <img src="assets/illustrations/lumi.svg" alt="Lumi el guía" class="lumi-mini-img"/>
+        <img src="assets/illustrations/lumi.png" alt="Lumi el guía" class="lumi-mini-img"/>
         <span class="lumi-badge-pulse"></span>
       </div>
       <span class="lumi-btn-text">¡Ayuda de Lumi!</span>
@@ -49,7 +49,7 @@ window.emoTIC_Guide = {
       <div class="lumi-modal-card">
         <div class="lumi-modal-header">
           <div class="lumi-header-info">
-            <img src="assets/illustrations/lumi.svg" alt="Lumi" class="lumi-modal-img"/>
+            <img src="assets/illustrations/lumi.png" alt="Lumi" class="lumi-modal-img"/>
             <div>
               <h2 id="lumi-modal-title" class="lumi-title">¡Hola! Soy Lumi, tu guía</h2>
               <p class="lumi-subtitle" id="lumi-world-indicator">Acompañándote en cada paso de tu aventura</p>
@@ -278,7 +278,7 @@ window.emoTIC_Guide = {
 
     toast.className = `lumi-feedback-toast ${isSuccess ? "toast-success" : "toast-support"}`;
     toast.innerHTML = `
-      <img src="assets/illustrations/lumi.svg" alt="Lumi" class="toast-lumi-icon"/>
+      <img src="assets/illustrations/lumi.png" alt="Lumi" class="toast-lumi-icon"/>
       <div class="toast-body">
         <strong>${isSuccess ? "¡Maravilloso progreso!" : "¡Buen intento, vamos a reflexionar!"}</strong>
         <p>${message}</p>

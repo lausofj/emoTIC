@@ -235,13 +235,13 @@ window.emoTIC_Navigation = {
                 badgeBg = 'background: #059669;';
                 badgeIcon = '🌳';
                 btnColor = 'color: #059669;';
-                avatarSrc = (act.character && act.character.avatarSvg) || 'assets/illustrations/timo.svg';
+                avatarSrc = (act.character && act.character.avatarSvg) || 'assets/illustrations/timo.png';
               } else if (act.id === "act-6") {
                 circleBg = 'background: radial-gradient(circle, #FEF3C7 40%, #FDE68A 100%); box-shadow: 0 4px 14px rgba(217, 119, 6, 0.25);';
                 badgeBg = 'background: #D97706;';
                 badgeIcon = '🐹';
                 btnColor = 'color: #D97706;';
-                avatarSrc = (act.character && act.character.avatarSvg) || 'assets/illustrations/cuy.svg';
+                avatarSrc = (act.character && act.character.avatarSvg) || 'assets/illustrations/cuy.png';
               }
 
               return `

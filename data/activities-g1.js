@@ -17,7 +17,7 @@ window.EMOTIC_ACTIVITIES_G1 = [
     competence: "Identificación de emociones",
     learningObjective: "Darme cuenta de cómo me siento y reconocer las sensaciones de mi cuerpo ante cada emoción.",
     characterName: "Lumi y las Caritas Curiosas",
-    characterSvg: "assets/illustrations/lumi.svg",
+    characterSvg: "assets/illustrations/lumi.png",
     gameType: "emotion-detective", // Detective de emociones y sensaciones
     offlineReady: true,
     isOfficial: true,
@@ -259,7 +259,7 @@ window.EMOTIC_ACTIVITIES_G1 = [
     competence: "Toma de perspectiva",
     learningObjective: "Entender que las demás personas pueden pensar, sentir y ver las cosas de forma diferente a mí, y resolver situaciones misteriosas.",
     characterName: "Lumi y los Lentes Mágicos",
-    characterSvg: "assets/illustrations/lumi.svg",
+    characterSvg: "assets/illustrations/lumi.png",
     gameType: "mystery-investigator", // Situaciones misteriosas (Antonio y Saray)
     offlineReady: true,
     isOfficial: true,
@@ -505,7 +505,7 @@ window.EMOTIC_ACTIVITIES_G1 = [
     competence: "Escucha activa",
     learningObjective: "Aprender a escuchar a los demás con atención, sin interrumpir, utilizando la regla del objeto de la palabra.",
     characterName: "Ramón y Ramona",
-    characterSvg: "assets/illustrations/lumi.svg",
+    characterSvg: "assets/illustrations/lumi.png",
     gameType: "active-listening", // Simulación de conversación y respeto de turnos
     offlineReady: true,
     isOfficial: true,
