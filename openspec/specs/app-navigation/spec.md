@@ -28,7 +28,7 @@ El directorio `assets/illustrations/` SHALL contener exclusivamente las ilustrac
 - **THEN** no existen los 6 archivos `.svg` obsoletos y todas las imágenes de personajes se cargan satisfactoriamente en formato PNG
 
 ### Requirement: Desactivación de Progressive Web App y Service Worker
-La aplicación SHALL operar como una aplicación web tradicional sin infraestructura PWA ni Service Worker. El sistema SHALL desvincular el archivo de manifiesto (`manifest.webmanifest`), no registrar ningún Service Worker y desregistrar programáticamente cualquier Service Worker previamente activo en el navegador del cliente para evitar problemas de almacenamiento en caché persistente.
+La aplicación SHALL operar como una aplicación web tradicional sin infraestructura PWA ni Service Worker. Los archivos residuales `manifest.webmanifest` y `service-worker.js` SHALL ser eliminados del repositorio, y el sistema SHALL desregistrar programáticamente cualquier Service Worker previamente activo en el navegador del cliente para evitar problemas de almacenamiento en caché persistente.
 
 #### Scenario: Desregistro e inactividad de Service Worker
 - **WHEN** un usuario carga o recarga la plataforma emoTIC
