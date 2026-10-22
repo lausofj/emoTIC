@@ -1348,7 +1348,7 @@ window.emoTIC_Games = {
         <!-- Tarjeta de Presentación de los Niños -->
         <section class="empathy-presentation-card">
           <div class="empathy-avatar-stage" id="kids-avatar-stage">
-            <img src="${kids.avatarSvg || 'assets/illustrations/nino-nina.svg'}" alt="Sofi y Nico" class="empathy-avatar-img" />
+            <img src="${kids.avatarSvg || 'assets/illustrations/nino-nina.png'}" alt="Sofi y Nico" class="empathy-avatar-img" />
           </div>
 
           <div class="character-speech-bubble">
@@ -1586,7 +1586,7 @@ window.emoTIC_Games = {
     modal.innerHTML = `
       <div class="victory-card-box">
         <div class="victory-cat-avatar" style="background: radial-gradient(circle, #EDE9FE 30%, #DDD6FE 100%); box-shadow: 0 8px 24px rgba(124, 58, 237, 0.3);">
-          <img src="assets/illustrations/nino-nina.svg" alt="Sofi y Nico" style="width: 85px; height: 85px; object-fit: contain;" />
+          <img src="assets/illustrations/nino-nina.png" alt="Sofi y Nico" style="width: 85px; height: 85px; object-fit: contain;" />
         </div>
         <h3 class="victory-title" style="color:#6D28D9;">¡Misión de Empatía Conquistada!</h3>
         <div class="victory-stars-row">⭐⭐⭐</div>

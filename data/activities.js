@@ -245,7 +245,7 @@ window.EMOTIC_ACTIVITIES = [
     character: {
       id: "nino-nina",
       name: "Sofi y Nico",
-      avatarSvg: "assets/illustrations/nino-nina.svg",
+      avatarSvg: "assets/illustrations/nino-nina.png",
       audioFile: "assets/audio/nino-nina-nivel3.mp3",
       greeting: "¡Hola! Somos Sofi y Nico. Hoy vamos a convertirnos en detectives de la empatía para ponernos en los zapatos de los demás.",
       explanation: "En cada situación observarás lo que le pasa a un compañero y responderás 3 preguntas clave: 1. ¿Qué emoción tiene? 2. ¿Cómo nos afecta a nosotros? 3. ¿Debemos ayudar y qué podemos hacer? ¡Gana estrellas y tu medalla de la empatía!",
@@ -262,7 +262,7 @@ window.EMOTIC_ACTIVITIES = [
         number: 1,
         title: "Lucas y sus lápices caídos",
         icon: "✏️",
-        characterIllustration: "assets/illustrations/nino-nina.svg",
+        characterIllustration: "assets/illustrations/nino-nina.png",
         scenario: "Lucas estaba dibujando muy concentrado, pero al levantarse tropezó con su silla, se le cayeron todos los colores por el suelo y se sentó cabizbajo con lágrimas en los ojos.",
         questions: [
           {
@@ -302,7 +302,7 @@ window.EMOTIC_ACTIVITIES = [
         number: 2,
         title: "Valentina frente al salón",
         icon: "🎤",
-        characterIllustration: "assets/illustrations/nino-nina.svg",
+        characterIllustration: "assets/illustrations/nino-nina.png",
         scenario: "Valentina tiene que recitar un poema frente a toda la clase. Sus manos tiemblan, se abraza a sí misma con los ojos muy abiertos y respira agitada.",
         questions: [
           {
@@ -342,7 +342,7 @@ window.EMOTIC_ACTIVITIES = [
         number: 3,
         title: "Mateo y el rompecabezas difícil",
         icon: "🧩",
-        characterIllustration: "assets/illustrations/nino-nina.svg",
+        characterIllustration: "assets/illustrations/nino-nina.png",
         scenario: "Mateo está tratando de armar un rompecabezas. Una pieza no encaja, frunce el ceño, su cara se pone roja de calor y golpea la mesa con el puño.",
         questions: [
           {

@@ -223,7 +223,7 @@ window.emoTIC_Navigation = {
                 badgeBg = 'background: #7C3AED;';
                 badgeIcon = '👫';
                 btnColor = 'color: #7C3AED;';
-                avatarSrc = (act.character && act.character.avatarSvg) || 'assets/illustrations/nino-nina.svg';
+                avatarSrc = (act.character && act.character.avatarSvg) || 'assets/illustrations/nino-nina.png';
               } else if (act.id === "act-4") {
                 circleBg = 'background: radial-gradient(circle, #EFF6FF 40%, #DBEAFE 100%); box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);';
                 badgeBg = 'background: #2563EB;';
