@@ -25,6 +25,43 @@ window.emoTIC_Teacher = {
     }
   },
 
+  formatDate(dateVal) {
+    if (!dateVal) return "";
+    try {
+      let d;
+      if (dateVal instanceof Date) {
+        d = dateVal;
+      } else if (typeof dateVal === "string") {
+        const s = dateVal.trim();
+        if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(s)) {
+          d = new Date(s.replace(" ", "T") + "-05:00");
+        } else {
+          d = new Date(s);
+        }
+      } else {
+        d = new Date(dateVal);
+      }
+
+      if (isNaN(d.getTime())) return String(dateVal);
+
+      return new Intl.DateTimeFormat("es-CO", {
+        timeZone: "America/Bogota",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true
+      }).format(d);
+    } catch (e) {
+      try {
+        return new Date(dateVal).toLocaleString("es-CO");
+      } catch (err) {
+        return String(dateVal);
+      }
+    }
+  },
+
   logout() {
     sessionStorage.removeItem("emotic_teacher_token");
     sessionStorage.removeItem("emotic_teacher_info");
@@ -643,7 +680,7 @@ window.emoTIC_Teacher = {
                     <td style="padding:10px;">${row.score} pts</td>
                     <td style="padding:10px;">${row.mistakes_count}</td>
                     <td style="padding:10px;">${row.duration_seconds}s</td>
-                    <td style="padding:10px; font-size:0.85rem; color:#64748B;">${new Date(row.client_timestamp || row.created_at).toLocaleString()}</td>
+                    <td style="padding:10px; font-size:0.85rem; color:#64748B;">${this.formatDate(row.client_timestamp || row.created_at)}</td>
                   </tr>
                 `).join('')}
               </tbody>
@@ -693,7 +730,7 @@ window.emoTIC_Teacher = {
                 <td><strong>${item.title}</strong></td>
                 <td>${item.grade_level || "1° Primaria"}</td>
                 <td>${'⭐'.repeat(item.stars || 3)}</td>
-                <td>${new Date(item.completedAt || item.timestamp || Date.now()).toLocaleDateString()}</td>
+                <td>${this.formatDate(item.completedAt || item.timestamp || Date.now())}</td>
               </tr>
             `).join('')}
           </tbody>
@@ -748,7 +785,7 @@ window.emoTIC_Teacher = {
         <div class="meta">
           <p><strong>Plataforma:</strong> emoTIC «Mundos de las Emociones»</p>
           <p><strong>Programa Base:</strong> Emociones para la Vida (MEN / SED Bogotá / Banco Mundial)</p>
-          <p><strong>Fecha del Reporte:</strong> ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</p>
+          <p><strong>Fecha del Reporte:</strong> ${this.formatDate(new Date())}</p>
         </div>
 
         <h3>Actividades Registradas:</h3>
@@ -770,7 +807,7 @@ window.emoTIC_Teacher = {
                   <td>${item.gender === 'nina' ? 'Niña' : 'Niño'} - ${item.grade_level || item.grade || '1º Primaria'}</td>
                   <td>${item.badgeIcon || '🌟'} ${item.badgeName || 'Logro'}</td>
                   <td>${item.stars || 3} / 3</td>
-                  <td>${new Date(item.completedAt || item.timestamp || Date.now()).toLocaleString()}</td>
+                  <td>${this.formatDate(item.completedAt || item.timestamp || Date.now())}</td>
                 </tr>
               `).join('')}
           </tbody>

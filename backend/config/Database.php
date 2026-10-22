@@ -44,6 +44,7 @@ class Database
 
         try {
             self::$connection = new PDO($dsn, $user, $pass, $options);
+            self::$connection->exec("SET time_zone = '-05:00'");
             return self::$connection;
         } catch (PDOException $e) {
             error_log("Error de conexión a la base de datos emoTIC: " . $e->getMessage());

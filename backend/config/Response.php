@@ -13,6 +13,7 @@ class Response
      */
     public static function initCors(): void
     {
+        Env::load();
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
         header('Access-Control-Allow-Headers: Content-Type, Authorization, X-API-Key, X-Teacher-Token, X-Requested-With');

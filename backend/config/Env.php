@@ -74,6 +74,12 @@ class Env
         }
 
         self::$loaded = true;
+
+        // Configurar zona horaria predeterminada regional (por defecto America/Bogota / UTC-5)
+        $tz = (string) self::get('APP_TIMEZONE', 'America/Bogota');
+        if ($tz !== '') {
+            @date_default_timezone_set($tz);
+        }
     }
 
     /**
