@@ -140,6 +140,32 @@ class Auth
             return trim($matches[1]);
         }
 
+        // Respaldo 1: Cabecera personalizada X-Teacher-Token (no eliminada por proxies ni hosts como ByetHost)
+        if (isset($_SERVER['HTTP_X_TEACHER_TOKEN']) && trim($_SERVER['HTTP_X_TEACHER_TOKEN']) !== '') {
+            return trim($_SERVER['HTTP_X_TEACHER_TOKEN']);
+        }
+
+        // Respaldo 2: apache_request_headers para X-Teacher-Token
+        if (function_exists('apache_request_headers')) {
+            $requestHeaders = apache_request_headers();
+            foreach (['X-Teacher-Token', 'x-teacher-token', 'X-TEACHER-TOKEN'] as $k) {
+                if (isset($requestHeaders[$k]) && trim($requestHeaders[$k]) !== '') {
+                    return trim($requestHeaders[$k]);
+                }
+            }
+        }
+
+        // Respaldo 3: Parámetro en URL o cuerpo (token / auth_token) para servidores donde Apache bloquea cabeceras
+        if (isset($_GET['token']) && trim((string)$_GET['token']) !== '') {
+            return trim((string)$_GET['token']);
+        }
+        if (isset($_GET['auth_token']) && trim((string)$_GET['auth_token']) !== '') {
+            return trim((string)$_GET['auth_token']);
+        }
+        if (isset($_POST['token']) && trim((string)$_POST['token']) !== '') {
+            return trim((string)$_POST['token']);
+        }
+
         return null;
     }
 
@@ -159,6 +185,13 @@ class Auth
                     return trim($requestHeaders[$key]);
                 }
             }
+        }
+
+        if (isset($_GET['api_key']) && trim((string)$_GET['api_key']) !== '') {
+            return trim((string)$_GET['api_key']);
+        }
+        if (isset($_POST['api_key']) && trim((string)$_POST['api_key']) !== '') {
+            return trim((string)$_POST['api_key']);
         }
 
         return null;

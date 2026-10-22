@@ -565,18 +565,35 @@ window.emoTIC_Teacher = {
     if (grade) params.append("grade_level", grade);
     if (gender) params.append("gender", gender);
     if (activity) params.append("activity_id", activity);
+    if (token) params.append("token", token); // Respaldo para hostings como ByetHost que eliminan Authorization
 
     container.innerHTML = `<p style="color:#64748B; text-align:center; padding:20px;">Cargando registros desde la base de datos...</p>`;
 
     try {
       const res = await fetch(`backend/api/attempts.php?${params.toString()}`, {
         headers: {
-          "Authorization": `Bearer ${token}`
+          "Authorization": `Bearer ${token}`,
+          "X-Teacher-Token": token
         }
       });
 
       if (res.status === 401) {
-        this.logout();
+        if (badge) {
+          badge.textContent = "Error 401: No autorizado";
+          badge.style.background = "#FEE2E2";
+          badge.style.color = "#991B1B";
+        }
+        container.innerHTML = `
+          <div style="background:#FEF2F2; border:1px solid #F87171; border-radius:10px; padding:20px; text-align:center; margin:16px 0;">
+            <p style="color:#991B1B; font-weight:700; font-size:1.05rem; margin-bottom:8px;">⚠️ Tu sesión ha expirado o no fue autorizada (401)</p>
+            <p style="color:#6B7280; font-size:0.9rem; margin-bottom:14px;">Inicia sesión nuevamente con tu usuario y contraseña de docente.</p>
+            <button class="btn-primary" id="btn-relogin-action" style="padding:8px 16px;">🔑 Iniciar Sesión Docente</button>
+          </div>
+        `;
+        document.getElementById("btn-relogin-action")?.addEventListener("click", () => {
+          this.logout();
+          this.checkAccess(() => this.renderTeacherDashboard());
+        });
         return;
       }
 

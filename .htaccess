@@ -1,0 +1,20 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# -------------------------------------------------------------
+# emoTIC - Soporte para Apache FastCGI / ByetHost / InfinityFree
+# Pasa las cabeceras Authorization, X-Teacher-Token y X-API-Key a PHP
+# -------------------------------------------------------------
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+SetEnvIf X-Teacher-Token "(.*)" HTTP_X_TEACHER_TOKEN=$1
+SetEnvIf X-API-Key "(.*)" HTTP_X_API_KEY=$1
+</IfModule>
+
+# Permitir CORS en respuestas estáticas si aplica
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Teacher-Token, X-API-Key"
+</IfModule>

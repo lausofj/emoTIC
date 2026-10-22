@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# -------------------------------------------------------------
+# emoTIC Backend - Pasar cabeceras Authorization a PHP
+# -------------------------------------------------------------
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+SetEnvIf X-Teacher-Token "(.*)" HTTP_X_TEACHER_TOKEN=$1
+SetEnvIf X-API-Key "(.*)" HTTP_X_API_KEY=$1
+</IfModule>
