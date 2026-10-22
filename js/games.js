@@ -55,6 +55,18 @@ window.emoTIC_Games = {
   isPlayingAudio: false,
   activityStartTime: null,
   activityMistakes: 0,
+  activityMistakesList: [],
+
+  recordMistake(detail) {
+    this.activityMistakes = (this.activityMistakes || 0) + 1;
+    if (!this.activityMistakesList) this.activityMistakesList = [];
+    const sec = this.activityStartTime ? Math.round((Date.now() - this.activityStartTime) / 1000) : 0;
+    this.activityMistakesList.push({
+      second: sec,
+      timestamp: new Date().toISOString(),
+      ...detail
+    });
+  },
 
   getAttemptDuration() {
     if (!this.activityStartTime) return 30;
@@ -77,6 +89,7 @@ window.emoTIC_Games = {
     this.currentActivity = activity;
     this.activityStartTime = Date.now();
     this.activityMistakes = 0;
+    this.activityMistakesList = [];
     this.stopAudio();
 
     if (activity.gameType === "matching-emotions" || activity.id === "act-1") {
@@ -126,7 +139,6 @@ window.emoTIC_Games = {
     path.setAttribute("fill", "none");
 
     if (isError) {
-      this.activityMistakes = (this.activityMistakes || 0) + 1;
       path.setAttribute("class", "matching-svg-error-line");
       path.setAttribute("stroke", "#EF4444");
     } else if (isTemp) {
@@ -652,6 +664,13 @@ window.emoTIC_Games = {
       // ¡ERROR AMIGABLE!
       emoTIC_Sound.playIncorrect();
 
+      this.recordMistake({
+        tipo: "Unión de emoción y significado",
+        emocion_seleccionada: emotionCard?.textContent?.trim() || emotionPairId,
+        significado_seleccionado: meaningCard?.textContent?.trim() || meaningPairId,
+        pista_dada: "Ese gato siente otra emoción, intenta de nuevo."
+      });
+
       if (svg) {
         const nodeEmotion = document.getElementById(`node-emotion-${emotionPairId}`);
         const nodeMeaning = document.getElementById(`node-meaning-${meaningPairId}`);
@@ -693,7 +712,8 @@ window.emoTIC_Games = {
       grade_level: studentCtx.grade_level,
       details: {
         totalPairs: this.matchingState.totalPairs || 6,
-        connectionsCount: (this.matchingState.connections || []).length
+        connectionsCount: (this.matchingState.connections || []).length,
+        mistakes_detail: this.activityMistakesList || []
       },
       badgeName: "Maestro de las Emociones",
       badgeIcon: "🐱",
@@ -1146,7 +1166,8 @@ window.emoTIC_Games = {
       grade_level: studentCtx.grade_level,
       details: {
         breathsCompleted: this.globitoState.breathsCompleted || 3,
-        sliderValue: this.globitoState.sliderValue || 3
+        sliderValue: this.globitoState.sliderValue || 3,
+        mistakes_detail: this.activityMistakesList || []
       },
       badgeName: "Maestro de la Calma",
       badgeIcon: "🐡",
@@ -1489,6 +1510,13 @@ window.emoTIC_Games = {
 
         } else {
           emoTIC_Sound.playGentleNotice();
+          this.recordMistake({
+            tipo: "Toma de perspectiva y empatía",
+            mision: mission.title || `Misión ${this.empathyState.missionIndex + 1}`,
+            pregunta: currentQ.question,
+            opcion_elegida: optData.text,
+            pista_dada: optData.feedback
+          });
           btn.classList.add("incorrect");
           feedbackArea.innerHTML = `
             <div class="empathy-feedback-banner try-again">
@@ -1519,7 +1547,8 @@ window.emoTIC_Games = {
       grade_level: studentCtx.grade_level,
       details: {
         missionIndex: this.empathyState.missionIndex,
-        score: this.empathyState.score
+        score: this.empathyState.score,
+        mistakes_detail: this.activityMistakesList || []
       },
       badgeName: "Detective de la Empatía",
       badgeIcon: "🤝",
@@ -1960,6 +1989,12 @@ window.emoTIC_Games = {
           } else {
             btn.classList.add("selected-wrong");
             emoTIC_Sound.playGentleNotice();
+            this.recordMistake({
+              tipo: "Forma de brindar ayuda",
+              situacion: sit.title || `Situación ${this.heroState.situationIndex + 1}`,
+              opcion_elegida: optData.title || optData.text || optData.id,
+              pista_dada: optData.feedback
+            });
             emoTIC_Sound.speak(optData.feedback);
 
             if (feedbackSpot) {
@@ -2029,7 +2064,10 @@ window.emoTIC_Games = {
       duration_seconds: this.getAttemptDuration(),
       gender: studentCtx.gender,
       grade_level: studentCtx.grade_level,
-      details: { completedMission: "hero-helping" },
+      details: {
+        completedMission: "hero-helping",
+        mistakes_detail: this.activityMistakesList || []
+      },
       badgeName: "Superamigo que Ayuda",
       badgeIcon: "🦸",
       completedAt: new Date().toISOString()
@@ -2552,6 +2590,12 @@ window.emoTIC_Games = {
           } else {
             btn.classList.add("incorrect");
             emoTIC_Sound.playGentleNotice();
+            this.recordMistake({
+              tipo: "Diálogo y comunicación asertiva",
+              actividad: currentSubAct.title || "Completar diálogo",
+              opcion_elegida: optData.text,
+              pista_dada: optData.feedback
+            });
             emoTIC_Sound.speak(optData.feedback);
 
             feedbackArea.innerHTML = `
@@ -2580,7 +2624,10 @@ window.emoTIC_Games = {
       duration_seconds: this.getAttemptDuration(),
       gender: studentCtx.gender,
       grade_level: studentCtx.grade_level,
-      details: { completedMission: "family-forest" },
+      details: {
+        completedMission: "family-forest",
+        mistakes_detail: this.activityMistakesList || []
+      },
       badgeName: "Guardián de las Familias",
       badgeIcon: "🌳",
       completedAt: new Date().toISOString()
@@ -2912,6 +2959,14 @@ window.emoTIC_Games = {
           ? "Pista de Kori: Este no es un cambio repentino del cuerpo, sino un sentimiento profundo que dura en el corazón. ¡Prueba en la otra canasta!"
           : "Pista de Kori: Este ocurre rápido como una chispa en el cuerpo cuando pasa algo inesperado, es una emoción. ¡Prueba en la otra canasta!";
 
+        this.recordMistake({
+          tipo: "Clasificación entre emoción y sentimiento",
+          concepto: currentItem.name,
+          categoria_correcta: currentItem.category === "emotion" ? "Emoción" : "Sentimiento",
+          categoria_elegida: chosenCategory === "emotion" ? "Emoción" : "Sentimiento",
+          pista_dada: hintText
+        });
+
         emoTIC_Sound.speak(hintText);
 
         if (feedbackBox) {
@@ -2999,7 +3054,10 @@ window.emoTIC_Games = {
       duration_seconds: this.getAttemptDuration(),
       gender: studentCtx.gender,
       grade_level: studentCtx.grade_level,
-      details: { completedMission: "baskets-classification" },
+      details: {
+        completedMission: "baskets-classification",
+        mistakes_detail: this.activityMistakesList || []
+      },
       badgeName: "Gran Maestro Emocional",
       badgeIcon: "🏆",
       completedAt: new Date().toISOString()

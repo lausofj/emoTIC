@@ -638,6 +638,7 @@ window.emoTIC_Teacher = {
 
       if (res.ok && result.success && Array.isArray(result.data)) {
         const attempts = result.data;
+        this.lastLoadedAttempts = attempts;
         if (badge) {
           badge.textContent = `MySQL: ${attempts.length} intentos`;
           badge.style.background = "#DCFCE7";
@@ -671,22 +672,48 @@ window.emoTIC_Teacher = {
                 </tr>
               </thead>
               <tbody>
-                ${attempts.map(row => `
-                  <tr style="border-bottom:1px solid #E2E8F0;">
-                    <td style="padding:10px;"><strong>${row.activity_title}</strong></td>
-                    <td style="padding:10px;">${row.gender === 'nina' ? '👧 Niña' : '👦 Niño'}</td>
-                    <td style="padding:10px;">${row.grade_level}</td>
-                    <td style="padding:10px; color:#F59E0B;">${'⭐'.repeat(row.stars || 1)}</td>
-                    <td style="padding:10px;">${row.score} pts</td>
-                    <td style="padding:10px;">${row.mistakes_count}</td>
-                    <td style="padding:10px;">${row.duration_seconds}s</td>
-                    <td style="padding:10px; font-size:0.85rem; color:#64748B;">${this.formatDate(row.client_timestamp || row.created_at)}</td>
-                  </tr>
-                `).join('')}
+                ${attempts.map((row, idx) => {
+                  const mCount = Number(row.mistakes_count || 0);
+                  const mCell = mCount === 0
+                    ? `<span style="display:inline-block; background:#DCFCE7; color:#166534; padding:3px 10px; border-radius:12px; font-weight:700; font-size:0.85rem;">0 errores ✨</span>`
+                    : `<div style="display:flex; align-items:center; gap:6px;">
+                        <span style="display:inline-block; background:#FEE2E2; color:#991B1B; padding:3px 8px; border-radius:12px; font-weight:700; font-size:0.85rem;">
+                          ${mCount} ${mCount === 1 ? 'error' : 'errores'}
+                        </span>
+                        <button class="btn-view-mistakes-action" data-idx="${idx}" style="background:#EEF2F6; border:1px solid #CBD5E1; border-radius:6px; padding:3px 8px; font-size:0.8rem; cursor:pointer; color:#1E293B; font-weight:700;" title="Ver detalle pedagógico de los errores">
+                          🔍 Ver
+                        </button>
+                      </div>`;
+
+                  return `
+                    <tr style="border-bottom:1px solid #E2E8F0;">
+                      <td style="padding:10px;"><strong>${row.activity_title}</strong></td>
+                      <td style="padding:10px;">${row.gender === 'nina' ? '👧 Niña' : '👦 Niño'}</td>
+                      <td style="padding:10px;">${row.grade_level}</td>
+                      <td style="padding:10px; color:#F59E0B;">${'⭐'.repeat(row.stars || 1)}</td>
+                      <td style="padding:10px;">${row.score} pts</td>
+                      <td style="padding:10px;">${mCell}</td>
+                      <td style="padding:10px;">${row.duration_seconds}s</td>
+                      <td style="padding:10px; font-size:0.85rem; color:#64748B;">${this.formatDate(row.client_timestamp || row.created_at)}</td>
+                    </tr>
+                  `;
+                }).join('')}
               </tbody>
             </table>
           </div>
         `;
+
+        // Enlazar botones para ver el detalle de los errores
+        container.querySelectorAll(".btn-view-mistakes-action").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const idx = parseInt(btn.getAttribute("data-idx"), 10);
+            const att = this.lastLoadedAttempts ? this.lastLoadedAttempts[idx] : null;
+            if (att) {
+              this.showMistakesModal(att);
+            }
+          });
+        });
+
         return;
       }
     } catch (netErr) {
@@ -719,24 +746,132 @@ window.emoTIC_Teacher = {
           <thead>
             <tr>
               <th>Actividad</th>
+              <th>Estudiante</th>
               <th>Grado</th>
               <th>Estrellas</th>
+              <th>Errores</th>
               <th>Fecha</th>
             </tr>
           </thead>
           <tbody>
-            ${localList.map(item => `
-              <tr>
-                <td><strong>${item.title}</strong></td>
-                <td>${item.grade_level || "1° Primaria"}</td>
-                <td>${'⭐'.repeat(item.stars || 3)}</td>
-                <td>${this.formatDate(item.completedAt || item.timestamp || Date.now())}</td>
-              </tr>
-            `).join('')}
+            ${localList.map(item => {
+              const mCount = Number(item.mistakes_count || item.mistakes || 0);
+              return `
+                <tr>
+                  <td><strong>${item.title}</strong></td>
+                  <td>${item.gender === 'nina' ? '👧 Niña' : '👦 Niño'}</td>
+                  <td>${item.grade_level || "1° Primaria"}</td>
+                  <td>${'⭐'.repeat(item.stars || 3)}</td>
+                  <td>
+                    ${mCount === 0
+                      ? `<span style="background:#DCFCE7; color:#166534; padding:2px 8px; border-radius:10px; font-weight:700; font-size:0.8rem;">0 errores ✨</span>`
+                      : `<span style="background:#FEE2E2; color:#991B1B; padding:2px 8px; border-radius:10px; font-weight:700; font-size:0.8rem;">${mCount} errores</span>`}
+                  </td>
+                  <td>${this.formatDate(item.completedAt || item.timestamp || Date.now())}</td>
+                </tr>
+              `;
+            }).join('')}
           </tbody>
         </table>
       </div>
     `;
+  },
+
+  // Modal para visualizar el detalle pedagógico de los errores cometidos en un intento
+  showMistakesModal(attempt) {
+    let details = attempt.details;
+    if (typeof details === "string") {
+      try { details = JSON.parse(details); } catch (e) { details = {}; }
+    }
+    details = details || {};
+    const mistakesList = Array.isArray(details.mistakes_detail) ? details.mistakes_detail : [];
+
+    const existingModal = document.getElementById("mistakes-detail-modal");
+    if (existingModal) existingModal.remove();
+
+    const modal = document.createElement("div");
+    modal.className = "lumi-modal-overlay";
+    modal.id = "mistakes-detail-modal";
+    modal.innerHTML = `
+      <div class="lumi-modal-card" style="max-width:580px; text-align:left;">
+        <div class="lumi-modal-header" style="background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);">
+          <div>
+            <h2 class="lumi-title" style="color:#991B1B; font-size:1.25rem;">🔍 Detalle Pedagógico del Intento</h2>
+            <p class="lumi-subtitle" style="color:#B91C1C; font-size:0.88rem; margin:2px 0 0 0;">
+              ${attempt.activity_title} • ${attempt.gender === 'nina' ? '👧 Niña' : '👦 Niño'} (${attempt.grade_level})
+            </p>
+          </div>
+          <button class="lumi-close-btn" id="btn-close-mistakes-modal" aria-label="Cerrar">&times;</button>
+        </div>
+
+        <div class="lumi-modal-body" style="max-height:65vh; overflow-y:auto; padding:18px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:10px 14px; margin-bottom:14px; font-size:0.9rem;">
+            <span><strong>Total de errores:</strong> ${attempt.mistakes_count}</span>
+            <span><strong>Duración:</strong> ${attempt.duration_seconds}s</span>
+            <span><strong>Puntaje:</strong> ${attempt.score} pts</span>
+          </div>
+
+          ${mistakesList.length > 0 ? `
+            <h4 style="color:#334155; margin:0 0 10px 0; font-size:0.95rem;">Registro de dudas y retroalimentaciones formativas:</h4>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              ${mistakesList.map((m, i) => `
+                <div style="background:#FFF; border:1px solid #FECACA; border-left:4px solid #EF4444; border-radius:8px; padding:10px 12px; font-size:0.9rem;">
+                  <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                    <strong style="color:#991B1B;">Error #${i + 1} ${m.tipo ? `• ${m.tipo}` : ''}</strong>
+                    ${m.second !== undefined ? `<small style="color:#64748B;">a los ${m.second}s</small>` : ''}
+                  </div>
+                  ${m.pregunta || m.situacion || m.mision ? `
+                    <p style="margin:2px 0 4px 0; color:#475569; font-size:0.88rem;">
+                      <strong>Contexto:</strong> ${m.pregunta || m.situacion || m.mision}
+                    </p>
+                  ` : ''}
+                  ${m.opcion_elegida ? `
+                    <p style="margin:2px 0 4px 0; color:#B91C1C; background:#FEF2F2; padding:4px 8px; border-radius:4px; font-size:0.85rem;">
+                      ❌ <strong>Opción que eligió:</strong> "${m.opcion_elegida}"
+                    </p>
+                  ` : ''}
+                  ${m.emocion_seleccionada && m.significado_seleccionado ? `
+                    <p style="margin:2px 0 4px 0; color:#B91C1C; background:#FEF2F2; padding:4px 8px; border-radius:4px; font-size:0.85rem;">
+                      ❌ Confundió: <strong>${m.emocion_seleccionada}</strong> con <strong>${m.significado_seleccionado}</strong>
+                    </p>
+                  ` : ''}
+                  ${m.categoria_elegida && m.categoria_correcta ? `
+                    <p style="margin:2px 0 4px 0; color:#B91C1C; background:#FEF2F2; padding:4px 8px; border-radius:4px; font-size:0.85rem;">
+                      ❌ Clasificó "<strong>${m.concepto}</strong>" como ${m.categoria_elegida} (lo correcto es ${m.categoria_correcta})
+                    </p>
+                  ` : ''}
+                  ${m.pista_dada ? `
+                    <div style="margin-top:6px; background:#F0FDF4; border:1px solid #BBF7D0; border-radius:4px; padding:6px 10px; color:#166534; font-size:0.85rem;">
+                      💡 <strong>Pista de apoyo brindada:</strong> ${m.pista_dada}
+                    </div>
+                  ` : ''}
+                </div>
+              `).join('')}
+            </div>
+          ` : `
+            <div style="background:#F8FAFC; border:1px dashed #CBD5E1; border-radius:8px; padding:16px; text-align:center; color:#475569;">
+              <p style="margin:0 0 6px 0; font-weight:700;">📌 Conteo registrado: ${attempt.mistakes_count} error(es)</p>
+              <p style="margin:0; font-size:0.88rem; color:#64748B;">
+                El estudiante necesitó ${attempt.mistakes_count} intento(s) adicional(es) antes de acertar, recibiendo las pistas de apoyo del personaje hasta completar exitosamente el reto.
+              </p>
+            </div>
+          `}
+        </div>
+
+        <div class="lumi-modal-footer">
+          <button class="btn-primary" id="btn-close-mistakes-action" style="padding:8px 18px;">Cerrar</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    const close = () => modal.remove();
+    document.getElementById("btn-close-mistakes-modal").addEventListener("click", close);
+    document.getElementById("btn-close-mistakes-action").addEventListener("click", close);
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) close();
+    });
   },
 
   updateSWDiagnostic() {
