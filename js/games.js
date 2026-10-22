@@ -1441,13 +1441,14 @@ window.emoTIC_Games = {
           
           <!-- Tracker de Misiones -->
           <div class="empathy-mission-tracker">
-            <span class="mission-chip ${this.empathyState.missionIndex === 0 ? 'active' : ''}">✏️ Misión 1</span>
-            <span style="color:#CBD5E1;">•</span>
-            <span class="mission-chip ${this.empathyState.missionIndex === 1 ? 'active' : ''}">🎤 Misión 2</span>
-            <span style="color:#CBD5E1;">•</span>
-            <span class="mission-chip ${this.empathyState.missionIndex === 2 ? 'active' : ''}">🧩 Misión 3</span>
+            ${act.missions.map((m, idx) => `
+              <span class="mission-chip ${this.empathyState.missionIndex === idx ? 'active' : (this.empathyState.missionIndex > idx ? 'done' : '')}">
+                ${m.icon} Misión ${idx + 1}
+              </span>
+              ${idx < act.missions.length - 1 ? '<span style="color:#CBD5E1;">•</span>' : ''}
+            `).join('')}
             <span style="font-size:0.85rem; font-weight:800; color:#7C3AED; background:#EDE9FE; padding:4px 10px; border-radius:999px;">
-              Paso ${this.empathyState.qStepIndex + 1} de 3
+              Paso ${this.empathyState.qStepIndex + 1} de ${mission.questions.length}
             </span>
           </div>
 
@@ -1519,8 +1520,8 @@ window.emoTIC_Games = {
 
           optButtons.forEach(b => b.classList.add("locked"));
 
-          const isLastQuestionOfMission = this.empathyState.qStepIndex === 2;
-          const isLastMission = this.empathyState.missionIndex === 2;
+          const isLastQuestionOfMission = this.empathyState.qStepIndex >= mission.questions.length - 1;
+          const isLastMission = this.empathyState.missionIndex >= act.missions.length - 1;
 
           feedbackArea.innerHTML = `
             <div class="empathy-feedback-banner success">
@@ -1591,7 +1592,7 @@ window.emoTIC_Games = {
         <h3 class="victory-title" style="color:#6D28D9;">¡Misión de Empatía Conquistada!</h3>
         <div class="victory-stars-row">⭐⭐⭐</div>
         <p class="victory-message-text">
-          ¡Felicitaciones! Completaste las 3 misiones. Ahora eres un <strong>Detective de la Empatía</strong>: sabes reconocer lo que sienten tus compañeros, comprender cómo nos afecta y ofrecer ayuda respetuosa con el Código de Ayuda.
+          ¡Felicitaciones! Completaste las 2 misiones de empatía mutua entre Sofi y Nico. Ahora eres un <strong>Detective de la Empatía</strong>: sabes reconocer las emociones de tus compañeros y ofrecer tu ayuda con cariño y respeto.
         </p>
         <div class="victory-actions-row">
           <button class="btn-victory-replay" id="btn-replay-empathy">Repetir Reto</button>

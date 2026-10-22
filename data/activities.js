@@ -247,52 +247,42 @@ window.EMOTIC_ACTIVITIES = [
       name: "Sofi y Nico",
       avatarSvg: "assets/illustrations/nino-nina.png",
       audioFile: "assets/audio/nino-nina-nivel3.mp3",
-      greeting: "¡Hola! Somos Sofi y Nico. Hoy vamos a convertirnos en detectives de la empatía para ponernos en los zapatos de los demás.",
-      explanation: "En cada situación observarás lo que le pasa a un compañero y responderás 3 preguntas clave: 1. ¿Qué emoción tiene? 2. ¿Cómo nos afecta a nosotros? 3. ¿Debemos ayudar y qué podemos hacer? ¡Gana estrellas y tu medalla de la empatía!",
-      audioTranscript: "¡Hola, amigos! Somos Sofi y Nico. Hoy jugaremos a Descubrir las Emociones de los Demás. A veces nuestros compañeros sienten tristeza, miedo o enojo. Aprenderemos a notar cómo se sienten, a darnos cuenta de cómo nos afecta a nosotros y a decidir cómo podemos ayudar con respeto. ¡Acompáñanos en esta gran misión!"
+      greeting: "¡Hola! Somos Sofi y Nico. Hoy vamos a convertirnos en detectives de la empatía para ponernos en los zapatos del otro y cuidarnos mutuamente.",
+      explanation: "En cada situación observarás lo que le pasa a tu compañero y responderás 2 pasos clave: 1. ¿Qué emoción está sintiendo? 2. ¿Cómo actuar con empatía y ayudarlo con respeto? ¡Gana estrellas y tu medalla de la empatía!",
+      audioTranscript: "¡Hola, amigos! Somos Sofi y Nico. Hoy jugaremos a Descubrir las Emociones del Otro. A veces sentimos tristeza, miedo, frustración o nervios. Aprenderemos a notar cómo se siente nuestro compañero y a decidir cómo podemos ayudarlo con cariño y respeto. ¡Acompáñanos en esta gran misión de empatía!"
     },
 
     gameType: "empathy-detective",
-    totalMissions: 3,
+    totalMissions: 2,
 
-    // Las 3 misiones gamificadas con las 3 preguntas clave cada una
+    // Las 2 misiones gamificadas de empatía mutua entre Sofi y Nico
     missions: [
       {
         id: "mision-1",
         number: 1,
-        title: "Lucas y sus lápices caídos",
-        icon: "✏️",
+        title: "Nico y su proyecto de bloques",
+        icon: "🧱",
         characterIllustration: "assets/illustrations/nino-nina.png",
-        scenario: "Lucas estaba dibujando muy concentrado, pero al levantarse tropezó con su silla, se le cayeron todos los colores por el suelo y se sentó cabizbajo con lágrimas en los ojos.",
+        scenario: "Nico estaba armando con mucho entusiasmo su torre de bloques de colores, pero al poner la última pieza se tambaleó y se desarmó por completo en el piso. Nico agachó la cabeza, apretó los labios con el ceño fruncido y sus ojos se llenaron de lágrimas.",
         questions: [
           {
             qIndex: 1,
-            badge: "Paso 1: La emoción del otro",
-            question: "¿Qué emoción crees que está sintiendo Lucas?",
+            badge: "Paso 1: La emoción de mi compañero",
+            question: "¿Qué emoción crees que está sintiendo Nico en este momento?",
             options: [
-              { text: "Tristeza o desánimo por lo ocurrido", isCorrect: true, feedback: "¡Exacto! Su cabeza agachada y sus lágrimas indican que siente tristeza." },
+              { text: "Frustración y tristeza por lo ocurrido", isCorrect: true, feedback: "¡Exacto! Su cabeza agachada, el ceño apretado y sus lágrimas indican frustración y tristeza." },
               { text: "Mucha alegría y ganas de celebrar", isCorrect: false, feedback: "Fíjate bien: tiene la cabeza agachada y no está sonriendo." },
-              { text: "Mucho asco por la comida", isCorrect: false, feedback: "No hay comida en esta situación, fue un tropiezo con sus lápices." }
+              { text: "Mucho asco por la comida", isCorrect: false, feedback: "No hay comida en esta situación, se le desarmó su torre de bloques." }
             ]
           },
           {
             qIndex: 2,
-            badge: "Paso 2: ¿Cómo nos afecta a nosotros?",
-            question: "¿Cómo te hace sentir o cómo te afecta ver a Lucas triste?",
+            badge: "Paso 2: Acción empática",
+            question: "¿Cómo puede Sofi actuar con empatía y ayudar a Nico con respeto?",
             options: [
-              { text: "Siento empatía y compasión; me conmueve y me preocupa ver a mi compañero triste", isCorrect: true, feedback: "¡Excelente! La empatía nos permite sentir en el corazón lo que le pasa a los demás." },
-              { text: "Me da muchísima risa y me burlo en voz alta", isCorrect: false, feedback: "Burlarse lastima a los demás y no demuestra empatía." },
-              { text: "Me da igual y me voy a mirar otra cosa", isCorrect: false, feedback: "Cuando un amigo está triste, es valioso prestar atención a lo que sucede." }
-            ]
-          },
-          {
-            qIndex: 3,
-            badge: "Paso 3: ¿Debemos ayudar y cómo?",
-            question: "¿Debemos ayudar a Lucas y cuál es la mejor forma de hacerlo?",
-            options: [
-              { text: "Sí, me acerco amablemente y le digo: '¿Quieres que te ayude a recoger tus lápices?'", isCorrect: true, feedback: "¡Maravilloso! Aplicaste el Código de Ayuda: Mirar, Preguntar con respeto y Ayudar." },
-              { text: "No, le quito los lápices para quedármelos yo", isCorrect: false, feedback: "Eso aumentaría su tristeza y no sería un trato justo ni solidario." },
-              { text: "Grito muy fuerte en el salón para que todos lo miren", isCorrect: false, feedback: "Gritar puede avergonzar a Lucas en lugar de hacerlo sentir mejor." }
+              { text: "Acercarse con cariño y decirle: 'No te preocupes Nico, ¿quieres que te ayude a construirla de nuevo?'", isCorrect: true, feedback: "¡Maravilloso! Sofi aplicó el Código de Ayuda: Mirar, Preguntar con respeto y Ofrecer apoyo en equipo." },
+              { text: "Reírse a carcajadas de la torre caída", isCorrect: false, feedback: "Burlarse lastima los sentimientos de Nico y no demuestra empatía." },
+              { text: "Quitarle los bloques que quedaron para jugar ella sola", isCorrect: false, feedback: "Eso aumentaría la tristeza de Nico y no sería un trato justo ni solidario." }
             ]
           }
         ]
@@ -300,79 +290,29 @@ window.EMOTIC_ACTIVITIES = [
       {
         id: "mision-2",
         number: 2,
-        title: "Valentina frente al salón",
-        icon: "🎤",
+        title: "Sofi frente al salón de clase",
+        icon: "📖",
         characterIllustration: "assets/illustrations/nino-nina.png",
-        scenario: "Valentina tiene que recitar un poema frente a toda la clase. Sus manos tiemblan, se abraza a sí misma con los ojos muy abiertos y respira agitada.",
+        scenario: "A Sofi le corresponde pasar al frente para leer un cuento frente a todos sus compañeros. Sus manos tiemblan sosteniendo el libro, respira rápido y mira tímidamente hacia el suelo sin atreverse a empezar.",
         questions: [
           {
             qIndex: 1,
-            badge: "Paso 1: La emoción del otro",
-            question: "¿Qué emoción está sintiendo Valentina en este momento?",
+            badge: "Paso 1: La emoción de mi compañera",
+            question: "¿Qué emoción está experimentando Sofi en este momento?",
             options: [
-              { text: "Miedo o nerviosismo ante el público", isCorrect: true, feedback: "¡Muy bien! Sus manos temblorosas y su mirada alerta muestran miedo o nervios." },
-              { text: "Mucho aburrimiento y sueño", isCorrect: false, feedback: "No tiene sueño, su cuerpo está en tensión y alerta." },
-              { text: "Mucha rabia con su profesora", isCorrect: false, feedback: "No tiene ceño fruncido de rabia, está asustada por hablar." }
+              { text: "Miedo o nerviosismo ante el público", isCorrect: true, feedback: "¡Muy bien! Sus manos temblorosas y su mirada tímida muestran miedo o nerviosismo." },
+              { text: "Mucho aburrimiento y sueño", isCorrect: false, feedback: "No tiene sueño, su cuerpo está tenso y alerta por pasar al frente." },
+              { text: "Mucha rabia con su profesora", isCorrect: false, feedback: "No tiene ceño fruncido de rabia, está asustada por hablar en voz alta." }
             ]
           },
           {
             qIndex: 2,
-            badge: "Paso 2: ¿Cómo nos afecta a nosotros?",
-            question: "¿Cómo nos afecta ver a nuestra compañera con miedo o nervios?",
+            badge: "Paso 2: Acción empática",
+            question: "¿Cómo puede Nico actuar con empatía y apoyar a Sofi con respeto?",
             options: [
-              { text: "Entendemos que hablar en público puede dar miedo y deseamos que se sienta segura y tranquila", isCorrect: true, feedback: "¡Así es! Ponerse en sus zapatos nos hace entender su temor." },
-              { text: "Nos enojamos con ella porque no empieza rápido", isCorrect: false, feedback: "Enojarse no ayuda a calmar su nerviosismo." },
-              { text: "Hacemos ruidos para asustarla más", isCorrect: false, feedback: "Hacer ruidos aumentaría su miedo en lugar de apoyarla." }
-            ]
-          },
-          {
-            qIndex: 3,
-            badge: "Paso 3: ¿Debemos ayudar y cómo?",
-            question: "¿Debemos ayudar a Valentina y qué podemos hacer?",
-            options: [
-              { text: "Sí, la miramos con una sonrisa cálida y le hacemos un gesto de ánimo: '¡Tú puedes, respira hondo!'", isCorrect: true, feedback: "¡Brillante! El apoyo respetuoso de los compañeros da calma y confianza." },
-              { text: "Nos reímos si se equivoca en una palabra", isCorrect: false, feedback: "Las burlas hacen que tenga más miedo la próxima vez." },
-              { text: "Nos ponemos a hablar entre nosotros ignorándola", isCorrect: false, feedback: "Escuchar con respeto es una forma muy hermosa de cuidar a los demás." }
-            ]
-          }
-        ]
-      },
-      {
-        id: "mision-3",
-        number: 3,
-        title: "Mateo y el rompecabezas difícil",
-        icon: "🧩",
-        characterIllustration: "assets/illustrations/nino-nina.png",
-        scenario: "Mateo está tratando de armar un rompecabezas. Una pieza no encaja, frunce el ceño, su cara se pone roja de calor y golpea la mesa con el puño.",
-        questions: [
-          {
-            qIndex: 1,
-            badge: "Paso 1: La emoción del otro",
-            question: "¿Qué emoción está sintiendo Mateo?",
-            options: [
-              { text: "Enojo o frustración porque la pieza no encaja", isCorrect: true, feedback: "¡Exacto! El ceño apretado, el calor y el golpe en la mesa son signos de rabia." },
-              { text: "Una sorpresa agradable y divertida", isCorrect: false, feedback: "No está sorprendido gratamente, está molesto con el reto." },
-              { text: "Mucha tranquilidad y serenidad", isCorrect: false, feedback: "Golpear la mesa no es señal de tranquilidad." }
-            ]
-          },
-          {
-            qIndex: 2,
-            badge: "Paso 2: ¿Cómo nos afecta a nosotros?",
-            question: "¿Cómo nos afecta ver a Mateo con tanta rabia?",
-            options: [
-              { text: "Comprendemos que está frustrado, y entendemos que su molestia es con el juego y no contra nosotros", isCorrect: true, feedback: "¡Gran madurez! Saber que su molestia no es contra nosotros evita que nos pongamos a pelear." },
-              { text: "Nos ponemos bravos y le gritamos de vuelta", isCorrect: false, feedback: "Gritarle aumentaría el conflicto en lugar de resolverlo." },
-              { text: "Nos asustamos y pensamos que no le agradamos", isCorrect: false, feedback: "A veces la gente se enoja por situaciones y no por las personas a su alrededor." }
-            ]
-          },
-          {
-            qIndex: 3,
-            badge: "Paso 3: ¿Debemos ayudar y cuál es la mejor forma?",
-            question: "¿Debemos ayudar a Mateo y cómo podemos ofrecer nuestra ayuda?",
-            options: [
-              { text: "Esperamos un segundo a que respire y le preguntamos con calma: '¿Quieres que busquemos la pieza juntos?'", isCorrect: true, feedback: "¡Perfecto! Dar un momento de calma y ofrecer ayuda en equipo es la mejor solución." },
-              { text: "Le desbaratamos todo el rompecabezas para molestarlo", isCorrect: false, feedback: "Eso causaría una pelea mayor y lastimaría su confianza." },
-              { text: "Le quitamos las piezas a la fuerza", isCorrect: false, feedback: "Quitar cosas a la fuerza no es respetuoso." }
+              { text: "Mirarla con una sonrisa de confianza y hacerle un gesto suave de ánimo: '¡Tú puedes Sofi, respira hondo!'", isCorrect: true, feedback: "¡Brillante! El apoyo respetuoso y la mirada cálida de Nico le dan calma y seguridad a Sofi." },
+              { text: "Hacer ruidos extraños para ponerla más nerviosa", isCorrect: false, feedback: "Hacer ruidos aumentaría el miedo de Sofi en lugar de apoyarla." },
+              { text: "Gritarle que empiece ya porque tiene afán", isCorrect: false, feedback: "Presionar o gritar aumentaría la ansiedad de su compañera." }
             ]
           }
         ]
