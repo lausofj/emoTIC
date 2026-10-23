@@ -1,14 +1,30 @@
 /**
- * emoTIC - Accesibilidad y Adaptabilidad Responsiva
- * Sin modo nocturno (diseño diurno, alegre, cálido y luminoso permanentemente).
- * Incluye modo de texto grande, reducción de movimiento, foco visible para teclado y diseño multidispositivo.
+ * emoTIC - Accesibilidad y Adaptabilidad Responsiva Integral
+ * Optimizado para celulares (320px - 480px), tabletas (600px - 900px),
+ * laptops y pantallas de escritorio.
+ * Mantiene la estética diurna, limpia, alegre, cálida y moderna.
  */
 
-
-
 /* ========================================================
-   MODO REDUCCIÓN DE MOVIMIENTO
+   REGLAS GLOBALES Y PREVENCIÓN DE DESBORDAMIENTO (ANTI-OVERFLOW)
    ======================================================== */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  position: relative;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+img, svg, picture, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Reducción de movimiento accesible */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -23,113 +39,445 @@ body.reduced-motion * {
   transition: none !important;
 }
 
-/* Indicador de foco visible y accesible para navegación por teclado */
+/* Indicador de foco visible para teclado */
 *:focus-visible {
-  outline: 3px solid #3B82F6 !important;
+  outline: 3px solid #5F4CB4 !important;
   outline-offset: 3px;
 }
 
 /* ========================================================
-   ADAPTABILIDAD RESPONSIVA (CELULARES, TABLETAS, COMPUTADORES)
+   1. TABLETAS Y PANTALLAS MEDIANAS (<= 900px)
    ======================================================== */
 @media (max-width: 900px) {
-  .welcome-hero-banner {
+  .app-screen {
+    padding: 16px;
+  }
+
+  /* Distribución de la pantalla principal / cuaderno */
+  .travel-main-layout {
     flex-direction: column;
-    text-align: center;
+    align-items: center;
   }
 
-  .character-dialog-hero {
-    flex-direction: column;
-    text-align: center;
+  .notebook-container {
+    max-width: 100%;
   }
 
-  .speech-bubble-hero::before {
-    display: none;
+  /* Grilla de juegos */
+  .games-cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
   }
 
+  /* Pautas docentes */
   .guidelines-dual-grid {
     grid-template-columns: 1fr;
   }
 
-  .pair-columns {
+  .form-row {
     grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 600px) {
+/* ========================================================
+   2. SMARTPHONES Y PANTALLAS MÓVILES (<= 680px)
+   ======================================================== */
+@media (max-width: 680px) {
+  /* Header Superior Flotante */
   .header-pill-container {
     padding: 8px 10px 0 10px;
   }
 
   .app-header-pill {
-    padding: 6px 14px;
-  }
-
-  .hide-mobile {
-    display: none !important;
-  }
-
-  .emoti-hero-title {
-    font-size: 1.85rem;
-  }
-
-  .emoti-hero-subtitle {
-    font-size: 1rem;
-  }
-
-  .emoti-orbit-pill.orb-left-far,
-  .emoti-orbit-pill.orb-right-far {
-    display: none;
-  }
-
-  .emoti-card-box {
-    padding: 22px 18px;
-    border-radius: 20px;
-  }
-
-  .emoti-tabs-nav-row {
+    padding: 6px 12px;
     gap: 8px;
   }
 
-  .emoti-tab-nav-btn {
-    padding: 8px 16px;
-    font-size: 0.9rem;
+  .header-pill-left {
+    gap: 8px;
   }
 
-  .app-screen {
-    padding: 12px;
+  .brand-logo-img {
+    width: 28px;
+    height: 28px;
   }
 
-  .phase-card-content {
-    padding: 16px;
-    min-height: auto;
+  .brand-title-emoti {
+    font-size: 1.15rem;
+    letter-spacing: -0.2px;
   }
 
-  .phase-heading {
-    font-size: 1.2rem;
+  .nav-text-link {
+    font-size: 0.85rem;
+    padding: 5px 10px;
   }
 
-  .lumi-floating-btn {
-    bottom: 14px;
-    right: 14px;
-    padding: 4px 10px 4px 4px;
+  .header-pill-right {
+    gap: 6px;
   }
 
-  .lumi-avatar-wrapper {
-    width: 38px;
-    height: 38px;
+  .header-stars-pill {
+    font-size: 0.8rem;
+    padding: 4px 10px;
   }
 
-  .lumi-btn-text {
+  .header-action-pill-btn {
     font-size: 0.82rem;
+    padding: 5px 12px;
   }
 
-  .btn-primary-large {
+  /* Pantallas base */
+  .app-screen {
+    padding: 12px 10px 32px 10px;
+  }
+
+  /* --- Pantalla de Inicio / Bienvenida --- */
+  .travel-home-view {
+    padding: 14px 10px 36px 10px;
+  }
+
+  .home-exact-viewport {
+    max-width: 100%;
+    padding: 0 4px;
+  }
+
+  .travel-hero-title {
+    font-size: clamp(1.55rem, 6.2vw, 2.1rem);
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+
+  .travel-play-btn-row {
+    margin-bottom: 14px;
+  }
+
+  .btn-travel-jugar-main {
+    font-size: 1.08rem;
+    padding: 12px 24px;
+    max-width: 100%;
     width: 100%;
+  }
+
+  .travel-hero-subtitle {
+    font-size: 0.92rem;
+    line-height: 1.4;
+    margin-bottom: 18px;
+    padding: 0 4px;
+  }
+
+  .home-selection-card {
+    padding: 18px 14px;
+    border-radius: 20px;
+    max-width: 100%;
+  }
+
+  .home-selection-title {
+    font-size: 1.02rem;
+    margin-bottom: 14px;
+  }
+
+  .travel-avatars-row {
+    gap: 16px;
+    justify-content: space-evenly;
+  }
+
+  .travel-avatar-icon-box {
+    width: clamp(86px, 24vw, 110px);
+    height: clamp(86px, 24vw, 110px);
+    border-radius: 20px;
+  }
+
+  .travel-avatar-label {
+    font-size: 0.95rem;
+    margin-top: 8px;
+  }
+
+  .travel-selection-caption {
+    font-size: 0.76rem;
+    padding: 0 6px;
+  }
+
+  /* --- Pantalla de Selección de Mundos y Juegos --- */
+  .games-selection-view {
+    padding: 8px 6px 32px 6px;
+  }
+
+  .games-hero-header {
+    margin-bottom: 18px;
+    text-align: left;
+  }
+
+  .games-user-greeting {
+    font-size: clamp(1.45rem, 5.5vw, 1.95rem);
+    line-height: 1.2;
+  }
+
+  .games-grade-sub {
+    font-size: 0.98rem;
+  }
+
+  .games-cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr));
+    gap: 12px;
+  }
+
+  .game-select-card {
+    padding: 18px 12px 16px 12px;
+    border-radius: 16px;
+  }
+
+  .game-avatar-circle {
+    width: 86px;
+    height: 86px;
+    margin-bottom: 10px;
+  }
+
+  .game-avatar-img {
+    width: 74px;
+    height: 74px;
+  }
+
+  .game-card-title {
     font-size: 1.05rem;
   }
 
-  .form-row {
+  .game-card-status, .game-card-stars {
+    font-size: 0.8rem;
+  }
+
+  .game-card-btn {
+    font-size: 1rem;
+    padding: 5px 14px;
+  }
+
+  .emoti-tip-banner {
+    padding: 12px 14px;
+    font-size: 0.86rem;
+    border-radius: 12px;
+  }
+
+  .emoti-games-subfooter {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  /* --- Cuaderno / Bitácora Escolar --- */
+  .notebook-container {
+    padding: 10px 8px 12px 6px;
+    border-radius: 20px;
+  }
+
+  .notebook-binder-shell {
+    grid-template-columns: 1fr;
+    border-radius: 16px;
+  }
+
+  .notebook-spiral-spine {
+    display: none !important;
+  }
+
+  .notebook-page {
+    padding: 14px 12px;
+  }
+
+  .notebook-page-title {
+    font-size: 1.05rem;
+  }
+
+  .notebook-badges-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  .notebook-badge-item {
+    font-size: 1.25rem;
+    border-radius: 10px;
+  }
+
+  /* --- Actividades y Juegos (Player) --- */
+  .activity-viewport {
+    padding: 6px 4px 32px 4px;
+  }
+
+  .activity-top-bar {
+    padding: 10px 12px;
+    border-radius: 16px;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .btn-back-to-menu {
+    font-size: 0.84rem;
+    padding: 6px 12px;
+  }
+
+  .activity-game-heading {
+    font-size: 1.12rem;
+  }
+
+  .activity-level-tag {
+    font-size: 0.72rem;
+  }
+
+  .character-presentation-card {
+    flex-direction: column;
+    padding: 18px 14px;
+    gap: 14px;
+    text-align: center;
+    border-radius: 18px;
+  }
+
+  .character-avatar-stage {
+    width: 100px;
+    height: 100px;
+  }
+
+  /* Opciones de respuesta en juegos */
+  .empathy-options-grid,
+  .hero-options-grid,
+  .dilemma-options-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .empathy-option-btn,
+  .hero-option-btn,
+  .choice-card-btn {
+    min-height: 48px;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    text-align: left;
+    width: 100%;
+  }
+
+  /* Canastas / Clasificación */
+  .sorting-baskets-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* Matching / Emparejamiento de emociones */
+  .matching-columns-wrapper {
+    gap: 12px;
+  }
+
+  .matching-item-card {
+    padding: 10px;
+    font-size: 0.9rem;
+    min-height: 52px;
+  }
+
+  /* --- Área Docente --- */
+  .teacher-header-bar {
+    padding: 14px 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    border-radius: 16px;
+  }
+
+  .teacher-main-title {
+    font-size: 1.25rem;
+  }
+
+  .teacher-tabs-nav {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 6px;
+    gap: 6px;
+  }
+
+  .t-tab {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  .teacher-pane {
+    padding: 16px 12px;
+    border-radius: 16px;
+  }
+
+  .table-responsive-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    border: 1px solid #E2E8F0;
+  }
+
+  .curriculum-table,
+  .progress-data-table {
+    min-width: 540px;
+    font-size: 0.82rem;
+  }
+
+  .curriculum-table th, .curriculum-table td,
+  .progress-data-table th, .progress-data-table td {
+    padding: 8px 10px;
+  }
+
+  /* Modales Emergentes (Celebración, Errores Pedagógicos, Diálogos) */
+  .emoti-modal-overlay,
+  .modal-overlay {
+    padding: 12px;
+    align-items: center;
+  }
+
+  .emoti-modal-card,
+  .modal-box,
+  .teacher-dialog-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 88vh;
+    overflow-y: auto;
+    padding: 18px 14px !important;
+    border-radius: 20px !important;
+  }
+
+  /* Pie de página */
+  .app-footer {
+    padding: 18px 12px;
+    font-size: 0.78rem;
+    text-align: center;
+  }
+}
+
+/* ========================================================
+   3. DISPOSITIVOS MUY COMPACTOS (<= 400px)
+   ======================================================== */
+@media (max-width: 400px) {
+  .brand-title-emoti {
+    font-size: 1.05rem;
+  }
+
+  .header-stars-pill {
+    padding: 3px 8px;
+    font-size: 0.75rem;
+  }
+
+  .header-action-pill-btn {
+    padding: 4px 10px;
+    font-size: 0.78rem;
+  }
+
+  .travel-hero-title {
+    font-size: 1.48rem;
+  }
+
+  .travel-avatars-row {
+    gap: 10px;
+  }
+
+  .travel-avatar-icon-box {
+    width: 82px;
+    height: 82px;
+  }
+
+  .games-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sorting-baskets-container {
     grid-template-columns: 1fr;
   }
 }
