@@ -502,9 +502,9 @@ window.emoTIC_Teacher = {
       btnLogout.addEventListener("click", () => this.logout());
     }
 
-    // Exportar informe
+    // Exportar informe pedagógico
     document.getElementById("btn-export-report").addEventListener("click", () => {
-      this.exportReport(progressList);
+      this.exportReport();
     });
 
     // Reiniciar datos
@@ -885,77 +885,465 @@ window.emoTIC_Teacher = {
     }
   },
 
-  exportReport(progressList) {
-    const printWindow = window.open("", "_blank");
-    if (!printWindow) {
-      alert("Por favor habilita las ventanas emergentes para generar el informe imprimible.");
+  // Formateador detallado de fecha y hora separadas para Colombia (UTC-5)
+  formatDateParts(dateVal) {
+    if (!dateVal) return { date: "--", time: "--", full: "--" };
+    try {
+      let d;
+      if (dateVal instanceof Date) {
+        d = dateVal;
+      } else if (typeof dateVal === "string") {
+        const s = dateVal.trim();
+        if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(s)) {
+          d = new Date(s.replace(" ", "T") + "-05:00");
+        } else {
+          d = new Date(s);
+        }
+      } else {
+        d = new Date(dateVal);
+      }
+
+      if (isNaN(d.getTime())) return { date: String(dateVal), time: "", full: String(dateVal) };
+
+      const dateStr = new Intl.DateTimeFormat("es-CO", {
+        timeZone: "America/Bogota",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).format(d);
+
+      const timeStr = new Intl.DateTimeFormat("es-CO", {
+        timeZone: "America/Bogota",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+      }).format(d);
+
+      return {
+        date: dateStr,
+        time: timeStr,
+        full: `${dateStr}, ${timeStr}`
+      };
+    } catch (e) {
+      return { date: String(dateVal), time: "", full: String(dateVal) };
+    }
+  },
+
+  // Obtiene el identificador y nombre descriptivo del nivel pedagógico
+  getLevelInfo(activityId, title) {
+    const combined = `${activityId || ""} ${title || ""}`.toLowerCase();
+    if (combined.includes("act-1") || combined.includes("gato") || combined.includes("sentimiento")) {
+      return { levelNum: 1, levelName: "Nivel 1: Emociones y Sentimientos", character: "El Gato" };
+    }
+    if (combined.includes("act-2") || combined.includes("globito") || combined.includes("regular")) {
+      return { levelNum: 2, levelName: "Nivel 2: Regular Emociones (Globito)", character: "Globito el Pez" };
+    }
+    if (combined.includes("act-3") || combined.includes("descubriendo") || combined.includes("sofi") || combined.includes("nico")) {
+      return { levelNum: 3, levelName: "Nivel 3: Descubriendo Emociones de los Demás", character: "Sofi y Nico" };
+    }
+    if (combined.includes("act-4") || combined.includes("superamigo") || combined.includes("heroe") || combined.includes("ayuda")) {
+      return { levelNum: 4, levelName: "Nivel 4: Superamigos que Ayudan", character: "Héroes de la Empatía" };
+    }
+    if (combined.includes("act-5") || combined.includes("bosque") || combined.includes("familia") || combined.includes("timo")) {
+      return { levelNum: 5, levelName: "Nivel 5: El Bosque de las Familias", character: "Timo" };
+    }
+    if (combined.includes("act-6") || combined.includes("canasta") || combined.includes("clasifica")) {
+      return { levelNum: 6, levelName: "Nivel 6: Canastas de Emociones", character: "Clasificación" };
+    }
+    return { levelNum: 0, levelName: title || "Actividad Pedagógica emoTIC", character: "Docente" };
+  },
+
+  // Genera el desglose HTML pedagógico de errores cometidos en un intento
+  formatMistakesDetail(attempt) {
+    const count = Number(attempt.mistakes_count || 0);
+    if (count === 0) {
+      return `<span class="badge-ok-pill">0 errores ✨ (Acierto directo)</span>`;
+    }
+
+    let details = attempt.details;
+    if (typeof details === "string") {
+      try { details = JSON.parse(details); } catch (e) { details = null; }
+    }
+
+    const list = Array.isArray(details) ? details : (details?.mistakes || []);
+
+    let html = `
+      <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+        <span class="badge-mistake-pill">⚠️ ${count} ${count === 1 ? 'error cometido' : 'errores cometidos'}</span>
+      </div>
+    `;
+
+    if (list.length > 0) {
+      html += `
+        <div class="report-mistake-detail-box">
+          ${list.map((m, idx) => `
+            <div style="margin-bottom: 4px; padding-bottom: 3px; border-bottom: 1px dashed #FECACA;">
+              <strong>Error #${idx + 1}:</strong>
+              ${m.pregunta || m.situacion || m.mision ? `<span>${m.pregunta || m.situacion || m.mision}</span><br/>` : ''}
+              ${m.opcion_elegida ? `<span style="color:#B91C1C;">❌ Marcó: "<em>${m.opcion_elegida}</em>"</span><br/>` : ''}
+              ${m.emocion_seleccionada && m.significado_seleccionado ? `<span style="color:#B91C1C;">❌ Confundió "<strong>${m.emocion_seleccionada}</strong>" con "<em>${m.significado_seleccionado}</em>"</span><br/>` : ''}
+              ${m.categoria_elegida && m.categoria_correcta ? `<span style="color:#B91C1C;">❌ Clasificó "<strong>${m.concepto}</strong>" como ${m.categoria_elegida}</span><br/>` : ''}
+              ${m.pista_dada ? `<span style="color:#166534;">💡 Pista brindada: "${m.pista_dada}"</span>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      `;
+    } else {
+      html += `
+        <div class="report-mistake-detail-box" style="color:#64748B;">
+          Requirió ${count} intento(s) con pistas formativas del personaje antes de acertar.
+        </div>
+      `;
+    }
+
+    return html;
+  },
+
+  // Genera texto plano de los errores para el archivo Excel / CSV
+  formatMistakesText(attempt) {
+    const count = Number(attempt.mistakes_count || 0);
+    if (count === 0) return "Sin errores (100% de aciertos directos)";
+
+    let details = attempt.details;
+    if (typeof details === "string") {
+      try { details = JSON.parse(details); } catch (e) { details = null; }
+    }
+
+    const list = Array.isArray(details) ? details : (details?.mistakes || []);
+    if (list.length === 0) {
+      return `${count} error(es) registrado(s) en este nivel formativo`;
+    }
+
+    return list.map((m, idx) => {
+      let desc = `[Error ${idx + 1}] `;
+      if (m.pregunta || m.situacion || m.mision) desc += `Situación: ${m.pregunta || m.situacion || m.mision}. `;
+      if (m.opcion_elegida) desc += `Opción errónea elegida: "${m.opcion_elegida}". `;
+      if (m.emocion_seleccionada && m.significado_seleccionado) desc += `Confundió "${m.emocion_seleccionada}" con "${m.significado_seleccionado}". `;
+      if (m.categoria_elegida && m.categoria_correcta) desc += `Clasificó "${m.concepto}" en ${m.categoria_elegida} (debía ser ${m.categoria_correcta}). `;
+      if (m.pista_dada) desc += `Pista de apoyo: "${m.pista_dada}". `;
+      return desc.trim();
+    }).join(" | ");
+  },
+
+  // Exportar Informe Pedagógico Integral (Visualización, PDF e Impresión y Excel)
+  async exportReport() {
+    emoTIC_Sound.playClick();
+
+    // 1. Obtener lista de intentos a reportar
+    let attempts = this.lastLoadedAttempts;
+
+    if (!attempts || attempts.length === 0) {
+      // Intentar cargar directamente desde la API
+      const token = this.getToken();
+      if (token) {
+        try {
+          const res = await fetch("backend/api/attempts.php?limit=500", {
+            headers: { "Authorization": `Bearer ${token}` }
+          });
+          const json = await res.json();
+          if (json.success && Array.isArray(json.data)) {
+            attempts = json.data;
+            this.lastLoadedAttempts = attempts;
+          }
+        } catch (e) {
+          console.warn("Fallo consultando intentos para reporte:", e);
+        }
+      }
+    }
+
+    // Respaldo con intentos locales si aún estuviera vacío
+    if (!attempts || attempts.length === 0) {
+      try {
+        const localAttempts = await emoTIC_DB.getRecentAttempts(100);
+        if (localAttempts && localAttempts.length > 0) {
+          attempts = localAttempts;
+        }
+      } catch (err) {}
+    }
+
+    const teacherInfo = this.getTeacherInfo();
+    const nowParts = this.formatDateParts(new Date());
+
+    // Si definitivamente no hay registros en absoluto
+    if (!attempts || attempts.length === 0) {
+      alert("No hay intentos registrados aún para exportar. Cuando los estudiantes completen actividades, aparecerán detallados aquí.");
       return;
     }
 
-    const html = `
-      <!DOCTYPE html>
-      <html lang="es">
-      <head>
-        <meta charset="UTF-8">
-        <title>Informe de Progreso Socioemocional - emoTIC</title>
-        <style>
-          body { font-family: 'Segoe UI', Arial, sans-serif; padding: 30px; color: #263238; }
-          h1 { color: #5C6BC0; margin-bottom: 4px; }
-          .meta { color: #546E7A; font-size: 0.95rem; margin-bottom: 24px; border-bottom: 2px solid #ECEFF1; padding-bottom: 12px; }
-          table { width: 100%; border-collapse: collapse; margin-top: 16px; }
-          th, td { border: 1px solid #CFD8DC; padding: 10px; text-align: left; }
-          th { background: #E8EAF6; color: #283593; }
-          tr:nth-child(even) { background: #FAFAFA; }
-          .footer { margin-top: 40px; font-size: 0.85rem; color: #78909C; text-align: center; }
-          @media print {
-            .no-print { display: none; }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="no-print" style="margin-bottom:20px;">
-          <button onclick="window.print()" style="padding:10px 20px; font-size:1rem; background:#5C6BC0; color:#fff; border:none; border-radius:6px; cursor:pointer;">🖨️ Imprimir / Guardar en PDF</button>
-        </div>
-        <h1>Informe de Aprendizaje Socioemocional - emoTIC</h1>
-        <div class="meta">
-          <p><strong>Plataforma:</strong> emoTIC «Mundos de las Emociones»</p>
-          <p><strong>Programa Base:</strong> Emociones para la Vida (MEN / SED Bogotá / Banco Mundial)</p>
-          <p><strong>Fecha del Reporte:</strong> ${this.formatDate(new Date())}</p>
+    // 2. Cálculos estadísticos para el informe docente
+    const totalAttempts = attempts.length;
+    let totalMistakes = 0;
+    let perfectAttempts = 0;
+    let totalScore = 0;
+    let totalStars = 0;
+    const mistakesByLevel = {};
+
+    attempts.forEach(att => {
+      const m = Number(att.mistakes_count || 0);
+      totalMistakes += m;
+      if (m === 0) perfectAttempts++;
+      totalScore += Number(att.score || 0);
+      totalStars += Number(att.stars || 0);
+
+      const lvl = this.getLevelInfo(att.activity_id, att.activity_title);
+      mistakesByLevel[lvl.levelName] = (mistakesByLevel[lvl.levelName] || 0) + m;
+    });
+
+    // Identificar nivel que requirió mayor refuerzo
+    let maxMistakesLevel = "--";
+    let maxMistakesCount = 0;
+    Object.entries(mistakesByLevel).forEach(([name, count]) => {
+      if (count > maxMistakesCount) {
+        maxMistakesCount = count;
+        maxMistakesLevel = `${name} (${count} errores)`;
+      }
+    });
+
+    const avgScore = Math.round(totalScore / totalAttempts);
+    const avgStars = (totalStars / totalAttempts).toFixed(1);
+    const successRate = Math.round((perfectAttempts / totalAttempts) * 100);
+
+    // 3. Renderizar Modal de Previsualización Ejecutiva
+    const oldModal = document.getElementById("emotic-report-preview-modal");
+    if (oldModal) oldModal.remove();
+
+    const modal = document.createElement("div");
+    modal.className = "report-modal-overlay";
+    modal.id = "emotic-report-preview-modal";
+
+    modal.innerHTML = `
+      <div class="report-modal-card">
+        <!-- Barra de herramientas superior -->
+        <div class="report-modal-header">
+          <div class="report-header-title-box">
+            <img src="emotic-logo.png" alt="emoTIC Logo" class="report-header-logo" />
+            <div>
+              <h2 class="report-header-title">Informe Pedagógico de Desempeño y Detección de Errores</h2>
+              <p class="report-header-subtitle">Generación oficial • Programa «Emociones para la Vida»</p>
+            </div>
+          </div>
+          <div class="report-modal-actions">
+            <button class="btn-report-action btn-report-print" id="btn-report-trigger-print">
+              🖨️ Imprimir / Guardar en PDF
+            </button>
+            <button class="btn-report-action btn-report-csv" id="btn-report-trigger-csv">
+              📥 Descargar Excel (.CSV)
+            </button>
+            <button class="btn-report-action btn-report-close" id="btn-report-trigger-close">
+              ✕ Cerrar
+            </button>
+          </div>
         </div>
 
-        <h3>Actividades Registradas:</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Actividad</th>
-              <th>Estudiante / Grado</th>
-              <th>Insignia</th>
-              <th>Estrellas</th>
-              <th>Fecha de Registro</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${progressList.length === 0 ? '<tr><td colspan="5" style="text-align:center;">No hay registros aún.</td></tr>' :
-              progressList.map(item => `
-                <tr>
-                  <td><strong>${item.title}</strong></td>
-                  <td>${item.gender === 'nina' ? 'Niña' : 'Niño'} - ${item.grade_level || item.grade || '1º Primaria'}</td>
-                  <td>${item.badgeIcon || '🌟'} ${item.badgeName || 'Logro'}</td>
-                  <td>${item.stars || 3} / 3</td>
-                  <td>${this.formatDate(item.completedAt || item.timestamp || Date.now())}</td>
-                </tr>
-              `).join('')}
-          </tbody>
-        </table>
+        <!-- Cuerpo del informe imprimible -->
+        <div class="report-modal-body" id="report-printable-area">
+          <div class="report-paper-sheet">
+            
+            <!-- Encabezado Institucional -->
+            <div class="report-institution-header">
+              <div class="report-inst-brand">
+                <img src="emotic-logo.png" alt="Logotipo emoTIC" class="report-inst-logo" />
+                <div class="report-inst-titles">
+                  <h1>emoTIC • Informe de Aprendizaje Socioemocional</h1>
+                  <p>Secretaría de Educación del Distrito / MEN Colombia / Banco Mundial</p>
+                </div>
+              </div>
+              <div class="report-inst-meta">
+                <div><strong>Docente:</strong> ${teacherInfo.full_name || teacherInfo.username}</div>
+                <div><strong>Fecha de emisión:</strong> ${nowParts.date}</div>
+                <div><strong>Hora de reporte:</strong> <span style="color:#4F46E5; font-weight:800;">${nowParts.time}</span> (UTC-5)</div>
+              </div>
+            </div>
 
-        <div class="footer">
-          <p><em>Este informe refleja el progreso formativo registrado en emoTIC. Cumple con principios de privacidad y protección de datos de menores.</em></p>
+            <!-- Resumen Estadístico Clave -->
+            <div class="report-stats-grid">
+              <div class="report-stat-card">
+                <span class="report-stat-label">Total de Intentos</span>
+                <span class="report-stat-val">${totalAttempts}</span>
+                <span class="report-stat-sub">Registrados y auditados</span>
+              </div>
+              <div class="report-stat-card">
+                <span class="report-stat-label">Aciertos Directos</span>
+                <span class="report-stat-val" style="color:#10B981;">${successRate}%</span>
+                <span class="report-stat-sub">${perfectAttempts} intentos sin fallas</span>
+              </div>
+              <div class="report-stat-card">
+                <span class="report-stat-label">Errores Totales</span>
+                <span class="report-stat-val" style="color:#EF4444;">${totalMistakes}</span>
+                <span class="report-stat-sub">Dudas asistidas con pistas</span>
+              </div>
+              <div class="report-stat-card">
+                <span class="report-stat-label">Nivel de Mayor Reto</span>
+                <span class="report-stat-val" style="font-size:0.95rem; line-height:1.2; color:#D97706;">${maxMistakesLevel}</span>
+                <span class="report-stat-sub">Área pedagógica a reforzar</span>
+              </div>
+            </div>
+
+            <!-- Tabla Detallada con Hora Exacta, Nivel y Errores -->
+            <h3 style="font-size:1.05rem; color:#1E293B; margin:0 0 10px 0; font-weight:900;">
+              📋 Registro Detallado de Cada Intento (Cronología y Nivel):
+            </h3>
+
+            <div class="report-table-wrapper">
+              <table class="report-data-table">
+                <thead>
+                  <tr>
+                    <th style="width:14%;">Fecha y Hora</th>
+                    <th style="width:25%;">Nivel y Actividad</th>
+                    <th style="width:14%;">Estudiante</th>
+                    <th style="width:33%;">Errores Cometidos en el Nivel</th>
+                    <th style="width:14%;">Resultado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${attempts.map((att, idx) => {
+                    const timeObj = this.formatDateParts(att.client_timestamp || att.created_at);
+                    const lvl = this.getLevelInfo(att.activity_id, att.activity_title);
+                    const mistakesHtml = this.formatMistakesDetail(att);
+
+                    return `
+                      <tr>
+                        <!-- Hora y Fecha Exactas -->
+                        <td>
+                          <span class="badge-time-tag">${timeObj.time}</span><br/>
+                          <small style="color:#64748B;">${timeObj.date}</small>
+                        </td>
+
+                        <!-- Nivel Pedagógico -->
+                        <td>
+                          <span class="badge-level-tag">${lvl.levelName}</span><br/>
+                          <strong style="color:#1E293B; font-size:0.88rem;">${att.activity_title}</strong>
+                        </td>
+
+                        <!-- Estudiante y Grado -->
+                        <td>
+                          <span>${att.gender === 'nina' ? '👧 Niña' : '👦 Niño'}</span><br/>
+                          <small style="color:#64748B; font-weight:700;">${att.grade_level || '1° Primaria'}</small>
+                        </td>
+
+                        <!-- Detalle y Nivel de Errores -->
+                        <td>
+                          ${mistakesHtml}
+                        </td>
+
+                        <!-- Estrellas, Puntaje y Duración -->
+                        <td>
+                          <div style="color:#F59E0B; font-weight:800; font-size:0.9rem;">${'⭐'.repeat(att.stars || 1)}</div>
+                          <div style="font-weight:700; color:#334155;">${att.score} pts</div>
+                          <small style="color:#64748B;">⏱️ ${att.duration_seconds}s</small>
+                        </td>
+                      </tr>
+                    `;
+                  }).join('')}
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pie de Página del Informe Institucional -->
+            <div class="report-footer-note">
+              <p><strong>emoTIC</strong> • Sistema de Evaluación y Acompañamiento Socioemocional Basado en Competencias Ciudadanas.</p>
+              <p style="margin-top:2px;">Este reporte preserva la privacidad del estudiante, registrando métricas formativas para orientación de aula según lineamientos del MEN y la SED Bogotá.</p>
+            </div>
+
+          </div>
         </div>
-      </body>
-      </html>
+      </div>
     `;
 
-    printWindow.document.write(html);
-    printWindow.document.close();
+    document.body.appendChild(modal);
+
+    // Eventos de interacción del modal
+    const closeModal = () => modal.remove();
+
+    document.getElementById("btn-report-trigger-close").addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    const handleKeydown = (e) => {
+      if (e.key === "Escape") {
+        closeModal();
+        document.removeEventListener("keydown", handleKeydown);
+      }
+    };
+    document.addEventListener("keydown", handleKeydown);
+
+    // Acción: Imprimir / Guardar en PDF
+    document.getElementById("btn-report-trigger-print").addEventListener("click", () => {
+      window.print();
+    });
+
+    // Acción: Descargar archivo CSV para Microsoft Excel
+    document.getElementById("btn-report-trigger-csv").addEventListener("click", () => {
+      this.downloadCSV(attempts, teacherInfo);
+    });
+  },
+
+  // Generador de archivo CSV compatible con Excel (UTF-8 con BOM)
+  downloadCSV(attempts, teacherInfo) {
+    const headers = [
+      "ID",
+      "Fecha",
+      "Hora_Exacta_Colombia_UTC5",
+      "Nivel_Socioemocional",
+      "Actividad_Titulo",
+      "Estudiante_Genero",
+      "Grado_Escolar",
+      "Total_Errores",
+      "Detalle_Errores_Cometidos",
+      "Estrellas",
+      "Puntaje",
+      "Duracion_Segundos",
+      "Estado_Completado"
+    ];
+
+    const rows = attempts.map((att, idx) => {
+      const timeObj = this.formatDateParts(att.client_timestamp || att.created_at);
+      const lvl = this.getLevelInfo(att.activity_id, att.activity_title);
+      const mistakesText = this.formatMistakesText(att);
+
+      return [
+        att.id || (idx + 1),
+        timeObj.date,
+        timeObj.time,
+        lvl.levelName,
+        att.activity_title,
+        att.gender === 'nina' ? 'Niña' : 'Niño',
+        att.grade_level || '1° Primaria',
+        att.mistakes_count || 0,
+        mistakesText,
+        att.stars || 1,
+        att.score || 0,
+        att.duration_seconds || 0,
+        att.completed ? "Completado" : "Parcial"
+      ];
+    });
+
+    // Función de escape para CSV
+    const escapeCSV = (val) => {
+      const str = String(val === null || val === undefined ? "" : val);
+      if (str.includes(",") || str.includes("\"") || str.includes("\n") || str.includes(";")) {
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+      return str;
+    };
+
+    const csvContent = "\uFEFF" + [
+      headers.map(escapeCSV).join(","),
+      ...rows.map(row => row.map(escapeCSV).join(","))
+    ].join("\r\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    const dateFormatted = new Date().toISOString().slice(0, 10);
+    link.setAttribute("href", url);
+    link.setAttribute("download", `informe_emotic_pedagogico_${dateFormatted}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   }
 };
+
