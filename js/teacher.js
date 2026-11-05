@@ -779,12 +779,7 @@ window.emoTIC_Teacher = {
 
   // Modal para visualizar el detalle pedagógico de los errores cometidos en un intento
   showMistakesModal(attempt) {
-    let details = attempt.details;
-    if (typeof details === "string") {
-      try { details = JSON.parse(details); } catch (e) { details = {}; }
-    }
-    details = details || {};
-    const mistakesList = Array.isArray(details.mistakes_detail) ? details.mistakes_detail : [];
+    const mistakesList = this.getMistakesList(attempt);
 
     const existingModal = document.getElementById("mistakes-detail-modal");
     if (existingModal) existingModal.remove();
@@ -814,39 +809,40 @@ window.emoTIC_Teacher = {
           ${mistakesList.length > 0 ? `
             <h4 style="color:#334155; margin:0 0 10px 0; font-size:0.95rem;">Registro de dudas y retroalimentaciones formativas:</h4>
             <div style="display:flex; flex-direction:column; gap:10px;">
-              ${mistakesList.map((m, i) => `
-                <div style="background:#FFF; border:1px solid #FECACA; border-left:4px solid #EF4444; border-radius:8px; padding:10px 12px; font-size:0.9rem;">
-                  <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                    <strong style="color:#991B1B;">Error #${i + 1} ${m.tipo ? `• ${m.tipo}` : ''}</strong>
-                    ${m.second !== undefined ? `<small style="color:#64748B;">a los ${m.second}s</small>` : ''}
-                  </div>
-                  ${m.pregunta || m.situacion || m.mision ? `
-                    <p style="margin:2px 0 4px 0; color:#475569; font-size:0.88rem;">
-                      <strong>Contexto:</strong> ${m.pregunta || m.situacion || m.mision}
-                    </p>
-                  ` : ''}
-                  ${m.opcion_elegida ? `
-                    <p style="margin:2px 0 4px 0; color:#B91C1C; background:#FEF2F2; padding:4px 8px; border-radius:4px; font-size:0.85rem;">
-                      ❌ <strong>Opción que eligió:</strong> "${m.opcion_elegida}"
-                    </p>
-                  ` : ''}
-                  ${m.emocion_seleccionada && m.significado_seleccionado ? `
-                    <p style="margin:2px 0 4px 0; color:#B91C1C; background:#FEF2F2; padding:4px 8px; border-radius:4px; font-size:0.85rem;">
-                      ❌ Confundió: <strong>${m.emocion_seleccionada}</strong> con <strong>${m.significado_seleccionado}</strong>
-                    </p>
-                  ` : ''}
-                  ${m.categoria_elegida && m.categoria_correcta ? `
-                    <p style="margin:2px 0 4px 0; color:#B91C1C; background:#FEF2F2; padding:4px 8px; border-radius:4px; font-size:0.85rem;">
-                      ❌ Clasificó "<strong>${m.concepto}</strong>" como ${m.categoria_elegida} (lo correcto es ${m.categoria_correcta})
-                    </p>
-                  ` : ''}
-                  ${m.pista_dada ? `
-                    <div style="margin-top:6px; background:#F0FDF4; border:1px solid #BBF7D0; border-radius:4px; padding:6px 10px; color:#166534; font-size:0.85rem;">
-                      💡 <strong>Pista de apoyo brindada:</strong> ${m.pista_dada}
+              ${mistakesList.map((m, i) => {
+                const gamePart = this.getMistakeGamePart(m, attempt);
+                return `
+                  <div style="background:#FFF; border:1px solid #FECACA; border-left:4px solid #EF4444; border-radius:8px; padding:10px 12px; font-size:0.9rem;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                      <strong style="color:#991B1B;">Error #${i + 1} ${m.tipo ? `• ${m.tipo}` : ''}</strong>
+                      ${m.second !== undefined ? `<small style="color:#64748B;">a los ${m.second}s</small>` : ''}
                     </div>
-                  ` : ''}
-                </div>
-              `).join('')}
+                    <div style="margin:4px 0 6px 0; background:#FFF1F2; border-radius:6px; padding:6px 8px; font-size:0.88rem; color:#881337;">
+                      📍 <strong>Parte del juego:</strong> ${gamePart}
+                    </div>
+                    ${m.opcion_elegida ? `
+                      <p style="margin:2px 0 4px 0; color:#B91C1C; background:#FEF2F2; padding:4px 8px; border-radius:4px; font-size:0.85rem;">
+                        ❌ <strong>Opción que eligió:</strong> "${m.opcion_elegida}"
+                      </p>
+                    ` : ''}
+                    ${m.emocion_seleccionada && m.significado_seleccionado ? `
+                      <p style="margin:2px 0 4px 0; color:#B91C1C; background:#FEF2F2; padding:4px 8px; border-radius:4px; font-size:0.85rem;">
+                        ❌ Confundió: <strong>${m.emocion_seleccionada}</strong> con <strong>${m.significado_seleccionado}</strong>
+                      </p>
+                    ` : ''}
+                    ${m.categoria_elegida && m.categoria_correcta ? `
+                      <p style="margin:2px 0 4px 0; color:#B91C1C; background:#FEF2F2; padding:4px 8px; border-radius:4px; font-size:0.85rem;">
+                        ❌ Clasificó "<strong>${m.concepto}</strong>" como ${m.categoria_elegida} (lo correcto es ${m.categoria_correcta})
+                      </p>
+                    ` : ''}
+                    ${m.pista_dada ? `
+                      <div style="margin-top:6px; background:#F0FDF4; border:1px solid #BBF7D0; border-radius:4px; padding:6px 10px; color:#166534; font-size:0.85rem;">
+                        💡 <strong>Pista de apoyo brindada:</strong> ${m.pista_dada}
+                      </div>
+                    ` : ''}
+                  </div>
+                `;
+              }).join('')}
             </div>
           ` : `
             <div style="background:#F8FAFC; border:1px dashed #CBD5E1; border-radius:8px; padding:16px; text-align:center; color:#475569;">
@@ -954,6 +950,99 @@ window.emoTIC_Teacher = {
     return { levelNum: 0, levelName: title || "Actividad Pedagógica emoTIC", character: "Docente" };
   },
 
+  // Extrae la lista de errores normalizada independientemente de la estructura guardada
+  getMistakesList(attempt) {
+    if (!attempt) return [];
+    let details = attempt.details;
+    if (typeof details === "string") {
+      try { details = JSON.parse(details); } catch (e) { details = null; }
+    }
+    if (!details) return [];
+
+    if (Array.isArray(details)) return details;
+    if (Array.isArray(details.mistakes_detail)) return details.mistakes_detail;
+    if (Array.isArray(details.mistakes)) return details.mistakes;
+
+    // Respaldo para estructuras de intentos de versiones previas
+    const legacyList = [];
+    Object.keys(details).forEach(key => {
+      if (key.startsWith("intentos_") && Number(details[key]) > 1) {
+        const emocion = key.replace("intentos_", "");
+        legacyList.push({
+          tipo: "Identificación de emoción",
+          pregunta: `Identificar la emoción: ${emocion}`,
+          opcion_elegida: `Reintentó ${details[key]} veces`,
+          pista_dada: `Refuerzo formativo en la emoción ${emocion}`
+        });
+      }
+    });
+    if (legacyList.length > 0) return legacyList;
+
+    return [];
+  },
+
+  // Genera la descripción exacta de en qué parte o momento del juego ocurrió el error
+  getMistakeGamePart(m, attempt) {
+    if (!m) return "Durante el desarrollo del juego";
+
+    const parts = [];
+
+    // 1. Misión o Escenario
+    if (m.mision) {
+      parts.push(`Misión: "${m.mision}"`);
+    } else if (m.situacion) {
+      parts.push(`Situación: "${m.situacion}"`);
+    } else if (m.actividad) {
+      parts.push(`Actividad: "${m.actividad}"`);
+    } else if (m.emocion_seleccionada) {
+      parts.push(`Unión de parejas: Al asociar "${m.emocion_seleccionada}"`);
+    } else if (m.concepto) {
+      parts.push(`Clasificación en canastas: Ficha "${m.concepto}"`);
+    }
+
+    // 2. Pregunta o caso específico si está presente
+    if (m.pregunta) {
+      const qClean = m.pregunta.trim();
+      if (!parts.some(p => p.includes(qClean))) {
+        parts.push(`Pregunta: "${qClean}"`);
+      }
+    }
+
+    // 3. Si no hay nada de lo anterior, usar tipo o nivel
+    if (parts.length === 0) {
+      if (m.tipo) {
+        parts.push(`Fase: ${m.tipo}`);
+      } else {
+        const lvl = this.getLevelInfo(attempt?.activity_id, attempt?.activity_title);
+        parts.push(`En el reto de ${lvl.levelName}`);
+      }
+    }
+
+    // 4. Momento temporal en segundos si fue registrado
+    if (m.second !== undefined && m.second !== null) {
+      parts.push(`[segundo ${m.second}s]`);
+    }
+
+    return parts.join(" - ");
+  },
+
+  // Texto plano específico de las partes del juego donde ocurrieron los errores (para la columna dedicada de Excel)
+  formatMistakesLocationText(attempt) {
+    const count = Number(attempt.mistakes_count || 0);
+    if (count === 0) return "Ninguna (Acierto directo en todo el juego)";
+
+    const list = this.getMistakesList(attempt);
+    if (list.length === 0) {
+      const lvl = this.getLevelInfo(attempt?.activity_id, attempt?.activity_title);
+      return `${count} error(es) durante la resolución de: ${lvl.levelName}`;
+    }
+
+    return list.map((m, idx) => {
+      const loc = this.getMistakeGamePart(m, attempt);
+      return `[Error ${idx + 1}] ${loc}`;
+    }).join(" | ");
+  },
+
   // Genera el desglose HTML pedagógico de errores cometidos en un intento
   formatMistakesDetail(attempt) {
     const count = Number(attempt.mistakes_count || 0);
@@ -961,12 +1050,7 @@ window.emoTIC_Teacher = {
       return `<span class="badge-ok-pill">0 errores ✨ (Acierto directo)</span>`;
     }
 
-    let details = attempt.details;
-    if (typeof details === "string") {
-      try { details = JSON.parse(details); } catch (e) { details = null; }
-    }
-
-    const list = Array.isArray(details) ? details : (details?.mistakes || []);
+    const list = this.getMistakesList(attempt);
 
     let html = `
       <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
@@ -977,22 +1061,27 @@ window.emoTIC_Teacher = {
     if (list.length > 0) {
       html += `
         <div class="report-mistake-detail-box">
-          ${list.map((m, idx) => `
-            <div style="margin-bottom: 4px; padding-bottom: 3px; border-bottom: 1px dashed #FECACA;">
-              <strong>Error #${idx + 1}:</strong>
-              ${m.pregunta || m.situacion || m.mision ? `<span>${m.pregunta || m.situacion || m.mision}</span><br/>` : ''}
-              ${m.opcion_elegida ? `<span style="color:#B91C1C;">❌ Marcó: "<em>${m.opcion_elegida}</em>"</span><br/>` : ''}
-              ${m.emocion_seleccionada && m.significado_seleccionado ? `<span style="color:#B91C1C;">❌ Confundió "<strong>${m.emocion_seleccionada}</strong>" con "<em>${m.significado_seleccionado}</em>"</span><br/>` : ''}
-              ${m.categoria_elegida && m.categoria_correcta ? `<span style="color:#B91C1C;">❌ Clasificó "<strong>${m.concepto}</strong>" como ${m.categoria_elegida}</span><br/>` : ''}
-              ${m.pista_dada ? `<span style="color:#166534;">💡 Pista brindada: "${m.pista_dada}"</span>` : ''}
-            </div>
-          `).join('')}
+          ${list.map((m, idx) => {
+            const loc = this.getMistakeGamePart(m, attempt);
+            return `
+              <div style="margin-bottom: 6px; padding-bottom: 5px; border-bottom: 1px dashed #FECACA;">
+                <div style="color:#991B1B; font-weight:800; font-size:0.8rem; margin-bottom:2px;">
+                  📍 Error #${idx + 1} en: <span style="color:#1E293B;">${loc}</span>
+                </div>
+                ${m.opcion_elegida ? `<span style="color:#B91C1C;">❌ Marcó: "<em>${m.opcion_elegida}</em>"</span><br/>` : ''}
+                ${m.emocion_seleccionada && m.significado_seleccionado ? `<span style="color:#B91C1C;">❌ Confundió: <strong>${m.emocion_seleccionada}</strong> con <em>${m.significado_seleccionado}</em></span><br/>` : ''}
+                ${m.categoria_elegida && m.categoria_correcta ? `<span style="color:#B91C1C;">❌ Clasificó "<strong>${m.concepto}</strong>" como ${m.categoria_elegida} (debía ser ${m.categoria_correcta})</span><br/>` : ''}
+                ${m.pista_dada ? `<span style="color:#166534;">💡 Pista brindada: "${m.pista_dada}"</span>` : ''}
+              </div>
+            `;
+          }).join('')}
         </div>
       `;
     } else {
+      const lvl = this.getLevelInfo(attempt?.activity_id, attempt?.activity_title);
       html += `
         <div class="report-mistake-detail-box" style="color:#64748B;">
-          Requirió ${count} intento(s) con pistas formativas del personaje antes de acertar.
+          Requirió ${count} intento(s) con pistas formativas del personaje durante ${lvl.levelName} antes de acertar.
         </div>
       `;
     }
@@ -1005,23 +1094,19 @@ window.emoTIC_Teacher = {
     const count = Number(attempt.mistakes_count || 0);
     if (count === 0) return "Sin errores (100% de aciertos directos)";
 
-    let details = attempt.details;
-    if (typeof details === "string") {
-      try { details = JSON.parse(details); } catch (e) { details = null; }
-    }
-
-    const list = Array.isArray(details) ? details : (details?.mistakes || []);
+    const list = this.getMistakesList(attempt);
     if (list.length === 0) {
-      return `${count} error(es) registrado(s) en este nivel formativo`;
+      const lvl = this.getLevelInfo(attempt?.activity_id, attempt?.activity_title);
+      return `${count} error(es) registrado(s) en ${lvl.levelName}. El estudiante necesitó reintentos asistidos antes de acertar.`;
     }
 
     return list.map((m, idx) => {
-      let desc = `[Error ${idx + 1}] `;
-      if (m.pregunta || m.situacion || m.mision) desc += `Situación: ${m.pregunta || m.situacion || m.mision}. `;
-      if (m.opcion_elegida) desc += `Opción errónea elegida: "${m.opcion_elegida}". `;
+      const loc = this.getMistakeGamePart(m, attempt);
+      let desc = `[Error ${idx + 1} en: ${loc}] -> `;
+      if (m.opcion_elegida) desc += `Opción elegida errónea: "${m.opcion_elegida}". `;
       if (m.emocion_seleccionada && m.significado_seleccionado) desc += `Confundió "${m.emocion_seleccionada}" con "${m.significado_seleccionado}". `;
-      if (m.categoria_elegida && m.categoria_correcta) desc += `Clasificó "${m.concepto}" en ${m.categoria_elegida} (debía ser ${m.categoria_correcta}). `;
-      if (m.pista_dada) desc += `Pista de apoyo: "${m.pista_dada}". `;
+      if (m.categoria_elegida && m.categoria_correcta) desc += `Clasificó en "${m.categoria_elegida}" (lo correcto era "${m.categoria_correcta}"). `;
+      if (m.pista_dada) desc += `Pista de apoyo recibida: "${m.pista_dada}". `;
       return desc.trim();
     }).join(" | ");
   },
@@ -1291,6 +1376,7 @@ window.emoTIC_Teacher = {
       "Estudiante_Genero",
       "Grado_Escolar",
       "Total_Errores",
+      "Parte_Del_Juego_Donde_Tuvo_El_Error",
       "Detalle_Errores_Cometidos",
       "Estrellas",
       "Puntaje",
@@ -1301,6 +1387,7 @@ window.emoTIC_Teacher = {
     const rows = attempts.map((att, idx) => {
       const timeObj = this.formatDateParts(att.client_timestamp || att.created_at);
       const lvl = this.getLevelInfo(att.activity_id, att.activity_title);
+      const mistakesLocation = this.formatMistakesLocationText(att);
       const mistakesText = this.formatMistakesText(att);
 
       return [
@@ -1312,6 +1399,7 @@ window.emoTIC_Teacher = {
         att.gender === 'nina' ? 'Niña' : 'Niño',
         att.grade_level || '1° Primaria',
         att.mistakes_count || 0,
+        mistakesLocation,
         mistakesText,
         att.stars || 1,
         att.score || 0,
