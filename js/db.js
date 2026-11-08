@@ -13,6 +13,17 @@ window.emoTIC_DB = {
   API_KEY: "emotic_dev_api_key_892348a7b9c1d2e3f4a5",
   isSyncing: false,
 
+  getApiBaseUrl() {
+    if (typeof window !== "undefined") {
+      const port = window.location.port;
+      const isFile = window.location.protocol === "file:";
+      if (isFile || (port !== "" && port !== "80" && port !== "443")) {
+        return "http://127.0.0.1/emoTIC/backend/api";
+      }
+    }
+    return this.API_BASE;
+  },
+
   async init() {
     return new Promise((resolve) => {
       // Registrar listener para sincronización automática al recuperar conexión
@@ -235,7 +246,7 @@ window.emoTIC_DB = {
         };
 
         try {
-          const res = await fetch(`${this.API_BASE}/attempts.php`, {
+          const res = await fetch(`${this.getApiBaseUrl()}/attempts.php`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

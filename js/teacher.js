@@ -7,6 +7,19 @@ window.emoTIC_Teacher = {
   activeTab: "curriculum",
 
   // Estado de autenticación
+  // Resuelve la URL del API considerando entornos como Live Server (puerto 5500) o Apache directo
+  getApiUrl(endpoint) {
+    const clean = endpoint.replace(/^\/+/, "");
+    if (typeof window !== "undefined") {
+      const port = window.location.port;
+      const isFile = window.location.protocol === "file:";
+      if (isFile || (port !== "" && port !== "80" && port !== "443")) {
+        return `http://127.0.0.1/emoTIC/${clean}`;
+      }
+    }
+    return clean;
+  },
+
   isAuthenticated() {
     const token = this.getToken();
     return !!token;
@@ -136,41 +149,66 @@ window.emoTIC_Teacher = {
       btnSubmit.disabled = true;
       btnSubmit.textContent = "Verificando...";
 
-      try {
-        const res = await fetch("backend/api/auth/login.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password })
-        });
-        const data = await res.json();
+      const candidateUrls = [
+        this.getApiUrl("backend/api/auth/login.php"),
+        "backend/api/auth/login.php",
+        "http://127.0.0.1/emoTIC/backend/api/auth/login.php",
+        "http://localhost/emoTIC/backend/api/auth/login.php"
+      ];
+      const urlsToTry = [...new Set(candidateUrls)];
 
-        if (res.ok && data.success && data.token) {
-          sessionStorage.setItem("emotic_teacher_token", data.token);
-          sessionStorage.setItem("emotic_teacher_info", JSON.stringify(data.teacher || { username }));
-          localStorage.setItem("emotic_teacher_token", data.token);
-          localStorage.setItem("emotic_teacher_info", JSON.stringify(data.teacher || { username }));
+      let lastError = null;
+      let data = null;
+      let success = false;
 
-          modal.remove();
-          emoTIC_Sound.playSuccess();
-          onSuccess();
-        } else {
-          emoTIC_Sound.playGentleNotice();
-          if (errEl) {
-            errEl.textContent = data.message || "Usuario o contraseña incorrectos.";
-            errEl.style.display = "block";
+      for (const url of urlsToTry) {
+        try {
+          const res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+          });
+          const json = await res.json();
+          data = json;
+          if (res.ok && json.success && json.token) {
+            success = true;
+            break;
+          } else if (json && json.message) {
+            lastError = json.message;
+            break;
           }
-          btnSubmit.disabled = false;
-          btnSubmit.textContent = "Iniciar Sesión";
-          if (pInput) { pInput.value = ""; pInput.focus(); }
+        } catch (fetchErr) {
+          lastError = fetchErr;
         }
-      } catch (err) {
+      }
+
+      if (success && data && data.token) {
+        sessionStorage.setItem("emotic_teacher_token", data.token);
+        sessionStorage.setItem("emotic_teacher_info", JSON.stringify(data.teacher || { username }));
+        localStorage.setItem("emotic_teacher_token", data.token);
+        localStorage.setItem("emotic_teacher_info", JSON.stringify(data.teacher || { username }));
+
+        modal.remove();
+        emoTIC_Sound.playSuccess();
+        onSuccess();
+      } else {
         emoTIC_Sound.playGentleNotice();
         if (errEl) {
-          errEl.textContent = "No se pudo conectar con el servidor de autenticación.";
+          if (typeof lastError === "string") {
+            errEl.textContent = lastError;
+          } else if (data && data.message) {
+            errEl.textContent = data.message;
+          } else {
+            errEl.innerHTML = `
+              No se pudo conectar con el servidor Apache/PHP de XAMPP.<br/>
+              <span style="font-size:0.82rem; color:#475569;">Verifica que XAMPP esté encendido y accede desde: <strong>http://localhost/emoTIC/</strong></span>
+            `;
+          }
           errEl.style.display = "block";
         }
         btnSubmit.disabled = false;
         btnSubmit.textContent = "Iniciar Sesión";
+        if (pInput) { pInput.value = ""; pInput.focus(); }
       }
     };
 
@@ -607,7 +645,8 @@ window.emoTIC_Teacher = {
     container.innerHTML = `<p style="color:#64748B; text-align:center; padding:20px;">Cargando registros desde la base de datos...</p>`;
 
     try {
-      const res = await fetch(`backend/api/attempts.php?${params.toString()}`, {
+      const apiUrl = this.getApiUrl(`backend/api/attempts.php?${params.toString()}`);
+      const res = await fetch(apiUrl, {
         headers: {
           "Authorization": `Bearer ${token}`,
           "X-Teacher-Token": token
@@ -1123,7 +1162,7 @@ window.emoTIC_Teacher = {
       const token = this.getToken();
       if (token) {
         try {
-          const res = await fetch("backend/api/attempts.php?limit=500", {
+          const res = await fetch(this.getApiUrl("backend/api/attempts.php?limit=500"), {
             headers: { "Authorization": `Bearer ${token}` }
           });
           const json = await res.json();
