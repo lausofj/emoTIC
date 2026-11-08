@@ -644,38 +644,60 @@ window.emoTIC_Teacher = {
 
     container.innerHTML = `<p style="color:#64748B; text-align:center; padding:20px;">Cargando registros desde la base de datos...</p>`;
 
-    try {
-      const apiUrl = this.getApiUrl(`backend/api/attempts.php?${params.toString()}`);
-      const res = await fetch(apiUrl, {
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "X-Teacher-Token": token
-        }
-      });
+    const candidateUrls = [
+      this.getApiUrl(`backend/api/attempts.php?${params.toString()}`),
+      `backend/api/attempts.php?${params.toString()}`,
+      `http://127.0.0.1/emoTIC/backend/api/attempts.php?${params.toString()}`,
+      `http://localhost/emoTIC/backend/api/attempts.php?${params.toString()}`
+    ];
+    const urlsToTry = [...new Set(candidateUrls)];
 
-      if (res.status === 401) {
-        if (badge) {
-          badge.textContent = "Error 401: No autorizado";
-          badge.style.background = "#FEE2E2";
-          badge.style.color = "#991B1B";
-        }
-        container.innerHTML = `
-          <div style="background:#FEF2F2; border:1px solid #F87171; border-radius:10px; padding:20px; text-align:center; margin:16px 0;">
-            <p style="color:#991B1B; font-weight:700; font-size:1.05rem; margin-bottom:8px;">⚠️ Tu sesión ha expirado o no fue autorizada (401)</p>
-            <p style="color:#6B7280; font-size:0.9rem; margin-bottom:14px;">Inicia sesión nuevamente con tu usuario y contraseña de docente.</p>
-            <button class="btn-primary" id="btn-relogin-action" style="padding:8px 16px;">🔑 Iniciar Sesión Docente</button>
-          </div>
-        `;
-        document.getElementById("btn-relogin-action")?.addEventListener("click", () => {
-          this.logout();
-          this.checkAccess(() => this.renderTeacherDashboard());
+    let fetchSuccess = false;
+    let res = null;
+    let result = null;
+
+    for (const url of urlsToTry) {
+      try {
+        const testRes = await fetch(url, {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "X-Teacher-Token": token
+          }
         });
-        return;
+
+        if (testRes.status === 401) {
+          if (badge) {
+            badge.textContent = "Error 401: No autorizado";
+            badge.style.background = "#FEE2E2";
+            badge.style.color = "#991B1B";
+          }
+          container.innerHTML = `
+            <div style="background:#FEF2F2; border:1px solid #F87171; border-radius:10px; padding:20px; text-align:center; margin:16px 0;">
+              <p style="color:#991B1B; font-weight:700; font-size:1.05rem; margin-bottom:8px;">⚠️ Tu sesión ha expirado o no fue autorizada (401)</p>
+              <p style="color:#6B7280; font-size:0.9rem; margin-bottom:14px;">Inicia sesión nuevamente con tu usuario y contraseña de docente.</p>
+              <button class="btn-primary" id="btn-relogin-action" style="padding:8px 16px;">🔑 Iniciar Sesión Docente</button>
+            </div>
+          `;
+          document.getElementById("btn-relogin-action")?.addEventListener("click", () => {
+            this.logout();
+            this.checkAccess(() => this.renderTeacherDashboard());
+          });
+          return;
+        }
+
+        const testJson = await testRes.json();
+        if (testRes.ok && testJson.success && Array.isArray(testJson.data)) {
+          res = testRes;
+          result = testJson;
+          fetchSuccess = true;
+          break;
+        }
+      } catch (errLoop) {
+        // Continuar con el siguiente candidato
       }
+    }
 
-      const result = await res.json();
-
-      if (res.ok && result.success && Array.isArray(result.data)) {
+    if (fetchSuccess && result && Array.isArray(result.data)) {
         const attempts = result.data;
         this.lastLoadedAttempts = attempts;
         if (badge) {
@@ -754,9 +776,6 @@ window.emoTIC_Teacher = {
         });
 
         return;
-      }
-    } catch (netErr) {
-      console.warn("Fallo consultando MySQL backend, recurriendo a LocalStorage:", netErr);
     }
 
     // Respaldo en datos locales si el backend no respondió
@@ -771,11 +790,18 @@ window.emoTIC_Teacher = {
 
     if (localList.length === 0) {
       container.innerHTML = `
-        <div class="empty-state-notice" style="text-align:center; padding:30px;">
-          <span class="empty-icon">🌱</span>
-          <p>No hay registros de progreso local ni conexión al servidor.</p>
+        <div class="empty-state-notice" style="text-align:center; padding:32px 20px; background:#F8FAFC; border-radius:12px; border:1px dashed #CBD5E1;">
+          <span class="empty-icon" style="font-size:2.5rem; display:block; margin-bottom:10px;">🔌</span>
+          <p style="color:#1E293B; font-weight:700; font-size:1.05rem; margin-bottom:6px;">No hay conexión con el servidor MySQL ni registros locales</p>
+          <p style="color:#64748B; font-size:0.9rem; max-width:540px; margin:0 auto 16px auto; line-height:1.5;">
+            Para ver los datos guardados en la base de datos central, asegúrate de que <strong>Apache y MySQL</strong> estén iniciados en verde en el panel de XAMPP y de ingresar desde <strong>http://localhost/emoTIC/</strong>.
+          </p>
+          <button class="btn-primary" id="btn-retry-attempts-action" style="padding:8px 18px; font-size:0.9rem;">🔄 Reintentar Conexión</button>
         </div>
       `;
+      document.getElementById("btn-retry-attempts-action")?.addEventListener("click", () => {
+        this.loadAttemptsTable();
+      });
       return;
     }
 
